@@ -213,7 +213,7 @@
                         </div>
                     </li>
                     <li class="l-section section">
-                        <div class="hire">
+                        <div id="hire-us" class="hire">
                             <h2>Find A Solution For:</h2>
 
                             @if (session('error'))
@@ -306,10 +306,7 @@
     </div>
 
     <script>
-        document.getElementById("myForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent form submission
-            window.location.href = "{{ route('underConstruction') }}"; // Redirect to the specified route
-        });
+        //
     </script>
     @include('layouts.footer')
 @endsection

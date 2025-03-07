@@ -13,7 +13,7 @@
                         <div class="about">
                             <div class="about--banner-p">
                                 <h2>We<br>believe in<br>passionate<br>people</h2>
-                                <a href="#0">Career
+                                <!-- <a href="#0">Career
                                     <span>
                                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
@@ -24,7 +24,7 @@
                                             </g>
                                         </svg>
                                     </span>
-                                </a>
+                                </a> -->
                                 <img src="{{ asset('img/portfolio01.png') }}" alt="About Us">
                             </div>
                             <div class="about--options-p">
@@ -45,7 +45,7 @@
                         <div class="about">
                             <div class="about--banner-p">
                                 <h2>We<br>believe in<br>passionate<br>people</h2>
-                                <a href="#0">Career
+                                <!-- <a href="#0">Career
                                     <span>
                                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
@@ -56,7 +56,7 @@
                                             </g>
                                         </svg>
                                     </span>
-                                </a>
+                                </a> -->
                                 <img src="{{ asset('img/portfolio02.png') }}" alt="About Us">
                             </div>
                             <div class="about--options-p">
