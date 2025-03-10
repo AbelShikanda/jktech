@@ -119,14 +119,14 @@ jobs:
           USERSET: /home/prtvutnb/jke/release/${{github.sha}}/public/userset
           IMAGES: /home/prtvutnb/jke/release/${{github.sha}}/public/img
           FONTS: /home/prtvutnb/jke/release/${{github.sha}}/public/fonts
-          # SOURCE_ADMIN_DIR: /home/prtvutnb/jke/release/${{github.sha}}/public/admin
+          SOURCE_ADMIN_DIR: /home/prtvutnb/jke/release/${{github.sha}}/public/admin
 
           DEST_CSS_DIR: /home/prtvutnb/public_html/css
           DEST_JS_DIR: /home/prtvutnb/public_html/js
           DEST_USERSET: /home/prtvutnb/public_html/userset
           DEST_IMAGES: /home/prtvutnb/public_html/img
           DEST_FONTS: /home/prtvutnb/public_html/fonts
-          # DEST_ADMIN_DIR: /home/prtvutnb/public_html/admin
+          DEST_ADMIN_DIR: /home/prtvutnb/public_html/admin
 
           DEST_PARENT_DIR: /home/prtvutnb/public_html
         with:
@@ -244,38 +244,38 @@ jobs:
                 echo "userset directory does not exist in the source."
             fi
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            # if [ -d "$SOURCE_ADMIN_DIR" ]; then
-            #     if [ -d "$DEST_ADMIN_DIR" ]; then
-            #         rm -rf "$DEST_ADMIN_DIR"
-            #         if [ $? -ne 0 ]; then
-            #             echo "Failed to remove the destination admin directory."
-            #             exit 1
-            #         fi
-            #     else
-            #         echo "admin directory does not exist in the destination."
-            #     fi
-            #     mv "$SOURCE_ADMIN_DIR" "$DEST_PARENT_DIR"
-            #     if [ $? -ne 0 ]; then
-            #         echo "Failed to move the admin directory from source to destination."
-            #         exit 1
-            #     fi
-            # else
-            #     echo "admin directory does not exist in the source."
-            # fi
+            if [ -d "$SOURCE_ADMIN_DIR" ]; then
+                if [ -d "$DEST_ADMIN_DIR" ]; then
+                    rm -rf "$DEST_ADMIN_DIR"
+                    if [ $? -ne 0 ]; then
+                        echo "Failed to remove the destination admin directory."
+                        exit 1
+                    fi
+                else
+                    echo "admin directory does not exist in the destination."
+                fi
+                mv "$SOURCE_ADMIN_DIR" "$DEST_PARENT_DIR"
+                if [ $? -ne 0 ]; then
+                    echo "Failed to move the admin directory from source to destination."
+                    exit 1
+                fi
+            else
+                echo "admin directory does not exist in the source."
+            fi
             # ++++++++++++++++++++++++++++++++++++++++++   (FIRST TIME)   ++++++++++++++++++++++++++++++++++++++++++
-            mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/.htaccess" "/home/prtvutnb/public_html"
-            mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/favicon.ico" "/home/prtvutnb/public_html"
-            mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/index.php" "/home/prtvutnb/public_html"
-            mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/robots.txt" "/home/prtvutnb/public_html"
-            mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/mix-manifest.json" "/home/prtvutnb/public_html"
-            mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/web.config" "/home/prtvutnb/public_html"
+            # mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/.htaccess" "/home/prtvutnb/public_html"
+            # mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/favicon.ico" "/home/prtvutnb/public_html"
+            # mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/index.php" "/home/prtvutnb/public_html"
+            # mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/robots.txt" "/home/prtvutnb/public_html"
+            # mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/mix-manifest.json" "/home/prtvutnb/public_html"
+            # mv -f "/home/prtvutnb/jke/release/${GITHUB_SHA}/public/web.config" "/home/prtvutnb/public_html"
             # ++++++++++++++++++++++++++++++++++++++++++   (LATER TIMES)   +++++++++++++++++++++++++++++++++++++++++
-            # rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/.htaccess
-            # rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/favicon.ico
-            # rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/index.php
-            # rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/robots.txt
-            # rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/mix-manifest.json
-            # rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/web.config
+            rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/.htaccess
+            rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/favicon.ico
+            rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/index.php
+            rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/robots.txt
+            rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/mix-manifest.json
+            rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/web.config
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             rm -rf /home/prtvutnb/jke/release/${GITHUB_SHA}/public/
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -389,6 +389,7 @@ jobs:
             cd $ACTIVE_RELEASE_PATH
             # php artisan migrate --force
             # php artisan db:seed --force
+            # php artisan db:seed --class=ServiceTypeSeeder
             # php artisan migrate --path=/database/migrations/2025_02_16_193521_create_promo_codes_table.php --force
 
   # Run activate release

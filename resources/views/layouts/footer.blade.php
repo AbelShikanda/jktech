@@ -7,17 +7,17 @@
         <li class="{{ request()->is('hire-us') ? 'is-active' : '' }}">Hire us</li>
         @include('layouts.partials.guest')
     </ul>
+@elseif(request()->is('portfolio'))
+    <ul class="outer-nav">
+        <li><a href="{{ route('home') }}">Home</a></li>
+        @include('layouts.partials.guest')
+    </ul>
 @elseif(request()->is('tutorials'))
     <ul class="outer-nav">
         <li><a href="{{ route('home') }}">Home</a></li>
         @include('layouts.partials.guest')
     </ul>
 @elseif(request()->is('education'))
-    <ul class="outer-nav">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        @include('layouts.partials.guest')
-    </ul>
-@elseif(request()->is('portfolio'))
     <ul class="outer-nav">
         <li><a href="{{ route('home') }}">Home</a></li>
         @include('layouts.partials.guest')
