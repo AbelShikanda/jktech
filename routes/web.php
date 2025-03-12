@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
@@ -30,22 +31,17 @@ Route::get('/under_construction', [UnderConstructionController::class, 'underCon
 //     return response()->file(public_path('sitemap.xml'));
 // });
 
-// Route::get('/admin_', function () {
-//     return redirect()->route('dashboard.index');
-// })
-//     ->middleware('adminauth');
-
 Route::get('/admin_', function () {
     return redirect()->route('dashboard.index');
-});
-Route::resource('dashboard', DashboardController::class);
+})
+    ->middleware('adminauth');
 
-// Route::group(['prefix' => '/admin'], function () {
-//     Route::get('/login', [AdminAuthController::class, 'getLogin'])->name('getLogin');
-//     Route::post('/login', [AdminAuthController::class, 'postLogin'])->name('postLogin');
-//     Route::post('/logout', [AdminAuthController::class, 'adminLogout'])->name('adminLogout');
-//     Route::resource('dashboard', DashboardController::class)->middleware('adminauth');
-// });
+Route::group(['prefix' => '/admin'], function () {
+    Route::get('/login', [AdminAuthController::class, 'getLogin'])->name('getLogin');
+    Route::post('/login', [AdminAuthController::class, 'postLogin'])->name('postLogin');
+    Route::post('/logout', [AdminAuthController::class, 'adminLogout'])->name('adminLogout');
+    Route::resource('dashboard', DashboardController::class)->middleware('adminauth');
+});
 
 // Route::group(['middleware' => 'adminauth'], function () {
 //     Route::resource('colors', ProductColorController::class);
