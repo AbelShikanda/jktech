@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ServiceTypeSeeder::class,
             ServiceCategoriesSeeder::class,
             CreateAdminSeeder::class,
+            WorkingHourSeeder::class,
         ]);
     }
 }

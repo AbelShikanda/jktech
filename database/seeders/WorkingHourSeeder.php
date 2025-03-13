@@ -21,7 +21,7 @@ class WorkingHourSeeder extends Seeder
             ['day_of_week' => 'Thursday', 'start_time' => '09:00:00', 'end_time' => '17:00:00', 'is_off_day' => false],
             ['day_of_week' => 'Friday', 'start_time' => '09:00:00', 'end_time' => '17:00:00', 'is_off_day' => false],
             ['day_of_week' => 'Saturday', 'start_time' => '10:00:00', 'end_time' => '14:00:00', 'is_off_day' => false],
-            ['day_of_week' => 'Sunday', 'start_time' => '00:00:00', 'end_time' => '00:00:00', 'is_off_day' => true],  // Closed
+            ['day_of_week' => 'Sunday', 'start_time' => '00:00:00', 'end_time' => '00:00:00', 'is_off_day' => false],
         ];
 
         foreach ($workingHours as $hour) {
