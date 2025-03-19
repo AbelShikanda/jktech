@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ServiceCategoryController;
+use App\Http\Controllers\Admin\ServiceTypeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PagesController;
@@ -43,36 +45,33 @@ Route::group(['prefix' => '/admin'], function () {
     Route::resource('dashboard', DashboardController::class)->middleware('adminauth');
 });
 
-// Route::group(['middleware' => 'adminauth'], function () {
-//     Route::resource('colors', ProductColorController::class);
-//     Route::resource('sizes', ProductSizeController::class);
-//     Route::resource('types', ProductTypeController::class);
-//     Route::resource('materials', ProductMaterialController::class);
-//     Route::resource('product_categories', ProductCategoryController::class);
-//     Route::resource('products', ProductsController::class);
-//     Route::resource('product_images', ProductImageController::class);
-//     Route::resource('orders', OrdersController::class);
-//     Route::resource('order_items', OrderItemsController::class);
-//     Route::resource('admins', AdminController::class);
-//     Route::resource('users', UserController::class);
-//     Route::resource('blogs', BlogController::class);
-//     Route::resource('blog_categories', BlogCategoryController::class);
-//     Route::resource('blog_images', BlogImageController::class);
-//     Route::resource('contact', ContactsController::class);
-//     Route::resource('prices', PricesController::class);
-//     Route::resource('comment', CommentsController::class);
+Route::group(['middleware' => 'adminauth'], function () {
+    Route::resource('types', ServiceTypeController::class);
+    Route::resource('service_categories', ServiceCategoryController::class);
+    //     Route::resource('products', ProductsController::class);
+    //     Route::resource('product_images', ProductImageController::class);
+    //     Route::resource('orders', OrdersController::class);
+    //     Route::resource('order_items', OrderItemsController::class);
+    //     Route::resource('admins', AdminController::class);
+    //     Route::resource('users', UserController::class);
+    //     Route::resource('blogs', BlogController::class);
+    //     Route::resource('blog_categories', BlogCategoryController::class);
+    //     Route::resource('blog_images', BlogImageController::class);
+    //     Route::resource('contact', ContactsController::class);
+    //     Route::resource('prices', PricesController::class);
+    //     Route::resource('comment', CommentsController::class);
 
-//     Route::resource('permissions', PermissionsController::class);
-//     Route::resource('roles', RolesController::class);
+    //     Route::resource('permissions', PermissionsController::class);
+    //     Route::resource('roles', RolesController::class);
 
-//     Route::get('/promo', [PromoCodeController::class, 'index'])->name('promo.index');
-//     Route::get('/create/promo', [PromoCodeController::class, 'create'])->name('promo.create');
-//     Route::post('/create-promo', [PromoCodeController::class, 'createPromo'])->name('create.promo');
-//     Route::get('/promo-edit/{id}', [PromoCodeController::class, 'edit'])->name('promo.edit');
-//     Route::get('/promo-details/{id}', [PromoCodeController::class, 'show'])->name('promo.show');
-//     Route::PATCH('/promo-update/{id}', [PromoCodeController::class, 'update'])->name('promo.update');
-//     Route::DELETE('/promo-destroy/{id}', [PromoCodeController::class, 'destroy'])->name('promo.destroy');
-// });
+    //     Route::get('/promo', [PromoCodeController::class, 'index'])->name('promo.index');
+    //     Route::get('/create/promo', [PromoCodeController::class, 'create'])->name('promo.create');
+    //     Route::post('/create-promo', [PromoCodeController::class, 'createPromo'])->name('create.promo');
+    //     Route::get('/promo-edit/{id}', [PromoCodeController::class, 'edit'])->name('promo.edit');
+    //     Route::get('/promo-details/{id}', [PromoCodeController::class, 'show'])->name('promo.show');
+    //     Route::PATCH('/promo-update/{id}', [PromoCodeController::class, 'update'])->name('promo.update');
+    //     Route::DELETE('/promo-destroy/{id}', [PromoCodeController::class, 'destroy'])->name('promo.destroy');
+});
 
 Auth::routes();
 

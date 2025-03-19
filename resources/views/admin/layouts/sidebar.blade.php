@@ -58,11 +58,11 @@
                                 class="ml-1 item-text">Services</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
+                        <a class="nav-link pl-3" href="{{ route('service_categories.index') }}"><span
                                 class="ml-1 item-text">Categories</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span 
+                        <a class="nav-link pl-3" href="{{ route('types.index') }}"><span 
                             class="ml-1 item-text">Types</span></a>
                     </li>
                     <li class="nav-item">
