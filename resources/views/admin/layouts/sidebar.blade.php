@@ -54,7 +54,7 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="forms">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
+                        <a class="nav-link pl-3" href="{{ route('services.index') }}"><span
                                 class="ml-1 item-text">Services</span></a>
                     </li>
                     <li class="nav-item">

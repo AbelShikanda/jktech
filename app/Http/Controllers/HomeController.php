@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Services;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        // $images = ProductImages::with('products')
+        //     ->latest()
+        //     ->take(6)
+        //     ->get();
+
+        // $blogs = BlogImages::with('blogs')
+        //     ->orderBy('id', 'DESC')
+        //     ->take(2)
+        //     ->get();
+
+        $services = Services::with(['serviceType', 'Category'])
+            ->latest()
+            ->take(10)
+            ->get();
+        return view('home', with([
+            'services' => $services,
+        ]));
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceCategoryController;
+use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\ServiceTypeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
@@ -48,7 +49,7 @@ Route::group(['prefix' => '/admin'], function () {
 Route::group(['middleware' => 'adminauth'], function () {
     Route::resource('types', ServiceTypeController::class);
     Route::resource('service_categories', ServiceCategoryController::class);
-    //     Route::resource('products', ProductsController::class);
+    Route::resource('services', ServicesController::class);
     //     Route::resource('product_images', ProductImageController::class);
     //     Route::resource('orders', OrdersController::class);
     //     Route::resource('order_items', OrderItemsController::class);

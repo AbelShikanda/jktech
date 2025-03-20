@@ -12,7 +12,7 @@
                         </p>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ route('types.create') }}" type="button" class=" float-right btn mb-2 btn-outline-primary">Add A Role</a>
+                        <a href="{{ route('types.create') }}" type="button" class=" float-right btn mb-2 btn-outline-primary">Add Type</a>
                     </div>
                 </div>
                 <div class="row my-4">
@@ -72,4 +72,6 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
+    
+    @include('admin.layouts.partials.modals')
 @endsection
