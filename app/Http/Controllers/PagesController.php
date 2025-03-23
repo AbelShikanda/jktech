@@ -2,63 +2,89 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Services;
+use App\Services\BookingService;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-    public function portfolio() {
-        return view('pages.Portfolio');
+    protected $bookingService;
+
+    public function __construct(BookingService $bookingService)
+    {
+        $this->bookingService = $bookingService;
     }
 
-    public function portfolio_details() {
+    public function bookings(Request $request)
+    {
+        $services = Services::all();
+        return view('bookings.index', with([
+            'services' => $services,
+        ]));
+    }
+
+    public function portfolio_details()
+    {
         return view('pages.portfolio_details');
     }
-    
-    public function tutorials() {
+
+    public function tutorials()
+    {
         return view('pages.tutorials');
     }
-    
-    public function tutorial_Details() {
+
+    public function tutorial_Details()
+    {
         return view('pages.tutorial_Details');
     }
-    
-    public function education() {
+
+    public function education()
+    {
         return view('pages.education');
     }
-    
-    public function education_Details() {
+
+    public function education_Details()
+    {
         return view('pages.education_Details');
     }
-    
-    public function contact() {
+
+    public function contact()
+    {
         return view('pages.contact');
     }
-    
-    public function contact_store() {
+
+    public function contact_store()
+    {
         return view('pages.contact_store');
     }
-    
-    public function comments() {
+
+    public function comments()
+    {
         return view('pages.comments');
     }
-    
-    public function get_booking() {
+
+    public function get_booking()
+    {
         return view('pages.get_booking');
     }
-    
-    public function add_booking() {
+
+    public function add_booking()
+    {
         return view('pages.add_booking');
     }
-    
-    public function update_booking() {
+
+    public function update_booking()
+    {
         return view('pages.update_booking');
     }
-    
-    public function reduce_booking() {
+
+    public function reduce_booking()
+    {
         return view('pages.reduce_booking');
     }
-    
-    public function delete_booking() {
+
+    public function delete_booking()
+    {
         return view('pages.delete_booking');
     }
 }

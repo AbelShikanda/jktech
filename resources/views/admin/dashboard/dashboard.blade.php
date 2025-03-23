@@ -376,5 +376,5 @@
             </div>
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-    @include('admin.layouts.partials.modal')
+    @include('admin.layouts.partials.modals')
 @endsection

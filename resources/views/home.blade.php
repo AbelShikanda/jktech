@@ -119,7 +119,7 @@
                     </li>
                     <li class="l-section section">
                         <div id="hire-us" class="hire">
-                            <h2>Find A Solution For:</h2>
+                            <h2>Book Consultation:</h2>
 
                             @if (session('error'))
                                 <p style="color: red;">{{ session('error') }}</p>
@@ -127,20 +127,10 @@
                             <!-- checkout formspree.io for easy form setup -->
                             <form action="#" method="POST" class="work-request" id="myForm">
                                 @csrf
-                                <!-- <div class="work-request--options">
-                                            <label for="services">Select a Service:</label>
-                                            <select id="services" name="service" required>
-                                                <option value="" disabled selected>Choose an option</option>
-                                                <option value="app design">Mobile App Design</option>
-                                                <option value="graphic design">Web App Design</option>
-                                                <option value="motion design">Data Analytics</option>
-                                                <option value="marketing">Content Marketing</option>
-                                            </select>
-                                        </div> -->
                                 <div class="work-request--options">
                                     <span class="options-a">
                                 @foreach ($services as $service)
-                                        <input id="opt-1" type="checkbox" value="app design">
+                                        <input id="opt-1" name="service" type="checkbox" value="app design">
                                         <label for="opt-1">
                                             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
