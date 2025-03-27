@@ -24,6 +24,8 @@ class BookingService
 
         // 🚫 Check if the day is an off-day
         $workingHour = WorkingHour::where('day_of_week', $date->format('l'))->first();
+
+        dd($data, $date, $startTime, $endTime);
         if (!$workingHour || $workingHour->is_off_day) {
             return ['error' => 'This day is an off-day. Please choose another day.'];
         }

@@ -23,6 +23,25 @@ class PagesController extends Controller
         ]));
     }
 
+    public function bookingStore(Request $request)
+    {
+        $validated = $request->validate([
+            'service' => '',
+            'date' => '',
+            'start_time' => '',
+        ]);
+
+        $service = $this->bookingService->createBooking($validated);
+
+        if (isset($service['error'])) {
+            return redirect()->back()->with('error', $service['error']);
+        }
+
+        return redirect()->route('booking.index')->with([
+            'success' => $service['success'],
+        ]);
+    }
+
     public function portfolio_details()
     {
         return view('pages.portfolio_details');

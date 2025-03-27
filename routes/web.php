@@ -90,7 +90,6 @@ Route::get('/contact/store', [PagesController::class, 'contact_store'])->name('c
 Route::get('/comments', [PagesController::class, 'comments'])->name('comments');
 
 Route::get('/bookings', [PagesController::class, 'bookings'])->name('bookings.index');
-// Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
-Route::post('/booking/consultation', [BookingController::class, 'store'])->name('bookings.store');
+Route::post('/booking/consultation', [PagesController::class, 'bookingStore'])->name('bookings.store');
 // Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
 // Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');

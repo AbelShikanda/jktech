@@ -72,22 +72,4 @@ class Services extends Model
     {
         return $this->belongsToMany(ServiceCategories::class, 'service_service_categories', 'services_id', 'service_categories_id');
     }
-
-    /**
-     * The attributes that should be cast.
-     */
-    // public function orderItems()
-    // {
-    //     return $this->belongsToMany(Order_Items::class);
-    // }
-
-    // public function ratings()
-    // {
-    //     return $this->hasMany(Ratings::class);
-    // }
-
-    // public function averageRating()
-    // {
-    //     return $this->ratings()->avg('rating');
-    // }
 }
