@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\ServiceCategoryController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\ServiceTypeController;
+use App\Http\Controllers\Admin\WorkScheduleController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PagesController;
@@ -50,28 +52,16 @@ Route::group(['middleware' => 'adminauth'], function () {
     Route::resource('types', ServiceTypeController::class);
     Route::resource('service_categories', ServiceCategoryController::class);
     Route::resource('services', ServicesController::class);
-    //     Route::resource('product_images', ProductImageController::class);
-    //     Route::resource('orders', OrdersController::class);
-    //     Route::resource('order_items', OrderItemsController::class);
-    //     Route::resource('admins', AdminController::class);
-    //     Route::resource('users', UserController::class);
+    Route::resource('work', WorkScheduleController::class);
+    Route::resource('holiday', HolidayController::class);
     //     Route::resource('blogs', BlogController::class);
     //     Route::resource('blog_categories', BlogCategoryController::class);
     //     Route::resource('blog_images', BlogImageController::class);
     //     Route::resource('contact', ContactsController::class);
     //     Route::resource('prices', PricesController::class);
-    //     Route::resource('comment', CommentsController::class);
 
     //     Route::resource('permissions', PermissionsController::class);
     //     Route::resource('roles', RolesController::class);
-
-    //     Route::get('/promo', [PromoCodeController::class, 'index'])->name('promo.index');
-    //     Route::get('/create/promo', [PromoCodeController::class, 'create'])->name('promo.create');
-    //     Route::post('/create-promo', [PromoCodeController::class, 'createPromo'])->name('create.promo');
-    //     Route::get('/promo-edit/{id}', [PromoCodeController::class, 'edit'])->name('promo.edit');
-    //     Route::get('/promo-details/{id}', [PromoCodeController::class, 'show'])->name('promo.show');
-    //     Route::PATCH('/promo-update/{id}', [PromoCodeController::class, 'update'])->name('promo.update');
-    //     Route::DELETE('/promo-destroy/{id}', [PromoCodeController::class, 'destroy'])->name('promo.destroy');
 });
 
 Auth::routes();
@@ -91,5 +81,3 @@ Route::get('/comments', [PagesController::class, 'comments'])->name('comments');
 
 Route::get('/bookings', [PagesController::class, 'bookings'])->name('bookings.index');
 Route::post('/booking/consultation', [PagesController::class, 'bookingStore'])->name('bookings.store');
-// Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
-// Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');

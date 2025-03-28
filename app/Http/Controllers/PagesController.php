@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Services;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
@@ -25,6 +26,10 @@ class PagesController extends Controller
 
     public function bookingStore(Request $request)
     {
+        if (!Auth::user()) {
+            return redirect()->route('login');
+        }
+
         $validated = $request->validate([
             'service' => '',
             'date' => '',

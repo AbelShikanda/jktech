@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Models\Holiday;
+use App\Models\User;
 use App\Models\WorkingHour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +25,7 @@ class BookingService
 
         // 🚫 Check if the day is an off-day
         $workingHour = WorkingHour::where('day_of_week', $date->format('l'))->first();
-
-        dd($data, $date, $startTime, $endTime);
-        if (!$workingHour || $workingHour->is_off_day) {
+        if (!$workingHour || $workingHour->is_off_day == 1) {
             return ['error' => 'This day is an off-day. Please choose another day.'];
         }
 
