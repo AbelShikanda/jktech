@@ -34,11 +34,8 @@ class HomeController extends Controller
         //     ->take(2)
         //     ->get();
 
-        $services = Services::with(['serviceType', 'Category'])
-            ->latest()
-            ->take(10)
-            ->get();
-        return view('home', with([
+        $services = Services::all();
+        return view('bookings.index', with([
             'services' => $services,
         ]));
     }

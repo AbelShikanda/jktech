@@ -1,35 +1,36 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
 // userset
-@import 'userset/userset';
+@import "userset/userset";
 
 // BASE
-@import 'base/fonts';
-@import 'base/normalize';
-@import 'base/vars';
-@import 'base/selection-colors';
-@import 'base/body-element';
-
+@import "base/fonts";
+@import "base/normalize";
+@import "base/vars";
+@import "base/selection-colors";
+@import "base/body-element";
 
 // LAYOUTS
-@import 'layouts/grid';
-
+@import "layouts/grid";
 
 // MODULES;
-@import 'modules/device-notification';
-@import 'modules/section';
-@import 'modules/header';
-@import 'modules/side-nav';
-@import 'modules/intro';
-@import 'modules/work';
-@import 'modules/about';
-@import 'modules/contact';
-@import 'modules/hire';
-@import 'modules/outer-nav';
+@import "modules/device-notification";
+@import "modules/section";
+@import "modules/header";
+@import "modules/side-nav";
+@import "modules/intro";
+@import "modules/work";
+@import "modules/about";
+@import "modules/contact";
+@import "modules/hire";
+@import "modules/outer-nav";
+
+// AUTH:
+@import "auth/auth";

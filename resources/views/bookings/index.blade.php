@@ -8,14 +8,21 @@
                 @include('layouts.header')
                 @include('layouts.navBar')
                 <ul class="l-main-content main-content">
-                    <li class="l-section section section--is-active">
+                    <li class="l-section section">
                         <div id="hire-us" class="hire">
                             <h2>Book Consultation:</h2>
 
                             @if (session('error'))
                                 <p style="color: red;">{{ session('error') }}</p>
                             @endif
-                            <!-- checkout formspree.io for easy form setup -->
+
+                            @if (Session('success'))
+                                <div class="text-success text-center">
+                                    <strong>{{ Session('success') }}</strong>
+                                </div>
+                            @endif
+                            
+
                             <form action="{{ route('bookings.store') }}" method="POST" class="work-request" id="myForm">
                                 @csrf
                                 <div class="work-request--options">
@@ -24,7 +31,8 @@
                                             @php
                                                 $checkboxId = 'opt-' . $service->id;
                                             @endphp
-                                            <input id="{{ $checkboxId }}" name="service[]" type="checkbox" value="{{ $service->name }}">
+                                            <input id="{{ $checkboxId }}" name="service[]" type="checkbox"
+                                                value="{{ $service->id }}">
                                             <label for="{{ $checkboxId }}">
                                                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

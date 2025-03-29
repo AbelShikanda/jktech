@@ -32,11 +32,11 @@
         </p>
         <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item dropdown">
-                <a href="#ui-elements" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <a href="#ui-element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-box fe-16"></i>
                     <span class="ml-3 item-text">Schedules</span>
                 </a>
-                <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
+                <ul class="collapse list-unstyled pl-4 w-100" id="ui-element">
                     <li class="nav-item">
                         <a class="nav-link pl-3" href="{{ route('work.index') }}"><span class="ml-1 item-text">Working Hours</span>
                         </a>

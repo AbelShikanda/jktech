@@ -31,9 +31,9 @@ class PagesController extends Controller
         }
 
         $validated = $request->validate([
-            'service' => '',
-            'date' => '',
-            'start_time' => '',
+            'service' => 'required|array',
+            'date' => 'required',
+            'start_time' => 'required',
         ]);
 
         $service = $this->bookingService->createBooking($validated);
@@ -42,9 +42,14 @@ class PagesController extends Controller
             return redirect()->back()->with('error', $service['error']);
         }
 
-        return redirect()->route('booking.index')->with([
+        return redirect()->route('bookings.index')->with([
             'success' => $service['success'],
         ]);
+    }
+
+    public function portfolio()
+    {
+        return view('pages.portfolio');
     }
 
     public function portfolio_details()

@@ -51,6 +51,8 @@ class BookingService
             'confirmed' => false,
         ]);
 
+        $booking->services()->attach($data['service']);
+
         return ['success' => 'Booking successful.', 'booking' => $booking];
     }
 }

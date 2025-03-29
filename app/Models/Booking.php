@@ -16,6 +16,11 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function services()
+    {
+        return $this->belongsToMany(Services::class, 'booking_services', 'bookings_id', 'services_id');
+    }
+
     public static function isAvailable($date, $startTime)
     {
         return !self::where('date', $date)
@@ -31,12 +36,18 @@ class Booking extends Model
             return ['status' => false, 'message' => 'This time slot is already booked.'];
         }
 
-        return self::create([
+        $booking = self::create([
             'user_id' => $data['user_id'],
             'date' => $data['date'],
             'start_time' => $data['start_time'],
             'end_time' => $oneHourLater,
             'confirmed' => false
         ]);
+
+        if (isset($data['service']) && is_array($data['service'])) {
+            $booking->services()->attach($data['service']);
+        }
+
+        return $booking;
     }
 }

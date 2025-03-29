@@ -14,27 +14,7 @@ use App\Http\Controllers\UnderConstructionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
- * |--------------------------------------------------------------------------
- * | Web Routes
- * |--------------------------------------------------------------------------
- * |
- * | Here is where you can register web routes for your application. These
- * | routes are loaded by the RouteServiceProvider within a group which
- * | contains the "web" middleware group. Now create something great!
- * |
- */
-
-/*
- * |--------------------------------------------------------------------------
- * | Web Routes
- * |--------------------------------------------------------------------------
- */
 Route::get('/under_construction', [UnderConstructionController::class, 'underConstruction'])->name('underConstruction');
-
-// Route::get('/sitemap.xml', function () {
-//     return response()->file(public_path('sitemap.xml'));
-// });
 
 Route::get('/admin_', function () {
     return redirect()->route('dashboard.index');
