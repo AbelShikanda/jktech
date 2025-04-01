@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700|Source+Sans+Pro:300,400,600,700&display=swap");
+
+$bg-color: #151728;
+$border-color: #272a3a;
+$title-font: "DM Sans", sans-serif;
+$body-font: "Source Sans Pro", sans-serif;
+$side-title: #5c5e6e;
+$button: #8f98a9;
+
+.portfolio {
+	display: flex;
+	padding-top: 20px;
+	position: relative;
+	z-index: 2;
+	&-left {
+		width: 310px;
+		flex-shrink: 0;
+	}
+	&-right {
+		flex-grow: 1;
+		padding-left: 20px;
+	}
+	@media screen and (max-width: 768px) {
+		flex-wrap: wrap;
+		flex-direction: column-reverse;
+		&-right {
+			padding-left: 0;
+			margin-bottom: 20px;
+		}
+		&-left {
+			width: 100%;
+		}
+	}
+}
+
+.portstus-main {
+	padding: 0 20px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid $border-color;
+	padding-bottom: 20px;
+	flex-wrap: wrap;
+}
+
+.portland {
+	padding-top: 20px;
+	margin-top: 20px;
+	.portstus-main {
+		border: none;
+		display: flex;
+	}
+	.intro-menu {
+		margin-bottom: auto;
+		margin-top: 5px;
+	}
+}
+
+.portland-detail {
+	width: calc(100% - 110px);
+}
+
+.portland-title span {
+	color: #1771d6;
+	cursor: pointer;
+}
+
+.portland-date {
+	font-size: 15px;
+	color: #595c6c;
+	margin-top: 4px;
+}
+
+.portland-content {
+	padding: 0 20px 20px;
+}
+
+.portland-photo {
+	width: 100%;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 4px;
+	margin-top: 10px;
+}
+
+.portland-photos {
+	display: flex;
+	margin-top: 20px;
+	max-height: 30vh;
+}
+
+.portland-photos > .portland-photo {
+	width: 50%;
+}
+
+.portland-right {
+	width: 50%;
+	margin-left: 10px;
+	line-height: 0;
+	display: flex;
+	flex-direction: column;
+	.portland-photo {
+		height: calc(50% - 10px);
+	}
+}
+
+.portland-actions {
+	padding: 0 20px 20px;
+}
+
+.portland-action {
+	margin-right: 20px;
+	text-decoration: none;
+	color: #a2a4b4;
+	display: inline-flex;
+	align-items: center;
+	font-weight: 600;
+	&:hover {
+		color: #fff;
+	}
+	svg {
+		width: 16px;
+		margin-right: 6px;
+	}
+}

@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('leftSide')
+    {{-- Leave this section empty to exclude the sidebar --}}
+@endsection
+@section('rightSide')
+    {{-- Leave this section empty to exclude the sidebar --}}
+@endsection
+
 @section('content')
     <header class="login-header">
 

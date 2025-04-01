@@ -35,7 +35,7 @@ class HomeController extends Controller
         //     ->get();
 
         $services = Services::all();
-        return view('bookings.index', with([
+        return view('home', with([
             'services' => $services,
         ]));
     }

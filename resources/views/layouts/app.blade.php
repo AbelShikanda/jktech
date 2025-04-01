@@ -36,31 +36,34 @@
 
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
 <body>
 
-    <!-- notification for small viewports and landscape oriented smartphones -->
-    <div class="device-notification">
-        <a class="device-notification--logo" href="{{ url('/') }}">
-            <img src="{{ asset('img/logo.png') }}" alt="Global">
-            <p>{{ config('app.name', 'jksolutions') }}</p>
-        </a>
+    <div class="container" x-data="{ rightSide: false, leftSide: false }">
+        @section('leftSide')
+            @include('layouts.leftSide')
+        @show
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        </div>
-    </div>
-
-    <div class="perspective effect-rotate-left">
         @yield('content')
+
+        @auth
+            @section('rightSide')
+                @include('layouts.rightSide')
+            @show
+        @endauth
+
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script>
-        window.jQuery || document.write('<script src="{{ asset('userset/js/vendor/jquery-2') }}.2.4.min.js"><\/script>')
-    </script>
-    <script src="{{ asset('userset/js/functions-min.js') }}"></script>
+
 </body>
 
 </html>
+<!-- @section('nav')
+    {{-- Leave this section empty to exclude the sidebar --}}
+@endsection
+@section('sidebar')
+    {{-- Leave this section empty to exclude the sidebar --}}
+@endsection -->

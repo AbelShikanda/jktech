@@ -30,16 +30,26 @@ class PagesController extends Controller
             return redirect()->route('login');
         }
 
+        if (!$request->services) {
+            return redirect()->back()->with([
+                'error' => 'missing services',
+            ]);
+        }
+
         $validated = $request->validate([
             'service' => 'required|array',
             'date' => 'required',
             'start_time' => 'required',
         ]);
 
+        dd($validated);
+
         $service = $this->bookingService->createBooking($validated);
 
         if (isset($service['error'])) {
-            return redirect()->back()->with('error', $service['error']);
+            return redirect()->route('bookings.index')->with([
+                'error', $service['error']
+            ]);
         }
 
         return redirect()->route('bookings.index')->with([
@@ -115,5 +125,15 @@ class PagesController extends Controller
     public function delete_booking()
     {
         return view('pages.delete_booking');
+    }
+
+    public function getHolidays($month, $year)
+    {
+        // Fetch holidays for the given month and year
+        $holidays = \App\Models\Holiday::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get(['date']);  // Fetch only the 'date' field
+
+        return response()->json($holidays);
     }
 }

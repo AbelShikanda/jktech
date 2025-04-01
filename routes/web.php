@@ -61,3 +61,4 @@ Route::get('/comments', [PagesController::class, 'comments'])->name('comments');
 
 Route::get('/bookings', [PagesController::class, 'bookings'])->name('bookings.index');
 Route::post('/booking/consultation', [PagesController::class, 'bookingStore'])->name('bookings.store');
+Route::post('/api/holidays/${year}/${month}', [PagesController::class, 'getHolidays'])->name('getHolidays');
