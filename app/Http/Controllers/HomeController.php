@@ -34,9 +34,9 @@ class HomeController extends Controller
         //     ->take(2)
         //     ->get();
 
-        $services = Services::all();
+        // $services = Services::all();
         return view('home', with([
-            'services' => $services,
+            // 'services' => $services,
         ]));
     }
 }

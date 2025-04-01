@@ -72,7 +72,7 @@
                                                     <div class="booking-month">Jan</div>
                                                     <div class="booking-day">01</div>
                                                 </div> -->
-                            <div class="booking-title"><a href="{{ route('bookings.index') }}"> Book a consultation </a></div>
+                            <div class="booking-title"><a href="{{ route('underConstruction') }}"> Book a consultation </a></div>
                             <div class="booking-subtitle">find out more about what you can do today</div>
                         </div>
                     </div>

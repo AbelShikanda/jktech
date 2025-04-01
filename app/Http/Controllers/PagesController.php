@@ -18,9 +18,9 @@ class PagesController extends Controller
 
     public function bookings(Request $request)
     {
-        $services = Services::all();
+        // $services = Services::all();
         return view('bookings.index', with([
-            'services' => $services,
+            // 'services' => $services,
         ]));
     }
 
