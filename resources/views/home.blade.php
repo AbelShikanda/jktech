@@ -11,28 +11,12 @@
             </button>
         </div>
         <div class="main-container">
-            <div class="profile">
-                <div class="profile-avatar">
-                    <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj"
-                        alt="" class="profile-img">
-                    <div class="profile-name">BUSINESS INTELLIGENCE</div>
-                </div>
-                <!-- <a href="https://www.youtube.com/channel/UC0jnIUTS851tfF8v0Esp5dA"><img src="https://images.unsplash.com/photo-1508247967583-7d982ea01526?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80"
-                                                        alt="" class="profile-cover"></a> -->
-                <div class="profile-menu">
-                    <a class="profile-menu-link active">Home</a>
-                    <a class="profile-menu-link">About</a>
-                    <!-- <a class="profile-menu-link">Friends</a>
-                                                <a class="profile-menu-link">Photos</a>
-                                                <a class="profile-menu-link">More</a> -->
-                </div>
-            </div>
+            @include('layouts.partials.profile')
             <div class="timeline">
                 <div class="timeline-left">
                     <div class="intro box">
                         <div class="intro-title">
                             Introduction
-                            <!-- <button class="intro-menu"></button> -->
                         </div>
                         <div class="info">
                             <div class="info-item">
@@ -68,10 +52,6 @@
                         <div class="booking-wrapper">
                             <img src="https://msimonline.ischool.uw.edu/wp-content/uploads/sites/2/2021/04/how-to-become-a-business-intelligence-analyst.jpg"
                                 class="booking-img" />
-                            <!-- <div class="booking-date">
-                                                    <div class="booking-month">Jan</div>
-                                                    <div class="booking-day">01</div>
-                                                </div> -->
                             <div class="booking-title"><a href="{{ route('underConstruction') }}"> Book a consultation </a></div>
                             <div class="booking-subtitle">find out more about what you can do today</div>
                         </div>
@@ -98,8 +78,6 @@
                     <div class="status box">
                         <div class="status-menu">
                             <a class="status-menu-item active" href="#">Any question. how can i help?</a>
-                            <!-- <a class="status-menu-item" href="#">Photos</a>
-                                                        <a class="status-menu-item" href="#">Videos</a> -->
                         </div>
                         <div class="status-main">
                             <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj"

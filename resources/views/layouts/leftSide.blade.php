@@ -32,22 +32,22 @@
                 Portfolio
             </a>
             <!-- <a href="{{ route('tutorials') }}"> -->
-            <a href="{{ route('underConstruction') }}">
+            <!-- <a href="{{ route('underConstruction') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
                     <circle cx="12" cy="10" r="3" />
                 </svg>
                 Tutorials
-            </a>
+            </a> -->
             <!-- <a href="{{ route('education') }}"> -->
-            <a href="{{ route('underConstruction') }}">
+            <!-- <a href="{{ route('underConstruction') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                     <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
                     <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
                 </svg>
-                Knowledge Base
+                Knowledge Base -->
             </a>
             <!-- <a href="#">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
