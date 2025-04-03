@@ -16,13 +16,20 @@ class ServiceCategoriesSeeder extends Seeder
     public function run()
     {
         $serviceCategories = [
-            'Analytics',
+            'Governance and Compliance',
             'Cloud',
             'AI',
             'Security',
-            'Web App',
             'BI Solutions',
-            'Mobile App',
+            'Web Development',
+            'Software Development',
+            'Mobile Development',
+            'Management Systems',
+            'Marketing',
+            'Consulting',
+            'Analytics',
+            'Dashboarding',
+            'Maintanance Packages',
         ];
 
         foreach ($serviceCategories as $category) {

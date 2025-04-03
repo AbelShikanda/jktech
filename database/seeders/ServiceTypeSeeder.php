@@ -16,14 +16,22 @@ class ServiceTypeSeeder extends Seeder
     public function run()
     {
         $serviceTypes = [
-            'Data Analytics',
-            'Business Intelligence Consulting',
-            'Enterprise Reporting & Dashboards',
-            'Data Governance & Compliance',
-            'Software Development',
-            'Mobile Application Development',
-            'Web Application Development',
-            'Content Marketing Strategy',
+            'Data Analytics and Reporting',
+            'Document Management Systems',
+            'Consulting',
+            'E-commerce Dashboarding',
+            'E-commerce',
+            'Portfolio',
+            'Non Profit',
+            'Business',
+            'Blog',
+            'Forum/cummunity',
+            'Education',
+            'Content Marketing',
+            'Point Of Sale',
+            'Website Maintanance',
+            'Mobile Application Maintanance',
+            'Systems and Software Maintanance',
         ];
 
         foreach ($serviceTypes as $service) {

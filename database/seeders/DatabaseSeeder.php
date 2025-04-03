@@ -14,10 +14,31 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            ServiceTypeSeeder::class,
-            ServiceCategoriesSeeder::class,
+            // Users
             CreateAdminSeeder::class,
-            WorkingHourSeeder::class,
+            CreateUserSeeder::class,
+        ]);
+        $this->call([
+            // Categories and Types
+            ServiceCategoriesSeeder::class,
+            ServiceTypeSeeder::class,
+            KnowledgeBaseCategorySeeder::class,
+        ]);
+        $this->call([
+            // Attributes
+            CreateHolidaysSeeder::class,
+            CreateWorkingHoursSeeder::class,
+        ]);
+        $this->call([
+            // Products
+            CreateBookingsSeeder::class,
+            CreateServicesSeeder::class,
+            KnowledgeBaseSeeder::class,
+        ]);
+        $this->call([
+            // pivots
+            CreatePIvotSeeder::class,
+            KnowledgeKnowledgeBaseCategorySeeder::class,
         ]);
     }
 }
