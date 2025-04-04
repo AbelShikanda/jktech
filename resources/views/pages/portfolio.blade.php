@@ -14,50 +14,29 @@
             @include('layouts.partials.profile')
             <div class="portfolio">
                 <div class="portfolio-right">
+                    @foreach($catalog as $item)
                     <div class="portland box">
                         <div class="portstus-main">
                             <div class="portland-detail">
-                                <div class="portland-title"> Web <span>App</span></div>
+                                <div class="portland-title">{{ $item->title }} &nbsp; <span>{{ $item->description }}</span></div>
                             </div>
                             <button class="intro-menu"></button>
-                            <div class="dropdown-menu">
-                                <ul>
-                                    <li><a href="https://printshopeld.com/" target="_blank">View the site</a></li>
-                                </ul>
-                            </div>
+                            <ul class="select-dropdown__list">
+                                <li data-value="1" class="select-dropdown__list-item"><a href="{{ $item->url }}"
+                                        target="_blank">View the site</a></li>
+                            </ul>
                         </div>
-                        <div class="portland-content">Web Applicatoin.
+                        <div class="portland-content">
                             <div class="portland-photos">
-                                <img src="{{ asset('img/portfolio10.png') }}" alt="" class="portland-photo" />
+                                <img src="{{ asset('storage/' . $item->image_one) }}" alt="" class="portland-photo" />
                                 <div class="portland-right">
-                                    <img src="{{ asset('img/portfolio11.png') }}" alt="" class="portland-photo" />
-                                    <img src="{{ asset('img/portfolio12.png') }}" alt="" class="portland-photo" />
+                                    <img src="{{ asset('storage/' . $item->image_two) }}" alt="" class="portland-photo" />
+                                    <img src="{{ asset('storage/' . $item->image_three) }}" alt="" class="portland-photo" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="portland box">
-                        <div class="portstus-main">
-                            <div class="portland-detail">
-                                <div class="portland-title"> Web <span>App</span></div>
-                            </div>
-                            <button class="intro-menu"></button>
-                            <div class="dropdown-menu">
-                                <ul>
-                                    <li><a href="http://www.1n-west.co.ke/home" target="_blank">View the site</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="portland-content">Web Applicatoin.
-                            <div class="portland-photos">
-                                <img src="{{ asset('img/portfolio21.png') }}" alt="" class="portland-photo" />
-                                <div class="portland-right">
-                                    <img src="{{ asset('img/portfolio22.png') }}" alt="" class="portland-photo" />
-                                    <img src="{{ asset('img/portfolio23.png') }}" alt="" class="portland-photo" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -66,16 +45,47 @@
     </div>
 
     <script>
-        document.addEventListener("click", function(event) {
-            if (event.target.classList.contains("intro-menu")) {
-                const dropdownMenu = event.target.nextElementSibling;
-                document.querySelectorAll(".dropdown-menu").forEach(menu => {
-                    if (menu !== dropdownMenu) menu.classList.remove("active");
-                });
-                dropdownMenu.classList.toggle("active");
-            } else {
-                document.querySelectorAll(".dropdown-menu").forEach(menu => menu.classList.remove("active"));
+        // Toggle the dropdown when clicking the button
+        $('.intro-menu').on('click', function(e) {
+            e.stopPropagation(); // Prevent the event from propagating to the document
+
+            var dropdown = $(this).next('.select-dropdown__list')[0]; // Get the dropdown for this button
+
+            // First, close all other dropdowns
+            $('.select-dropdown__list').removeClass('active');
+
+            // Toggle this dropdown
+            $(dropdown).toggleClass('active');
+
+            // Adjust the dropdown position if necessary
+            adjustDropdownPosition(dropdown);
+        });
+
+        // Close the dropdown when an item is selected
+        $('.select-dropdown__list-item').on('click', function() {
+            var itemValue = $(this).data('value');
+            console.log(itemValue);
+            $('.intro-menu span').text($(this).text()).parent().attr('data-value', itemValue);
+
+            // Close the dropdown after an item is selected
+            $('.select-dropdown__list').removeClass('active');
+        });
+
+        // Close the dropdown when clicking anywhere outside the dropdown or button
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.portstus-main')
+                .length) { // Check if the click is outside the dropdown and button
+                $('.select-dropdown__list').removeClass('active');
             }
         });
+
+        // Function to ensure dropdown stays within the viewport
+        function adjustDropdownPosition(dropdown) {
+            const rect = dropdown.getBoundingClientRect();
+            if (rect.right > window.innerWidth) {
+                dropdown.style.left = "auto";
+                dropdown.style.right = "0"; // Align to the right if overflowing
+            }
+        }
     </script>
 @endsection

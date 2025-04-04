@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faqs;
 use App\Models\Services;
 use Illuminate\Http\Request;
 
@@ -29,14 +30,9 @@ class HomeController extends Controller
         //     ->take(6)
         //     ->get();
 
-        // $blogs = BlogImages::with('blogs')
-        //     ->orderBy('id', 'DESC')
-        //     ->take(2)
-        //     ->get();
-
-        // $services = Services::all();
+        $faqs = Faqs::where('is_active', 1)->get();
         return view('home', with([
-            // 'services' => $services,
+            'faqs' => $faqs,
         ]));
     }
 }

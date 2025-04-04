@@ -38,11 +38,13 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="ui-element">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="{{ route('work.index') }}"><span class="ml-1 item-text">Working Hours</span>
+                        <a class="nav-link pl-3" href="{{ route('work.index') }}"><span class="ml-1 item-text">Working
+                                Hours</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="{{ route('holiday.index') }}"><span class="ml-1 item-text">Holidays</span>
+                        <a class="nav-link pl-3" href="{{ route('holiday.index') }}"><span
+                                class="ml-1 item-text">Holidays</span>
                         </a>
                     </li>
                 </ul>
@@ -83,16 +85,14 @@
                                 class="ml-1 item-text">Categories</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="{{ route('types.index') }}"><span 
-                            class="ml-1 item-text">Types</span></a>
+                        <a class="nav-link pl-3" href="{{ route('types.index') }}"><span
+                                class="ml-1 item-text">Types</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Images</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Images</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Prices</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Prices</span></a>
                     </li>
                 </ul>
             </li>
@@ -108,16 +108,13 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="charts">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Users</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Users</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Contacts</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Contacts</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Admins</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Admins</span></a>
                     </li>
                 </ul>
             </li>
@@ -128,12 +125,10 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="chart">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Roles</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Roles</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Permissions</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Permissions</span></a>
                     </li>
                 </ul>
             </li>
@@ -150,42 +145,54 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="tables">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Articles</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Articles</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Categories</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Categories</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Images</span></a>
+                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Images</span></a>
                     </li>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Comments</span></a>
-                    </li>
-                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Comments</span></a>
             </li>
         </ul>
-        <!-- <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Promo Codes Components</span>
+        </li>
+        </ul>
+        <p class="text-muted nav-heading mt-4 mb-1">
+            <span>FAQs Components</span>
         </p>
         <ul class="navbar-nav flex-fill w-100 mb-2">
 
             <li class="nav-item dropdown">
                 <a href="#table" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-grid fe-16"></i>
-                    <span class="ml-3 item-text">Promotion Codes</span>
+                    <span class="ml-3 item-text">FAQs</span>
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="table">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span
-                                class="ml-1 item-text">Promo Codes</span></a>
+                        <a class="nav-link pl-3" href="{{ route('faqs.index') }}"><span class="ml-1 item-text">faqs</span></a>
                     </li>
                 </ul>
             </li>
-        </ul> -->
+        </ul>
+        <p class="text-muted nav-heading mt-4 mb-1">
+            <span>Portfolio Components</span>
+        </p>
+        <ul class="navbar-nav flex-fill w-100 mb-2">
+
+            <li class="nav-item dropdown">
+                <a href="#portfolio" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                    <i class="fe fe-grid fe-16"></i>
+                    <span class="ml-3 item-text">Portifolio</span>
+                </a>
+                <ul class="collapse list-unstyled pl-4 w-100" id="portfolio">
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="{{ route('portfolio.index') }}"><span class="ml-1 item-text">work</span></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </nav>
 </aside>

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FaqsController;
 use App\Http\Controllers\Admin\HolidayController;
+use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\ServiceCategoryController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\ServiceTypeController;
@@ -34,6 +36,8 @@ Route::group(['middleware' => 'adminauth'], function () {
     Route::resource('services', ServicesController::class);
     Route::resource('work', WorkScheduleController::class);
     Route::resource('holiday', HolidayController::class);
+    Route::resource('faqs', FaqsController::class);
+    Route::resource('portfolio', PortfolioController::class);
     //     Route::resource('blogs', BlogController::class);
     //     Route::resource('blog_categories', BlogCategoryController::class);
     //     Route::resource('blog_images', BlogImageController::class);
@@ -49,8 +53,8 @@ Auth::routes();
 Route::redirect('/home', '/');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/portfolio', [PagesController::class, 'portfolio'])->name('portfolio');
-Route::get('/portfolio/details', [PagesController::class, 'portfolio_details'])->name('portfolio_details');
+Route::get('/catalog', [PagesController::class, 'catalog'])->name('catalog');
+// Route::get('/portfolio/details', [PagesController::class, 'portfolio_details'])->name('portfolio_details');
 Route::get('/tutorials', [PagesController::class, 'tutorials'])->name('tutorials');
 Route::get('/tutorials/datails', [PagesController::class, 'tutorials_datails'])->name('tutorials_datails');
 Route::get('/education', [PagesController::class, 'education'])->name('education');

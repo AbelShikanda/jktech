@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use CreateServicesTable;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
             // Attributes
             CreateHolidaysSeeder::class,
             CreateWorkingHoursSeeder::class,
+            FaqsSeeder::class,
         ]);
         $this->call([
             // Products

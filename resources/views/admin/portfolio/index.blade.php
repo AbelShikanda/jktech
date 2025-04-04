@@ -4,16 +4,16 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <h2 class="mb-2 page-title">Service faqs Table</h2>
+                <h2 class="mb-2 page-title">services Table</h2>
                 <div class="row">
                     <div class="col-md-6">
                         <p class="card-text">
-                            faqs of Services available in the organization
+                            service available in the organization
                         </p>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ route('faqs.create') }}" type="button"
-                            class=" float-right btn mb-2 btn-outline-primary">Add FAQ</a>
+                        <a href="{{ route('portfolio.create') }}" type="button"
+                            class=" float-right btn mb-2 btn-outline-primary">Add Work</a>
                     </div>
                 </div>
 
@@ -33,27 +33,19 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Question</th>
-                                            <th>Answer</th>
-                                            <th>Active</th>
-                                            <th>updated at</th>
+                                            <th>Title</th>
+                                            <th>Ur;</th>
+                                            <th>Updated_on</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($faqs as $item)
+                                        @foreach ($work as $w)
                                             <tr>
-                                                <td>{{ $item->id }}</td>
-                                                <td>{{ Str::words($item->question, 4, '...') }}</td>
-                                                <td>{{ Str::words($item->answer, 4, '...') }}</td>
-                                                <td>
-                                                    @if ($item->is_active)
-                                                        <span class="badge bg-success">Active</span>
-                                                    @else
-                                                        <span class="badge bg-warning">inactive</span>
-                                                    @endif
-
-                                                </td>
-                                                <td>{{ $item->updated_at }}</td>
+                                                <td>{{ $w->id }}</td>
+                                                <td>{{ $w->title }}</td>
+                                                <td>{{ $w->url }}</td>
+                                                <td>{{ $w->updated_at }}</td>
                                                 <td><button class="btn btn-sm dropdown-toggle more-horizontal"
                                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                                         aria-expanded="false">
@@ -61,21 +53,22 @@
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item"
-                                                            href="{{ route('faqs.edit', $item->id) }}">Edit</a>
-
+                                                            href="{{ route('portfolio.show', $w->id) }}">view</a>
                                                         <a class="dropdown-item"
-                                                            href="{{ route('faqs.destroy', $item->id) }}"
-                                                            onclick="event.preventDefault();
-                                                            document.getElementById('destroy-faqs').submit();">
-                                                            {{ __('Remove') }}
-                                                        </a>
+                                                            href="{{ route('portfolio.edit', $w->id) }}">Edit</a>
+                                                            <!-- <a class="dropdown-item"
+                                                                href="{{ route('portfolio.destroy', $w->id) }}"
+                                                                onclick="event.preventDefault();
+                                                            document.getElementById('destroy-portfolio').submit();">
+                                                                {{ __('Remove') }}
+                                                            </a>
 
-                                                        <form id="destroy-faqs"
-                                                            action="{{ route('faqs.destroy', $item->id) }}" method="POST"
-                                                            class="d-none">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
+                                                            <form id="destroy-portfolio"
+                                                                action="{{ route('portfolio.destroy', $w->id) }}"
+                                                                method="POST" class="d-none">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form> -->
                                                     </div>
                                                 </td>
                                             </tr>
@@ -89,6 +82,5 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-
     @include('admin.layouts.partials.modals')
 @endsection

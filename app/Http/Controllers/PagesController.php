@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Portfolio;
 use App\Models\Services;
 use App\Services\BookingService;
 use Illuminate\Http\Request;
@@ -18,9 +19,9 @@ class PagesController extends Controller
 
     public function bookings(Request $request)
     {
-        // $services = Services::all();
+        $services = Services::all();
         return view('bookings.index', with([
-            // 'services' => $services,
+            'services' => $services,
         ]));
     }
 
@@ -57,9 +58,12 @@ class PagesController extends Controller
         ]);
     }
 
-    public function portfolio()
+    public function catalog()
     {
-        return view('pages.portfolio');
+        $catalog = Portfolio::latest()->get();
+        return view('pages.portfolio', with([
+            'catalog' => $catalog,
+        ]));
     }
 
     public function portfolio_details()

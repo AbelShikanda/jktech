@@ -387,8 +387,8 @@ jobs:
           # in the event of trouble recognizing the changes after the link find a solution to refresh
           script: |
             cd $ACTIVE_RELEASE_PATH
-            # php artisan migrate --force
-            # php artisan db:seed --force
+            php artisan migrate --force
+            php artisan db:seed --force
             # php artisan db:seed --class=ServiceTypeSeeder
             # php artisan migrate --path=/database/migrations/2025_02_16_193521_create_promo_codes_table.php --force
 

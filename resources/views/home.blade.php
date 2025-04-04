@@ -52,7 +52,8 @@
                         <div class="booking-wrapper">
                             <img src="https://msimonline.ischool.uw.edu/wp-content/uploads/sites/2/2021/04/how-to-become-a-business-intelligence-analyst.jpg"
                                 class="booking-img" />
-                            <div class="booking-title"><a href="{{ route('underConstruction') }}"> Book a consultation </a></div>
+                            <div class="booking-title"><a href="{{ route('bookings.index') }}"> Book a consultation </a>
+                            </div>
                             <div class="booking-subtitle">find out more about what you can do today</div>
                         </div>
                     </div>
@@ -84,48 +85,36 @@
                                 class="status-img">
                             <textarea class="status-textarea" placeholder="Ask anything.."></textarea>
                             <a href="{{ route('underConstruction') }}" class="status-share">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-arrow-up-short" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
                                         d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
                                 </svg>
                             </a>
                             <!-- <button class="status-share">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd"
-                                                                d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
-                                                        </svg>
-                                                    </button> -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                    fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" />
+                                                                </svg>
+                                                            </button> -->
                         </div>
                         <div class="status-actions">
                             <!-- <p>This is your response</p> -->
                         </div>
                     </div>
-                    <div class="album box">
-                        <div class="album-content px-5">
-                            Learn how to use AI in your business.
-                            <div class="album-photos">
-                                <div class="album-right">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi officia a, nobis
-                                        excepturi aut, voluptatibus quos eius molestias unde tempore eveniet sint eligendi
-                                        facere,</p>
+                    @foreach ($faqs as $faq)
+                        <div class="album box">
+                            <div class="album-content px-5">
+                                {{ $faq->question }}
+                                <div class="album-photos">
+                                    <div class="album-right">
+                                        <p>{{ $faq->answer }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="album box">
-                        <div class="album-content px-5">
-                            Learn how to use AI in your business.
-                            <div class="album-photos">
-                                <div class="album-right">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi officia a, nobis
-                                        excepturi aut, voluptatibus quos eius molestias unde tempore eveniet sint eligendi
-                                        facere,</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -140,6 +129,15 @@
                     // Prevent clicking inside from closing it immediately
                     if (!event.target.closest(".album-photos")) {
                         const photos = this.querySelector(".album-photos");
+
+                        // Close any currently open .album-photos
+                        document.querySelectorAll(".album-photos.active").forEach(openPhoto => {
+                            if (openPhoto !== photos) {
+                                openPhoto.classList.remove("active");
+                            }
+                        });
+
+                        // Toggle current one
                         photos.classList.toggle("active");
                     }
                 });
