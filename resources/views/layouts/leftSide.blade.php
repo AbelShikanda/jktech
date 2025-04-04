@@ -11,7 +11,7 @@
             <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
     </div>
-    <div class="logo"><a href="{{ route('home') }}">ULTRANET</a></div>
+    <div class="logo">J K E</div>
     <div class="side-wrapper">
         <div class="side-title">MENU</div>
         <div class="side-menu">
