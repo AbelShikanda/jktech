@@ -13,14 +13,14 @@
                 <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" />
             </svg>
         </button>
-        <span class="account-user">Quan Ha
+        <span class="account-user"> {{ Auth::user()->first_name }}
             <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj" alt=""
                 class="account-profile" alt="">
             <span>▼</span>
         </span>
     </div>
-    <div class="side-wrapper stories">
-        <div class="side-title">STORIES</div>
+    <!-- <div class="side-wrapper stories">
+        <div class="side-title">BOOKINGS</div>
         <div class="user">
             <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj" alt=""
                 class="user-img">
@@ -28,31 +28,23 @@
                 <div class="album-date">12 hours ago</div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="side-wrapper contacts">
-        <div class="side-title">CONTACTS</div>
-        <div class="user">
-            <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj" class="user-img">
-            <div class="username">Andrei Mashrin
-                <div class="user-status"></div>
+        <!-- <div class="side-title">CONTACTS</div> -->
+        <div class="side-title">BOOKING</div>
+
+        @foreach ($bookings as $booking)
+            <div class="user">
+                <!-- <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj" class="user-img"> -->
+                <div class="username">Andrei
+                </div>
+                <div class="username">Andrei
+                    <div class="user-status"></div>
+                </div>
             </div>
-        </div>
-        <div class="user">
-            <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj"
-                class="user-img">
-            <div class="username">Aryn Jacobssen
-                <div class="user-status offline"></div>
-            </div>
-        </div>
-        <div class="user">
-            <img src="https://yt3.googleusercontent.com/0H-Pv3viQBfH9Q-A0zVEtUao_qHH1VR8fbRc6Fb05slh2mpONf6NOkhwYYibb5bQZgys1i3obQ=s160-c-k-c0x00ffffff-no-rj"
-                class="user-img">
-            <div class="username">Carole Landu
-                <div class="user-status offline"></div>
-            </div>
-        </div>
+        @endforeach
     </div>
-    <div class="search-bar right-search">
+    <!-- <div class="search-bar right-search">
         <input type="text" placeholder="Search" />
         <div class="search-bar-svgs">
             <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
@@ -70,5 +62,5 @@
                 <path d="M12 5v14M5 12h14" />
             </svg>
         </div>
-    </div>
+    </div> -->
 </div>

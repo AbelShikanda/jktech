@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Portfolio;
 use App\Models\Services;
 use App\Services\BookingService;
@@ -31,7 +32,7 @@ class PagesController extends Controller
             return redirect()->route('login');
         }
 
-        if (!$request->services) {
+        if (!$request->service) {
             return redirect()->back()->with([
                 'error' => 'missing services',
             ]);
@@ -42,8 +43,6 @@ class PagesController extends Controller
             'date' => 'required',
             'start_time' => 'required',
         ]);
-
-        dd($validated);
 
         $service = $this->bookingService->createBooking($validated);
 

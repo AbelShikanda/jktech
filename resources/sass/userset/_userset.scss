@@ -464,7 +464,7 @@ body {
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
-	margin-left: auto;
+	margin-left: 15px;
 	&.offline {
 		background-color: #606a8d;
 	}
@@ -475,7 +475,7 @@ body {
 
 .contacts .username {
 	display: flex;
-	flex: 1;
+	padding-right: 5px;
 	align-items: center;
 }
 
