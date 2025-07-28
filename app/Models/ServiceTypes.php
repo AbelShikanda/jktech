@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class ServiceTypes extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
 
     /**
      * The attributes that are mass assignable.
@@ -16,8 +17,9 @@ class ServiceTypes extends Model
      * @var array
      */
     protected $fillable = [
-        'services_id',
-        'service_types_id',
+        'name',
+        'slug',
+        'price',
     ];
 
     /**
@@ -26,7 +28,7 @@ class ServiceTypes extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 

@@ -9,114 +9,77 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $types = ServiceTypes::latest()->get();
-        return view('admin.types.index', with([
-            'types' => $types,
-        ]));
+        return view('admin.types.index', compact('types'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.types.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $types = $request->validate([
-            'name' => 'required',
-            'slug' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:service_types,slug,',
+            'price' => 'required|numeric|min:0',
         ]);
+
+        if (empty($validated['slug'])) {
+            unset($validated['slug']);
+        }
 
         try {
             DB::beginTransaction();
 
-            $types = ServiceTypes::create([
-                'name' => $request->input('name'),
-                'slug' => $request->input('slug'),
-            ]);
+            $type = ServiceTypes::create($validated);
 
-            if (!$types) {
-                DB::rollBack();
-                return back()->with(['message', 'something went wrong while saving your data']);
-            }
+            // dd($type);
 
             DB::commit();
-            return redirect()->route('types.index')->with(['message', 'type created successfully']);
+            return redirect()->route('types.index')->with('message', 'Type created successfully');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            return back()->with('error', 'Failed to create type: ' . $th->getMessage());
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(String $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $types = ServiceTypes::find($id);
-        return view('admin.types.edit', with([
-            'types' => $types,
-        ]));
+        $type = ServiceTypes::findOrFail($id);
+        return view('admin.types.edit', compact('type'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $types = $request->validate([
-            'name' => '',
-            'slug' => '',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:service_types,slug,' . $id,
+            'price' => 'required|numeric|min:0',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $types = ServiceTypes::find($id);
-            $types->update([
-                'name' => $request->input('name'),
-                'slug' => $request->input('slug'),
-            ]);
-
-            if (!$types) {
-                DB::rollBack();
-                return back()->with(['message', 'something went wrong while saving your data']);
-            }
+            $type = ServiceTypes::findOrFail($id);
+            $type->update($validated);
 
             DB::commit();
-            return redirect()->route('types.index')->with(['message', 'type updated successfully']);
+            return redirect()->route('types.index')->with('message', 'Type updated successfully');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            return back()->with('error', 'Failed to update type: ' . $th->getMessage());
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $type = ServiceTypes::find($id);
+        $type = ServiceTypes::findOrFail($id);
         $type->delete();
-        return redirect()->route('types.index')->with(['message', 'type deleted successfully']);
+
+        return redirect()->route('types.index')->with('message', 'Type deleted successfully');
     }
 }

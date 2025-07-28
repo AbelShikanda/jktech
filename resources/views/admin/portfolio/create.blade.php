@@ -24,7 +24,7 @@
                                 <strong class="card-title">service Posts</strong>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('portfolio.store') }}" method="POST" class="needs-validation"
+                                <form action="{{ route('portfolios.store') }}" method="POST" class="needs-validation"
                                     enctype="multipart/form-data">
                                     @csrf
 
@@ -51,20 +51,6 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="image_one">Image One</label>
                                         <input type="file" name="image_one" class="form-control" id="image_one"
-                                            accept="image/jpeg,image/png,image/jpg" required>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label for="image_two">Image Two</label>
-                                        <input type="file" name="image_two" class="form-control" id="image_two"
-                                            accept="image/jpeg,image/png,image/jpg" required>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label for="image_three">Image Three</label>
-                                        <input type="file" name="image_three" class="form-control" id="image_three"
                                             accept="image/jpeg,image/png,image/jpg" required>
                                         <div class="valid-feedback">Looks good!</div>
                                     </div>

@@ -12,7 +12,7 @@
                         </p>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ route('portfolio.create') }}" type="button"
+                        <a href="{{ route('portfolios.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add Work</a>
                     </div>
                 </div>
@@ -53,18 +53,18 @@
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item"
-                                                            href="{{ route('portfolio.show', $w->id) }}">view</a>
+                                                            href="{{ route('portfolios.show', $w->id) }}">view</a>
                                                         <a class="dropdown-item"
-                                                            href="{{ route('portfolio.edit', $w->id) }}">Edit</a>
+                                                            href="{{ route('portfolios.edit', $w->id) }}">Edit</a>
                                                             <!-- <a class="dropdown-item"
-                                                                href="{{ route('portfolio.destroy', $w->id) }}"
+                                                                href="{{ route('portfolios.destroy', $w->id) }}"
                                                                 onclick="event.preventDefault();
-                                                            document.getElementById('destroy-portfolio').submit();">
+                                                            document.getElementById('destroy-portfolios').submit();">
                                                                 {{ __('Remove') }}
                                                             </a>
 
-                                                            <form id="destroy-portfolio"
-                                                                action="{{ route('portfolio.destroy', $w->id) }}"
+                                                            <form id="destroy-portfolios"
+                                                                action="{{ route('portfolios.destroy', $w->id) }}"
                                                                 method="POST" class="d-none">
                                                                 @csrf
                                                                 @method('DELETE')

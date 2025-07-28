@@ -48,10 +48,13 @@ class BookingService
             'date' => $data['date'],
             'start_time' => $data['start_time'],
             'end_time' => $endTime,
+            'message' => $data['message'],
             'confirmed' => false,
         ]);
 
         $booking->services()->attach($data['service']);
+
+        // dd($booking);
 
         return ['success' => 'Booking successful.', 'booking' => $booking];
     }

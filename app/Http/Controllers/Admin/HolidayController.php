@@ -3,63 +3,64 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Holiday;
 use Illuminate\Http\Request;
 
 class HolidayController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('admin.holiday.index');
+        $holiday = Holiday::orderBy('date')->get();
+        return view('admin.holiday.index', compact('holiday'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.holiday.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'date' => 'required|date|unique:holidays,date',
+            'reason' => 'nullable|string|max:255',
+        ]);
+
+        Holiday::create($request->only(['date', 'reason']));
+
+        return redirect()->route('holiday.index')->with('success', 'Holiday added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $holiday = Holiday::findOrFail($id);
+        return view('admin.holiday.show', compact('holiday'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $holiday = Holiday::findOrFail($id);
+        return view('admin.holiday.edit', compact('holiday'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'date' => 'required|date|unique:holidays,date,' . $id,
+            'reason' => 'nullable|string|max:255',
+        ]);
+
+        $holiday = Holiday::findOrFail($id);
+        $holiday->update($request->only(['date', 'reason']));
+
+        return redirect()->route('holiday.index')->with('success', 'Holiday updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $holiday = Holiday::findOrFail($id);
+        $holiday->delete();
+
+        return redirect()->route('holiday.index')->with('success', 'Holiday deleted successfully.');
     }
 }

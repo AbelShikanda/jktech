@@ -19,6 +19,7 @@ class CreateBookingsTable extends Migration
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
+            $table->text('message')->nullable();
             $table->boolean('confirmed')->default(false);
             $table->timestamps();
 

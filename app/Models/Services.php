@@ -62,7 +62,7 @@ class Services extends Model
      */
     public function serviceImage()
     {
-        return $this->belongsToMany(ServiceImages::class, 'service_service_images', 'services_id', 'service_images_id');
+        return $this->hasOne(ServiceImages::class, 'services_id');
     }
 
     /**

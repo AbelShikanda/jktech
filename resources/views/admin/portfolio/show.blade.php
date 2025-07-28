@@ -49,10 +49,10 @@
                 <div class="row mt-4">
                     <div class="col-md-5"></div>
                     <div class="col">
-                        <a class="btn mb-2 btn-warning btn-lg" href="{{ route('portfolio.edit', $portfolio->id) }}">Edit</a>
+                        <a class="btn mb-2 btn-warning btn-lg" href="{{ route('portfolios.edit', $portfolio->id) }}">Edit</a>
                     </div>
                     <div class="col">
-                        <form action="{{ route('portfolio.destroy', $portfolio->id) }}" method="POST">
+                        <form action="{{ route('portfolios.destroy', $portfolio->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn mb-2 btn-danger btn-lg">Remove</button>

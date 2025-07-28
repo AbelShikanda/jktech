@@ -14,7 +14,5 @@ class Portfolio extends Model
         'title',
         'description',
         'image_one',
-        'image_two',
-        'image_three',
     ];
 }

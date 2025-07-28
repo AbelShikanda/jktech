@@ -17,6 +17,7 @@ class CreateServiceTypesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->decimal('price', 10, 2)->default(0);  // ✅ Add this line
             $table->timestamps();
         });
     }

@@ -9,7 +9,11 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'date', 'start_time', 'end_time', 'confirmed'];
+    protected $fillable = ['user_id', 'date', 'start_time', 'end_time', 'message', 'confirmed'];
+
+    protected $casts = [
+        'date' => 'datetime',
+    ];
 
     public function user()
     {
@@ -41,6 +45,7 @@ class Booking extends Model
             'date' => $data['date'],
             'start_time' => $data['start_time'],
             'end_time' => $oneHourLater,
+            'message' => $data['message'],
             'confirmed' => false
         ]);
 
@@ -49,5 +54,10 @@ class Booking extends Model
         }
 
         return $booking;
+    }
+
+    public function mpesaPayment()
+    {
+        return $this->hasOne(MpesaPayment::class);
     }
 }

@@ -56,4 +56,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relationship: User has many bookings.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasManyThrough(
+            MpesaPayment::class,  // Final model
+            Booking::class,  // Intermediate model
+            'user_id',  // Foreign key on Booking table
+            'booking_id',  // Foreign key on MpesaPayment table
+            'id',  // Local key on User table
+            'id'  // Local key on Booking table
+        );
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(UserBundle::class);
+    }
+
+    public function mpesaPayments()
+    {
+        return $this->hasMany(MpesaPayment::class);
+    }
 }

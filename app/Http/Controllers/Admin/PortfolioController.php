@@ -48,47 +48,37 @@ class PortfolioController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image_one' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'image_two' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'image_three' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // Initialize Intervention ImageManager
         $manager = new ImageManager(new Driver());
 
-        // This array will hold all the saved paths
-        $imagePaths = [];
+        $imagePath = null;
 
-        foreach (['image_one', 'image_two', 'image_three'] as $imageField) {
-            if ($request->hasFile($imageField)) {
-                $file = $request->file($imageField);
-                $currentDate = now()->toDateString();
-                $fileName = $imageField . '-' . $currentDate . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+        if ($request->hasFile('image_one')) {
+            $file = $request->file('image_one');
+            $currentDate = now()->toDateString();
+            $fileName = 'image_one-' . $currentDate . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-                // Read the image
-                $image = $manager->read($file->getPathname());
+            // Read and resize the image
+            $image = $manager->read($file->getPathname());
+            $resizedImage = $image->resize(1011, 570);
 
-                // Resize the image
-                $croppedImage = $image->resize(1011, 570);
+            // Save to storage
+            $path = 'img/portfolio/' . $fileName;
+            Storage::disk('public')->put($path, $resizedImage->encode(new JpegEncoder(quality: 90)));
 
-                // Save to storage
-                $path = 'img/portfolio/' . $fileName;
-                Storage::disk('public')->put($path, $croppedImage->encode(new JpegEncoder(quality: 90)));
-
-                // Store path in array
-                $imagePaths[$imageField] = $path;
-            }
+            $imagePath = $path;
         }
 
         Portfolio::create([
             'url' => $request->url,
             'title' => $request->title,
             'description' => $request->description,
-            'image_one' => $imagePaths['image_one'] ?? null,
-            'image_two' => $imagePaths['image_two'] ?? null,
-            'image_three' => $imagePaths['image_three'] ?? null,
+            'image_one' => $imagePath,
         ]);
 
-        return redirect()->route('portfolio.index')->with('success', 'Portfolio created successfully!');
+        return redirect()->route('portfolios.index')->with('success', 'Portfolio created successfully!');
     }
 
     /**
@@ -173,7 +163,7 @@ class PortfolioController extends Controller
             'image_three' => $imagePaths['image_three'] ?? $work->image_three,
         ]);
 
-        return redirect()->route('portfolio.index')->with('success', 'Portfolio updated successfully!');
+        return redirect()->route('portfolios.index')->with('success', 'Portfolio updated successfully!');
     }
 
     /**

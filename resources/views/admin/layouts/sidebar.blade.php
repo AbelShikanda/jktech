@@ -20,10 +20,27 @@
                         <a class="nav-link pl-3" href="{{ route('dashboard.index') }}"><span
                                 class="ml-1 item-text">Home</span></a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link pl-3" href="{{ route('schedules') }}"><span
-                                class="ml-1 item-text">schedule</span></a>
-                    </li> --}}
+                </ul>
+            </li>
+        </ul>
+        <p class="text-muted nav-heading mt-4 mb-1">
+            <span>Introduction</span>
+        </p>
+        <ul class="navbar-nav flex-fill w-100 mb-2">
+            <li class="nav-item dropdown">
+                <a href="#Features-element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                    <i class="fe fe-box fe-16"></i>
+                    <span class="ml-3 item-text">Features</span>
+                </a>
+                <ul class="collapse list-unstyled pl-4 w-100" id="Features-element">
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="{{ route('memes.index') }}"><span class="ml-1 item-text">Corausel</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="{{ route('software.index') }}"><span class="ml-1 item-text">Downloads</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -61,11 +78,19 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="ui-elements">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Consultation</span>
+                        <a class="nav-link pl-3" href="{{ route('appointment.index') }}"><span class="ml-1 item-text">Consultations</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Class</span>
+                        <a class="nav-link pl-3" href="{{ route('bundles.index') }}"><span class="ml-1 item-text">Bundles</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="{{ route('user-bundles.index') }}"><span class="ml-1 item-text">User Subscriptions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="{{ route('payments.index') }}"><span class="ml-1 item-text">Payments</span>
                         </a>
                     </li>
                 </ul>
@@ -89,10 +114,7 @@
                                 class="ml-1 item-text">Types</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Images</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Prices</span></a>
+                        <a class="nav-link pl-3" href="{{ route('service_Images.index') }}"><span class="ml-1 item-text">Images</span></a>
                     </li>
                 </ul>
             </li>
@@ -183,13 +205,13 @@
         <ul class="navbar-nav flex-fill w-100 mb-2">
 
             <li class="nav-item dropdown">
-                <a href="#portfolio" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <a href="#portfolios" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-grid fe-16"></i>
                     <span class="ml-3 item-text">Portifolio</span>
                 </a>
-                <ul class="collapse list-unstyled pl-4 w-100" id="portfolio">
+                <ul class="collapse list-unstyled pl-4 w-100" id="portfolios">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="{{ route('portfolio.index') }}"><span class="ml-1 item-text">work</span></a>
+                        <a class="nav-link pl-3" href="{{ route('portfolios.index') }}"><span class="ml-1 item-text">work</span></a>
                     </li>
                 </ul>
             </li>

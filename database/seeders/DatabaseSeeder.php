@@ -36,11 +36,17 @@ class DatabaseSeeder extends Seeder
             CreateBookingsSeeder::class,
             CreateServicesSeeder::class,
             KnowledgeBaseSeeder::class,
+            BundleSeeder::class,
+            // SoftwareSeeder::class,
         ]);
         $this->call([
             // pivots
             CreatePIvotSeeder::class,
             KnowledgeKnowledgeBaseCategorySeeder::class,
+        ]);
+        $this->call([
+            // seeders
+            ServiceTriggerSeeder::class,
         ]);
     }
 }

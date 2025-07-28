@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <h2 class="page-title">Edit type</h2>
+                <h2 class="page-title">Edit Type</h2>
                 <p class="text-muted">Edit this type for posting</p>
 
                 @if (count($errors) > 0)
@@ -21,31 +21,36 @@
                     <div class="col-md-6 offset-3">
                         <div class="card shadow mb-4">
                             <div class="card-header">
-                                <strong class="card-title">types</strong>
+                                <strong class="card-title">Edit Type</strong>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('types.update', $types->id) }}" method="POST" class="needs-validation"
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('types.update', $type->id) }}" method="POST" class="needs-validation" enctype="multipart/form-data">
                                     @csrf
                                     @method('patch')
+
                                     <div class="col-md-12 mb-3">
-                                        <label for="validationCustom01">Name</label>
-                                        <input type="text" name="name" class="form-control" id="validationCustom01" value="{{ $types->name }}" required>
-                                        <div class="valid-feedback"> Looks good! </div>
+                                        <label for="name">Name</label>
+                                        <input type="text" name="name" class="form-control" id="name" value="{{ old('name', $type->name) }}" required>
                                     </div>
+
                                     <div class="col-md-12 mb-3">
-                                        <label for="validationCustom01">Slug</label>
-                                        <input type="text" name="slug" class="form-control" id="validationCustom01" value="{{ $types->slug }}" required>
-                                        <div class="valid-feedback"> Looks good! </div>
+                                        <label for="slug">Slug</label>
+                                        <input type="text" name="slug" class="form-control" id="slug" value="{{ old('slug', $type->slug) }}" required>
                                     </div>
-                                    <button class="btn btn-primary" type="submit">Submit</button>
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="price">Price</label>
+                                        <input type="number" name="price" class="form-control" id="price" value="{{ old('price', $type->price) }}" step="0.01" min="0" required>
+                                    </div>
+
+                                    <button class="btn btn-primary" type="submit">Update</button>
                                 </form>
                             </div> <!-- /.card-body -->
                         </div> <!-- /.card -->
                     </div> <!-- /.col -->
                 </div> <!-- end section -->
-            </div> <!-- /.col-12 col-lg-10 col-xl-10 -->
-        </div> <!-- .row -->
-    </div> <!-- .container-fluid -->
+            </div>
+        </div>
+    </div>
     @include('admin.layouts.partials.modals')
 @endsection

@@ -8,36 +8,32 @@ use Illuminate\Support\Str;
 
 class ServiceTypeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         $serviceTypes = [
-            'Data Analytics and Reporting',
-            'Document Management Systems',
-            'Consulting',
-            'E-commerce Dashboarding',
-            'E-commerce',
-            'Portfolio',
-            'Non Profit',
-            'Business',
-            'Blog',
-            'Forum/cummunity',
-            'Education',
-            'Content Marketing',
-            'Point Of Sale',
-            'Website Maintanance',
-            'Mobile Application Maintanance',
-            'Systems and Software Maintanance',
+            ['Data Analytics and Reporting', 100000],
+            ['Document Management Systems', 120000],
+            ['Consulting', 2000],
+            ['E-commerce Dashboarding', 110000],
+            ['E-commerce', 150000],
+            ['Portfolio', 50000],
+            ['Non Profit', 70000],
+            ['Business', 90000],
+            ['Blog', 40000],
+            ['Forum/cummunity', 85000],
+            ['Education', 100000],
+            ['Content Marketing', 95000],
+            ['Point Of Sale', 130000],
+            ['Website Maintanance', 30000],
+            ['Mobile Application Maintanance', 35000],
+            ['Systems and Software Maintanance', 40000],
         ];
 
-        foreach ($serviceTypes as $service) {
+        foreach ($serviceTypes as [$name, $price]) {
             DB::table('service_types')->insert([
-                'name' => $service,
-                'slug' => Str::slug($service),
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'price' => $price,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

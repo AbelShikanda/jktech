@@ -17,7 +17,7 @@ class CreateServicesTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId('categories_id')->constrained('service_categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('type_id')->constrained('service_types')->onDelete('cascade')->onUpdate('cascade');
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 2)->nullable();  // ✅ Updated to nullable
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();

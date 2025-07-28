@@ -13,208 +13,156 @@ use Illuminate\Support\Facades\DB;
 
 class ServicesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $services = Services::with('serviceType', 'serviceImage')->orderBy('id', 'DESC')->get();
-        return view('admin.services.index', with([
-            'services' => $services,
-        ]));
+
+        return view('admin.services.index', compact('services'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = ServiceCategories::all();
         $service_types = ServiceTypes::all();
-        return view('admin.services.create', with([
-            'categories' => $categories,
-            'service_types' => $service_types,
-        ]));
+
+        return view('admin.services.create', compact('categories', 'service_types'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $service = $request->validate([
+        $validated = $request->validate([
             'name' => 'required',
             'meta_title' => 'required',
             'meta_description' => 'required',
             'meta_keywords' => 'required',
-            'meta_image' => 'required',
-            'category' => 'required',
-            'type' => 'required',
+            'meta_image' => 'nullable',
+            'category' => 'required|exists:service_categories,id',
+            'type' => 'required|exists:service_types,id',
             'description' => 'required',
         ]);
 
-        // $price = Prices::where('type_id', $request->input('type'))->pluck('price')->first();
-
         try {
             DB::beginTransaction();
+
+            $type = ServiceTypes::findOrFail($request->type);
+            $price = $type->price ?? 0;
 
             $service = Services::create([
                 'categories_id' => $request->category,
                 'type_id' => $request->type,
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'meta_title' => $request->input('meta_title'),
-                'meta_description' => $request->input('meta_description'),
-                'meta_keywords' => $request->input('meta_keywords'),
-                'meta_image' => $request->input('meta_image'),
-                'price' => 0,
-                'whatsapp' => 0,
-                'telegram' => 0,
-                'website' => 0,
-                'promotion' => 0,
+                'name' => $request->name,
+                'description' => $request->description,
+                'meta_title' => $request->meta_title,
+                'meta_description' => $request->meta_description,
+                'meta_keywords' => $request->meta_keywords,
+                'meta_image' => $request->meta_image,
+                'price' => $price,
+                'whatsapp' => $request->has('whatsapp'),
+                'telegram' => $request->has('telegram'),
+                'website' => $request->has('website'),
+                'promotion' => $request->has('promotion'),
             ]);
 
             ServiceServiceCategories::create([
                 'services_id' => $service->id,
-                'service_categories_id' => $service->categories_id,
+                'service_categories_id' => $request->category,
             ]);
 
             ServiceServiceTypes::create([
                 'services_id' => $service->id,
-                'service_types_id' => $service->type_id,
+                'service_types_id' => $request->type,
             ]);
 
-            if (!$service) {
-                DB::rollBack();
-
-                return back()->with('error', 'Something went wrong while saving user data');
-            }
-
             DB::commit();
-            return redirect()->route('services.index')->with('success', 'service stored successfully');
+            return redirect()->route('services.index')->with('success', 'Service stored successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            return back()->with('error', 'Something went wrong: ' . $th->getMessage());
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $service = Services::with(
-            'serviceType',
-            'Category',
-            'serviceImage',
-        )
-            ->where('id', $id)
-            ->orderBy('id', 'DESC')
-            ->first();
+        $service = Services::with('serviceType', 'Category', 'serviceImage')->findOrFail($id);
 
-        return view('admin.services.show', with([
-            'service' => $service,
-        ]));
+        return view('admin.services.show', compact('service'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $services = Services::find($id);
+        $service = Services::with('serviceType')->findOrFail($id);
+        $categories = ServiceCategories::all();  // Assuming your model is Category
+        $serviceTypes = ServiceTypes::all();  // This is where $serviceTypes comes from
 
-        $category = ServiceCategories::where('id', $services->categories_id)->first();
-        $categories = ServiceCategories::all();
-
-        $service_type = ServiceTypes::where('id', $services->type_id)->first();
-        $service_types = ServiceTypes::all();
-
-        return view('admin.services.edit', with([
-            'category' => $category,
-            'categories' => $categories,
-            'service_type' => $service_type,
-            'service_types' => $service_types,
-            'services' => $services,
-        ]));
+        return view('admin.services.edit', compact('service', 'categories', 'serviceTypes'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        $service = $request->validate([
-            'name' => '',
-            'meta_title' => '',
-            'meta_description' => '',
-            'meta_keywords' => '',
-            'meta_image' => '',
-            'category' => '',
-            'type' => '',
-            'description' => '',
-            'whatsapp' => '',
-            'telegram' => '',
-            'website' => '',
-            'promotion' => '',
+        $validated = $request->validate([
+            'name' => 'required',
+            'meta_title' => 'required',
+            'meta_description' => 'required',
+            'meta_keywords' => 'required',
+            'meta_image' => 'nullable',
+            'category' => 'required|exists:service_categories,id',
+            'type' => 'required|exists:service_types,id',
+            'description' => 'required',
+            'whatsapp' => 'nullable',
+            'telegram' => 'nullable',
+            'website' => 'nullable',
+            'promotion' => 'nullable',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $service = Services::find($id);
-            if ($service) {
-                $service->categories_id = $request->category;
-                $service->type_id = $request->type;
-                $service->name = $request->input('name');
-                $service->description = $request->input('description');
-                $service->meta_title = $request->input('meta_title');
-                $service->meta_description = $request->input('meta_description');
-                $service->meta_keywords = $request->input('meta_keywords');
-                $service->meta_image = $request->input('meta_image');
-                $service->whatsapp = !empty($request->whatsapp) ? 1 : 0;
-                $service->telegram = !empty($request->telegram) ? 1 : 0;
-                $service->website = !empty($request->website) ? 1 : 0;
-                $service->promotion = !empty($request->promotion) ? 1 : 0;
+            $service = Services::findOrFail($id);
+            $type = ServiceTypes::findOrFail($request->type);
+            $price = $type->price ?? 0;
 
-                $service->save();
-            } else {
-                dd('service not found');
-            }
+            $service->update([
+                'categories_id' => $request->category,
+                'type_id' => $request->type,
+                'name' => $request->name,
+                'description' => $request->description,
+                'meta_title' => $request->meta_title,
+                'meta_description' => $request->meta_description,
+                'meta_keywords' => $request->meta_keywords,
+                'meta_image' => $request->meta_image,
+                'price' => $price,
+                'whatsapp' => $request->has('whatsapp'),
+                'telegram' => $request->has('telegram'),
+                'website' => $request->has('website'),
+                'promotion' => $request->has('promotion'),
+            ]);
 
+            // Sync category and type relationships
             ServiceServiceCategories::where('services_id', $id)->delete();
             ServiceServiceCategories::create([
-                'services_id' => $service->id,
-                'service_categories_id' => $service->categories_id,
+                'services_id' => $id,
+                'service_categories_id' => $request->category,
             ]);
 
             ServiceServiceTypes::where('services_id', $id)->delete();
             ServiceServiceTypes::create([
-                'services_id' => $service->id,
-                'service_types_id' => $request->input('type'),
+                'services_id' => $id,
+                'service_types_id' => $request->type,
             ]);
 
-            if (!$service) {
-                DB::rollBack();
-
-                return back()->with('error', 'Something went wrong while saving user data');
-            }
-
             DB::commit();
-            return redirect()->route('services.index')->with('success', 'service updated successfully');
+            return redirect()->route('services.index')->with('success', 'Service updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            return back()->with('error', 'Something went wrong: ' . $th->getMessage());
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $service = Services::find($id);
+        $service = Services::findOrFail($id);
         $service->delete();
-        return redirect()->route('services.index')->with('message', 'service Deleted Successfully.');
+
+        return redirect()->route('services.index')->with('message', 'Service deleted successfully.');
     }
 }

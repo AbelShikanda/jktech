@@ -25,6 +25,6 @@ class ServiceImages extends Model
      */
     public function services()
     {
-        return $this->belongsToMany(Services::class, 'service_service_images', 'service_images_id', 'services_id');
+        return $this->belongsTo(Services::class, 'services_id');
     }
 }

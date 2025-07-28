@@ -12,9 +12,15 @@
                         </p>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ route('types.create') }}" type="button" class=" float-right btn mb-2 btn-outline-primary">Add Type</a>
+                        <a href="{{ route('types.create') }}" type="button"
+                            class=" float-right btn mb-2 btn-outline-primary">Add Type</a>
                     </div>
                 </div>
+
+                @if (session('message'))
+                    <div class="alert alert-success">{{ session('message') }}</div>
+                @endif
+
                 <div class="row my-4">
                     <!-- Small table -->
                     <div class="col-md-12">
@@ -26,8 +32,11 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
-                                            <th>created at</th>
-                                            <th>updated at</th>
+                                            <!-- <th>Slug</th> -->
+                                            <th>Price</th>
+                                            <!-- <th>Created At</th> -->
+                                            <th>Updated At</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -35,9 +44,12 @@
                                             <tr>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->created_at }}</td>
+                                                <!-- <td>{{ $item->slug }}</td> -->
+                                                <td>Ksh{{ number_format($item->price, 2) }}</td>
+                                                <!-- <td>{{ $item->created_at }}</td> -->
                                                 <td>{{ $item->updated_at }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal"
                                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                                         aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
@@ -49,11 +61,11 @@
                                                         <a class="dropdown-item"
                                                             href="{{ route('types.destroy', $item->id) }}"
                                                             onclick="event.preventDefault();
-                                                            document.getElementById('destroy-types').submit();">
+                            document.getElementById('destroy-type-{{ $item->id }}').submit();">
                                                             {{ __('Remove') }}
                                                         </a>
 
-                                                        <form id="destroy-types"
+                                                        <form id="destroy-type-{{ $item->id }}"
                                                             action="{{ route('types.destroy', $item->id) }}" method="POST"
                                                             class="d-none">
                                                             @csrf
@@ -64,6 +76,7 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -72,6 +85,6 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-    
+
     @include('admin.layouts.partials.modals')
 @endsection

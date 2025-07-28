@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Faqs;
+use App\Models\Memes;
 use App\Models\Services;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    // /**
-    //  * Create a new controller instance.
-    //  *
-    //  * @return void
-    //  */
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     // public function __construct()
     // {
     //     $this->middleware('auth');
@@ -30,9 +31,14 @@ class HomeController extends Controller
         //     ->take(6)
         //     ->get();
 
-        $faqs = Faqs::where('is_active', 1)->get();
-        return view('home', with([
-            'faqs' => $faqs,
-        ]));
+        // $faqs = Faqs::where('is_active', 1)->get();
+        // return view('home', with([
+        //     'faqs' => $faqs,
+        // ]));
+
+        $memes = Memes::latest()->get();
+        $services = Services::with('serviceImage')->get();
+
+        return view('home', compact('memes', 'services'));
     }
 }

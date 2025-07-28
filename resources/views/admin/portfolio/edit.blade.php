@@ -24,7 +24,7 @@
                                 <strong class="card-title">Edit service Posts</strong>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('portfolio.update', $work->id) }}" method="POST"
+                                <form action="{{ route('portfolios.update', $work->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -48,22 +48,19 @@
                                         <textarea class="form-control" name="description" id="description" required>{{ old('description', $work->description) }}</textarea>
                                         <div class="invalid-feedback">Please enter a description.</div>
                                     </div>
-
-                                    @foreach (['image_one', 'image_two', 'image_three'] as $field)
+                                    
                                         <div class="col-md-12 mb-3">
                                             <label
-                                                for="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</label>
-                                            @if ($work->$field)
+                                                for="imageOne">Image</label>
                                                 <div class="mb-2">
-                                                    <img src="{{ asset('storage/' . $work->$field) }}"
-                                                        alt="{{ $field }}" class="img-thumbnail"
+                                                    <img src="{{ asset('storage/' . $work->image_one) }}"
+                                                        alt="imageOne" class="img-thumbnail"
                                                         style="max-width: 200px;">
                                                 </div>
-                                            @endif
-                                            <input type="file" name="{{ $field }}" class="form-control"
-                                                id="{{ $field }}" accept="image/jpeg,image/png,image/jpg">
+                                            <input type="file" name="imageOne" class="form-control"
+                                                id="imageOne" accept="image/jpeg,image/png,image/jpg">
                                         </div>
-                                    @endforeach
+                                        
 
                                     <button class="btn btn-success" type="submit">Update Portfolio</button>
                                 </form>
