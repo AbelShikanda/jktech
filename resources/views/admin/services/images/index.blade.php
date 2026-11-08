@@ -47,8 +47,8 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $s->id }}">
                                     @if(auth('admin')->user()?->can('admin.services.manage'))
                                         @if ($s->serviceImage)
-                                            <a class="dropdown-item" href="{{ route('service_Images.edit', $s->serviceImage->id) }}">Edit Image</a>
-                                            <form action="{{ route('service_Images.destroy', $s->serviceImage->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this image?')">
+                                            <a class="dropdown-item" href="{{ route('service_Images.edit', optional($s->serviceImage)->id) }}">Edit Image</a>
+                                            <form action="{{ route('service_Images.destroy', optional($s->serviceImage)->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this image?')">
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="dropdown-item text-danger">Delete Image</button>
                                             </form>

@@ -13,10 +13,24 @@ class MpesaController extends Controller
 {
     public function checkStatus(Request $request)
     {
+        $request->validate(['id' => 'required']);
         $payment = MpesaPayment::find($request->id);
 
         if (!$payment) {
             return response()->json(['status' => 'Unknown']);
+        }
+
+        $webUser = auth('web')->user();
+        $adminUser = auth('admin')->user();
+        if (!$adminUser) {
+            if (!$webUser) {
+                return response()->json(['status' => 'Forbidden'], 403);
+            }
+            $owns = ((int) ($payment->user_id ?? 0) === (int) $webUser->id)
+                || ($payment->booking_id && \App\Models\Booking::where('id', $payment->booking_id)->where('user_id', $webUser->id)->exists());
+            if (!$owns) {
+                return response()->json(['status' => 'Forbidden'], 403);
+            }
         }
 
         $simulate = filter_var(config('services.mpesa.simulate', false), FILTER_VALIDATE_BOOLEAN);

@@ -88,14 +88,17 @@ class PagesController extends Controller
 
     public function retryBookingPayment($id, MpesaService $mpesaService)
     {
-        $booking = Booking::findOrFail($id);
-        $phone = MpesaPayment::where('booking_id', $id)->latest()->value('phone_number') ?: '254700000000';
+        $booking = Booking::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $phone = MpesaPayment::where('booking_id', $id)->where(function ($q) {
+            $q->where('user_id', Auth::id())->orWhereNull('user_id');
+        })->latest()->value('phone_number') ?: '254700000000';
         $amount = 2000;
         $simulate = filter_var(config('services.mpesa.simulate', true), FILTER_VALIDATE_BOOLEAN);
         $stkResponse = $simulate ? [] : $mpesaService->stkPushRequest($phone, $amount, $booking->id, 'payment for booking');
 
         $payment = MpesaPayment::create([
             'booking_id' => $booking->id,
+            'user_id' => Auth::id(),
             'payment_for' => 'booking',
             'phone_number' => $phone,
             'amount' => $amount,
