@@ -93,9 +93,7 @@ class PortfolioController extends Controller
     public function show($id)
     {
         $portfolio = Portfolio::findOrFail($id);
-        return view('admin.portfolio.show', with([
-            'portfolio' => $portfolio,
-        ]));
+        return view('admin.portfolio.show', compact('portfolio'));
     }
 
     /**
@@ -107,9 +105,7 @@ class PortfolioController extends Controller
     public function edit($id)
     {
         $work = Portfolio::findOrFail($id);
-        return view('admin.portfolio.edit', with([
-            'work' => $work,
-        ]));
+        return view('admin.portfolio.edit', compact('work'));
     }
 
     /**

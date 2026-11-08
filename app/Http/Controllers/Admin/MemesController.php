@@ -94,12 +94,7 @@ class MemesController extends Controller
     public function show($id)
     {
         $memes = Memes::findOrFail($id);
-        return view(
-            'admin.memes.show',
-            with([
-                'memes' => $memes,
-            ]),
-        );
+        return view('admin.memes.show', compact('memes'));
     }
 
     /**
@@ -111,12 +106,7 @@ class MemesController extends Controller
     public function edit($id)
     {
         $memes = Memes::findOrFail($id);
-        return view(
-            'admin.memes.edit',
-            with([
-                'memes' => $memes,
-            ]),
-        );
+        return view('admin.memes.edit', compact('memes'));
     }
 
     /**

@@ -12,7 +12,6 @@ use App\Services\BookingService;
 use App\Services\MpesaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PagesController extends Controller
 {
