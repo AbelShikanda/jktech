@@ -13,8 +13,13 @@
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                     <h1 class="display-6 mb-4">We’d Love to Hear From You</h1>
                     @if (session('success'))
-                        <div class="alert alert-success">
+                        <div class="alert alert-success" role="alert">
                             {{ session('success') }}
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger" role="alert">
+                            <ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
                         </div>
                     @endif
                     <p class="mb-4">

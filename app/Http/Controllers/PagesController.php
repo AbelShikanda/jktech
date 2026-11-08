@@ -80,8 +80,6 @@ class PagesController extends Controller
             $booking->save();
         }
 
-        DB::commit();
-
         return view('bookings.waiting', [
             'payment_id' => $mpesaPayment->id,
             'booking_id' => $booking->id,
