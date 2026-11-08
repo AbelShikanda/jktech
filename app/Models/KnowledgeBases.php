@@ -26,6 +26,9 @@ class KnowledgeBases extends Model
         'meta_description',
         'meta_keywords',
         'meta_image',
+        'whatsapp',
+        'telegram',
+        'website',
     ];
 
     /**
@@ -53,7 +56,7 @@ class KnowledgeBases extends Model
      */
     public function knowledgeBaseImage()
     {
-        return $this->belongsToMany(KnowledgeBaseImages::class, 'knowledgeBase_knowledgeBase_images', 'knowledgeBases_id', 'knowledgeBase_images_id');
+        return $this->belongsToMany(KnowledgeBaseImages::class, 'knowledge_knowledge_base_images', 'knowledgeBases_id', 'knowledgeBase_images_id');
     }
 
     /**
@@ -61,7 +64,7 @@ class KnowledgeBases extends Model
      */
     public function knowledgeBaseCategories()
     {
-        return $this->belongsToMany(KnowledgeBaseCategories::class, 'knowledgeBase_knowledgeBase_categories', 'knowledgeBases_id', 'knowledgeBase_categories_id');
+        return $this->belongsToMany(KnowledgeBaseCategories::class, 'knowledge_knowledge_base_categories', 'knowledgeBases_id', 'kBase_categories_id');
     }
 
     /**

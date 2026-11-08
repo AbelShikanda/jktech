@@ -25,6 +25,6 @@ class KnowledgeBaseImages extends Model
      */
     public function knowledgeBases()
     {
-        return $this->belongsToMany(KnowledgeBases::class, 'knowledgeBase_knowledgeBase_images', 'knowledgeBase_images_id', 'knowledgeBases_id');
+        return $this->belongsToMany(KnowledgeBases::class, 'knowledge_knowledge_base_images', 'knowledgeBase_images_id', 'knowledgeBases_id');
     }
 }

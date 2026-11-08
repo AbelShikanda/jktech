@@ -41,6 +41,9 @@ Route::group(['prefix' => '/admin'], function () {
 Route::group(['middleware' => 'adminauth'], function () {
     Route::resource('types', ServiceTypeController::class);
     Route::resource('service_categories', ServiceCategoryController::class);
+    Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class);
+    Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class);
+    Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class);
     Route::get('/admin/services/image', [ServiceImagesController::class, 'index'])->name('service_Images.index');
     Route::get('/admin/services/{id}/image/create', [ServiceImagesController::class, 'create'])->name('service_Images.create');
     Route::post('/admin/service-images', [ServiceImagesController::class, 'store'])->name('service_Images.store');

@@ -4,18 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class KnowledgeBaseCategories extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $table = 'knowledge_base_categories';
+
     protected $fillable = [
-        'knowledgeBases_id',
-        'knowledgeBase_categories_id',
+        'name',
+        'slug',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($category) {
+            if (empty($category->slug) && !empty($category->name)) {
+                $category->slug = Str::slug($category->name);
+            }
+        });
+    }
+
+    public function knowledgeBases()
+    {
+        return $this->belongsToMany(KnowledgeBases::class, 'knowledge_knowledge_base_categories', 'kBase_categories_id', 'knowledgeBases_id');
+    }
 }

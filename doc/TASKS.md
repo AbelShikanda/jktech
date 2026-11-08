@@ -43,7 +43,7 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 ## Module 3 — Spatie authorization
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
-| M3-01 | Confirm Spatie scope | architecture decision | M0-05 | no | A or B selected and recorded | blocked | Recommended B: Spatie Permission authorization on existing guards. |
+| M3-01 | Confirm Spatie scope | architecture decision | M0-05 | no | A or B selected and recorded | done | Resolved as **B** (2026-11-08): Spatie Permission for authorization on existing session guards. |
 | M3-02 | Align Spatie Permission config/models | `config/permission.php`, `Admin`, `User` as needed, migrations | M3-01 | no | guards/cache/tables/traits coherent | todo | Avoid breaking current auth. |
 | M3-03 | Define local roles/permissions map | seeders/docs | M3-02 | no | minimal useful roles/permissions for admin modules | todo | Placeholder/simulation-friendly. |
 | M3-04 | Seed roles/permissions | seeders | M3-03 | **yes** | roles/permissions exist locally | blocked | Requires explicit user permission. |
@@ -53,10 +53,10 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 ## Module 4 — Controllers & domain flows
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
-| M4-01 | Implement KnowledgeBaseCategory admin CRUD | `Admin/KnowledgeBaseCategoryController`, routes/views | M0-01 | no | full functional CRUD + validation | todo | Currently stubbed. |
-| M4-02 | Implement KnowledgeBase admin CRUD | `Admin/KnowledgeBaseController`, routes/views | M4-01 | no | full functional CRUD + relations/placeholders | todo | Currently stubbed. |
-| M4-03 | Implement KnowledgeBaseImage admin CRUD | `Admin/KnowledgeBaseImageController`, routes/views | M4-02 | no | full functional CRUD/upload or placeholder handling | todo | Currently stubbed. |
-| M4-04 | Make Dashboard useful | `Admin/DashboardController`, view | M0-01 | no | real/simulated safe aggregates render with empty DB | todo | Replace commented demo-only path. |
+| M4-01 | Implement KnowledgeBaseCategory admin CRUD | `Admin/KnowledgeBaseCategoryController`, routes/views | M0-01 | no | full functional CRUD + validation | done | Implemented controller + `admin.knowledge_base_categories.*` views; aligned `KnowledgeBaseCategories` model (`name/slug`, table, pivot). Routes added under `adminauth`. |
+| M4-02 | Implement KnowledgeBase admin CRUD | `Admin/KnowledgeBaseController`, routes/views | M4-01 | no | full functional CRUD + relations/placeholders | done | Implemented controller + `admin.knowledge_bases.*` views with placeholder meta/content. Fixed `KnowledgeBases` pivot table/key names to match migrations (`knowledge_knowledge_base_*`, `kBase_categories_id`). |
+| M4-03 | Implement KnowledgeBaseImage admin CRUD | `Admin/KnowledgeBaseImageController`, routes/views | M4-02 | no | full functional CRUD/upload or placeholder handling | done | Implemented controller + `admin.knowledge_base_images.*` views using URL/placeholder image handling (no external upload dependency required for local testing). |
+| M4-04 | Make Dashboard useful | `Admin/DashboardController`, view | M0-01 | no | real/simulated safe aggregates render with empty DB | done | Replaced commented demo dashboard with safe aggregate counts/sums and recent bookings/payments; dashboard view handles empty states. |
 | M4-05 | Audit all admin controllers | `app/Http/Controllers/Admin/*` | M3-05? | no | no stubs, actions functional, validation/errors sane | todo | Include profile-adjacent admin views if any. |
 | M4-06 | Audit public/profile/payment controllers | `PagesController`, `UserController`, `MpesaController`, services | M2-05 | no | local-testable flows, graceful null/empty handling | todo | Make “Completed” simulation explicit/local-only as needed. |
 | M4-07 | Local payment simulation strategy | controllers/services/config/views | M4-06 | no | pending/completed flow testable without gateway | todo | Gate by env/config; keep callback/status coherent. |
@@ -72,7 +72,7 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 ## Module 6 — UI/UX upgrade
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
-| M6-01 | Confirm UI/UX depth | decision | M0-05 | no | 1/2/3 selected and recorded | blocked | Recommended 2: moderate upgrade. |
+| M6-01 | Confirm UI/UX depth | decision | M0-05 | no | 1/2/3 selected and recorded | done | Resolved as **2** (2026-11-08): moderate UI/UX upgrade. |
 | M6-02 | UI conventions/shared patterns | layouts, partials, CSS/JS entrypoints | M6-01 | no | consistent forms/tables/cards/badges/alerts | todo | Stay compatible with Blade/Mix/Bootstrap unless justified. |
 | M6-03 | Auth/profile/payment UX pass | auth/profile/bookings/payment views | M2-05,M6-02 | no | clearer flows, feedback, responsive basics | todo | |
 | M6-04 | Admin UX pass | admin layout/dashboard/CRUD views | M4-04,M4-05,M6-02 | no | navigable, clear actions, empty/loading/error states | todo | |
