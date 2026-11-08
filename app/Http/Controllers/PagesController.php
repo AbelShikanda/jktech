@@ -68,7 +68,7 @@ class PagesController extends Controller
 
         $booking = $service['booking'];
         $amount = 2000;
-        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $simulate = filter_var(config('services.mpesa.simulate', true), FILTER_VALIDATE_BOOLEAN);
         $stkResponse = $simulate ? [] : $mpesaService->stkPushRequest($formattedPhone, $amount, $booking->id, 'payment for booking');
 
         $mpesaPayment = MpesaPayment::create([
@@ -101,7 +101,7 @@ class PagesController extends Controller
         $booking = Booking::findOrFail($id);
         $phone = MpesaPayment::where('booking_id', $id)->latest()->value('phone_number') ?: '254700000000';
         $amount = 2000;
-        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $simulate = filter_var(config('services.mpesa.simulate', true), FILTER_VALIDATE_BOOLEAN);
         $stkResponse = $simulate ? [] : $mpesaService->stkPushRequest($phone, $amount, $booking->id, 'payment for booking');
 
         $payment = MpesaPayment::create([

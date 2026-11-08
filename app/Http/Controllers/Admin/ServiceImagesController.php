@@ -87,13 +87,9 @@ class ServiceImagesController extends Controller
      */
     public function show($id)
     {
-        $images = ServiceImages::findOrFail($id);
-        return view(
-            'admin.services.images.show',
-            with([
-                'images' => $images,
-            ]),
-        );
+        $image = ServiceImages::with('services')->findOrFail($id);
+        $service = $image->services;
+        return view('admin.services.images.show', compact('image', 'service'));
     }
 
     /**

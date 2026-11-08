@@ -19,7 +19,7 @@ class MpesaController extends Controller
             return response()->json(['status' => 'Unknown']);
         }
 
-        $simulate = filter_var(env('MPESA_SIMULATE', false), FILTER_VALIDATE_BOOLEAN);
+        $simulate = filter_var(config('services.mpesa.simulate', false), FILTER_VALIDATE_BOOLEAN);
         if ($simulate && in_array($payment->status, ['Pending', 'pending', null, ''], true)) {
             $payment->status = 'Completed';
             $payment->result_desc = $payment->result_desc ?: 'Simulated locally (MPESA_SIMULATE=true).';

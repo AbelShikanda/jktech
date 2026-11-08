@@ -178,7 +178,7 @@ class UserController extends Controller
         $startDate = now();
         [$startDate, $endDate] = $this->calculateSubscriptionDates($bundle, $startDate);
 
-        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $simulate = filter_var(config('services.mpesa.simulate', true), FILTER_VALIDATE_BOOLEAN);
         $mpesa = $simulate ? [] : $mpesaService->stkPushRequest($phone, $bundle->price, null, 'payment for bundle');
         $payment = $this->createMpesaPayment($mpesa, $phone, $bundle->price, $bundle->id, auth()->id(), $startDate, $endDate, $simulate);
 
@@ -222,7 +222,7 @@ class UserController extends Controller
 
         // dd($startDate, $endDate);
 
-        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $simulate = filter_var(config('services.mpesa.simulate', true), FILTER_VALIDATE_BOOLEAN);
         $mpesa = $simulate ? [] : $mpesaService->stkPushRequest($phone, $bundle->price, null, 'payment for bundle');
         $payment = $this->createMpesaPayment($mpesa, $phone, $bundle->price, $bundle->id, auth()->id(), $startDate, $endDate, $simulate);
 

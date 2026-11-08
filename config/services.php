@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'mpesa' => [
+        'simulate' => filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN),
+    ],
+
 ];
