@@ -40,39 +40,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($work as $w)
+                                        @forelse (($work ?? collect()) as $w)
                                             <tr>
                                                 <td>{{ $w->id }}</td>
-                                                <td>{{ $w->title }}</td>
-                                                <td>{{ $w->url }}</td>
-                                                <td>{{ $w->updated_at }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                <td>{{ $w->title ?? 'N/A' }}</td>
+                                                <td>{{ \Illuminate\Support\Str::limit($w->url ?? '', 30) }}</td>
+                                                <td>{{ optional($w->updated_at)->format('Y-m-d H:i') ?? 'N/A' }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('portfolios.show', $w->id) }}">view</a>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('portfolios.edit', $w->id) }}">Edit</a>
-                                                            <!-- <a class="dropdown-item"
-                                                                href="{{ route('portfolios.destroy', $w->id) }}"
-                                                                onclick="event.preventDefault();
-                                                            document.getElementById('destroy-portfolios').submit();">
-                                                                {{ __('Remove') }}
-                                                            </a>
-
-                                                            <form id="destroy-portfolios"
-                                                                action="{{ route('portfolios.destroy', $w->id) }}"
-                                                                method="POST" class="d-none">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form> -->
+                                                        <a class="dropdown-item" href="{{ route('portfolios.show', $w->id) }}">View</a>
+                                                        <a class="dropdown-item" href="{{ route('portfolios.edit', $w->id) }}">Edit</a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="5" class="text-muted text-center">No portfolio items found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

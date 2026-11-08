@@ -41,50 +41,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($services as $s)
+                                        @forelse (($services ?? collect()) as $s)
                                             <tr>
                                                 <td>{{ $s->id }}</td>
-                                                <td>{{ $s->name }}</td>
-                                                @foreach ($s->serviceType as $item)
-                                                    <td>{{ Str::words($item->name, 3, '...') }}</td>
-                                                @endforeach
-                                                <td>{{ Str::words($s->description, 3, '...') }}</td>
-                                                <td>{{ $s->price }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                <td>{{ $s->name ?? 'N/A' }}</td>
+                                                <td>{{ optional(($s->serviceType ?? collect())->first())->name ?? 'N/A' }}</td>
+                                                <td>{{ \Illuminate\Support\Str::words($s->description ?? '', 6, '...') }}</td>
+                                                <td>KES {{ number_format((float) ($s->price ?? 0), 2) }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('services.show', $s->id) }}">view</a>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('services.edit', $s->id) }}">Edit</a>
-                                                        {{-- @if ($s->serviceImage->isEmpty())
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('service_images.create') }}">Add Image</a>
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('services.destroy', $s->id) }}"
-                                                                onclick="event.preventDefault();
-                                                            document.getElementById('destroy-service').submit();">
-                                                                {{ __('Remove') }}
-                                                            </a>
-
-                                                            <form id="destroy-service"
-                                                                action="{{ route('services.destroy', $s->id) }}"
-                                                                method="POST" class="d-none">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
-                                                        @else
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('service_images.index') }}">Remove image
-                                                                first</a>
-                                                        @endif --}}
+                                                        <a class="dropdown-item" href="{{ route('services.show', $s->id) }}">View</a>
+                                                        <a class="dropdown-item" href="{{ route('services.edit', $s->id) }}">Edit</a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="6" class="text-muted text-center">No services found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

@@ -40,46 +40,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($faqs as $item)
+                                        @forelse (($faqs ?? collect()) as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ Str::words($item->question, 4, '...') }}</td>
-                                                <td>{{ Str::words($item->answer, 4, '...') }}</td>
+                                                <td>{{ \Illuminate\Support\Str::words($item->question ?? '', 4, '...') }}</td>
+                                                <td>{{ \Illuminate\Support\Str::words($item->answer ?? '', 4, '...') }}</td>
                                                 <td>
                                                     @if ($item->is_active)
                                                         <span class="badge bg-success">Active</span>
                                                     @else
                                                         <span class="badge bg-warning">inactive</span>
                                                     @endif
-
                                                 </td>
-                                                <td>{{ $item->updated_at }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                <td>{{ optional($item->updated_at)->format('Y-m-d H:i') ?? 'N/A' }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('faqs.edit', $item->id) }}">Edit</a>
-
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('faqs.destroy', $item->id) }}"
-                                                            onclick="event.preventDefault();
-                                                            document.getElementById('destroy-faqs').submit();">
-                                                            {{ __('Remove') }}
-                                                        </a>
-
-                                                        <form id="destroy-faqs"
-                                                            action="{{ route('faqs.destroy', $item->id) }}" method="POST"
-                                                            class="d-none">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
+                                                        <a class="dropdown-item" href="{{ route('faqs.edit', $item->id) }}">Edit</a>
+                                                        <form action="{{ route('faqs.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this FAQ?')">@csrf @method('DELETE')<button class="dropdown-item" type="submit">Remove</button></form>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="6" class="text-muted text-center">No FAQs found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

@@ -186,6 +186,6 @@ class PortfolioController extends Controller
         // Delete the portfolio entry from DB
         $portfolio->delete();
 
-        return redirect()->route('portfolio.index')->with('success', 'Portfolio deleted successfully!');
+        return redirect()->route('portfolios.index')->with('success', 'Portfolio deleted successfully!');
     }
 }

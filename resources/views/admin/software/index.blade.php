@@ -18,15 +18,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($software as $item)
+            @forelse(($software ?? collect()) as $item)
                 <tr>
-                    <td>{{ $item->name }}</td>
+                    <td>{{ $item->name ?? 'N/A' }}</td>
                     <td>
-                        <ul>
+                        @if(($item->releases ?? collect())->isEmpty())
+                            <span class="text-muted">No releases</span>
+                        @else
+                        <ul class="mb-0">
                             @foreach($item->releases as $release)
-                                <li>{{ $release->os }} - v{{ $release->version }}</li>
+                                <li>{{ $release->os ?? 'N/A' }} - v{{ $release->version ?? 'N/A' }}</li>
                             @endforeach
                         </ul>
+                        @endif
                     </td>
                     <td>
                         <a href="{{ route('software.show', $item->id) }}" class="btn btn-sm btn-secondary">View</a>
@@ -37,7 +41,9 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="3" class="text-muted text-center">No software found.</td></tr>
+            @endforelse
         </tbody>
     </table>
 </div>

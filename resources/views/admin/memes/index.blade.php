@@ -40,39 +40,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($memes as $w)
+                                        @forelse (($memes ?? collect()) as $w)
                                             <tr>
                                                 <td>{{ $w->id }}</td>
-                                                <td>{{ $w->heading }}</td>
-                                                <td>{{ $w->description }}</td>
-                                                <td>{{ $w->created_at }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                <td>{{ $w->heading ?? 'N/A' }}</td>
+                                                <td>{{ \Illuminate\Support\Str::limit($w->description ?? '', 40) }}</td>
+                                                <td>{{ optional($w->created_at)->format('Y-m-d H:i') ?? 'N/A' }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('memes.show', $w->id) }}">view</a>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('memes.edit', $w->id) }}">Edit</a>
-                                                            <!-- <a class="dropdown-item"
-                                                                href="{{ route('memes.destroy', $w->id) }}"
-                                                                onclick="event.preventDefault();
-                                                            document.getElementById('destroy-memes').submit();">
-                                                                {{ __('Remove') }}
-                                                            </a>
-
-                                                            <form id="destroy-memes"
-                                                                action="{{ route('memes.destroy', $w->id) }}"
-                                                                method="POST" class="d-none">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form> -->
+                                                        <a class="dropdown-item" href="{{ route('memes.show', $w->id) }}">View</a>
+                                                        <a class="dropdown-item" href="{{ route('memes.edit', $w->id) }}">Edit</a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="5" class="text-muted text-center">No memes found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
