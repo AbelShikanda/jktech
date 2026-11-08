@@ -10,6 +10,11 @@ use Illuminate\Support\Str;
 
 class KnowledgeBaseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.content.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $items = KnowledgeBases::query()->with('knowledgeBaseCategories')->latest()->get();

@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class WorkScheduleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.settings.manage,admin')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */

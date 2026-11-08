@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.services.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $types = ServiceTypes::latest()->get();

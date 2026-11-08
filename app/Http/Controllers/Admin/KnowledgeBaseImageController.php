@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class KnowledgeBaseImageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.content.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $images = KnowledgeBaseImages::query()->with('knowledgeBases')->latest()->get();

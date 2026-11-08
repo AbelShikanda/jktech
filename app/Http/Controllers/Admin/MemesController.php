@@ -12,6 +12,11 @@ use Intervention\Image\ImageManager;
 
 class MemesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.content.manage,admin')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,12 +25,7 @@ class MemesController extends Controller
     public function index()
     {
         $memes = Memes::latest()->get();
-        return view(
-            'admin.memes.index',
-            with([
-                'memes' => $memes,
-            ]),
-        );
+        return view('admin.memes.index', compact('memes'));
     }
 
     /**

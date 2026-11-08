@@ -13,6 +13,11 @@ use Intervention\Image\ImageManager;
 
 class ServiceImagesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.services.manage,admin')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *

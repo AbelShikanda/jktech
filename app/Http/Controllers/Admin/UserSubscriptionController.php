@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class UserSubscriptionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.bookings.manage,admin')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *

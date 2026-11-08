@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class SoftwareController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.services.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $software = Software::with('releases')->latest()->get();

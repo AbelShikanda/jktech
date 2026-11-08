@@ -12,6 +12,11 @@ use Intervention\Image\ImageManager;
 
 class PortfolioController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.content.manage,admin')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,9 +25,7 @@ class PortfolioController extends Controller
     public function index()
     {
         $work = Portfolio::latest()->get();
-        return view('admin.portfolio.index', with([
-            'work' => $work,
-        ]));
+        return view('admin.portfolio.index', compact('work'));
     }
 
     /**

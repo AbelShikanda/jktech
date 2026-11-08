@@ -12,9 +12,9 @@
                             <img src="{{ asset('img/avatar-placeholder.png') }}" alt="User Avatar" class="avatar-img rounded-circle">
                         </div>
                         <p class="mt-2 mb-0 text-muted">
-                            {{ $appointment->user->first_name ?? 'Unknown User' }}
+                            {{ optional($appointment->user)->first_name ?? optional($appointment->user)->email ?? 'Unknown User' }}
                         </p>
-                        <small class="text-muted">{{ $appointment->user->email ?? '' }}</small>
+                        <small class="text-muted">{{ optional($appointment->user)->email ?? '' }}</small>
                     </div>
 
                     <div class="col">

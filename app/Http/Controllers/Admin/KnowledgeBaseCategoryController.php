@@ -9,6 +9,11 @@ use Illuminate\Support\Str;
 
 class KnowledgeBaseCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.content.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $categories = KnowledgeBaseCategories::query()->orderBy('name')->get();

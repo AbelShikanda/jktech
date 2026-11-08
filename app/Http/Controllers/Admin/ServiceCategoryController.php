@@ -9,6 +9,11 @@ use Illuminate\Support\Str;
 
 class ServiceCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.services.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $serviceCategories = ServiceCategories::latest()->get();

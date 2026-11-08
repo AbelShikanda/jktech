@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class FaqsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.content.manage,admin')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +21,7 @@ class FaqsController extends Controller
     public function index()
     {
         $faqs = Faqs::latest()->get();
-        return view('admin.faqs.index', with([
-            'faqs' => $faqs,
-        ]));
+        return view('admin.faqs.index', compact('faqs'));
     }
 
     /**

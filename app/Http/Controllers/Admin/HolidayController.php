@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class HolidayController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.settings.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $holiday = Holiday::orderBy('date')->get();
