@@ -1,0 +1,94 @@
+# TASKS.md — JKE execution board
+
+Purpose: canonical, modulated starting point for the JKE local-dev hardening/migration work.  
+Status legend: `todo` | `in_progress` | `blocked` | `done`  
+Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
+
+## Global rules
+- **Permission gate (critical):** never run `db:seed`, `migrate:fresh --seed`, `migrate:refresh --seed`, or any destructive DB reset/reseed without explicit user permission. Mark such tasks `blocked` until permission is given.
+- **Git:** local commits are allowed when explicitly requested/approved; **never push** unless the user explicitly requests it.
+- **Quality gates for touched modules:** handle empty DB states gracefully; enforce authorization on the server; keep UI feedback clear (success/error/empty/loading where relevant).
+- **Secrets:** do not copy `.env` secrets into docs or commits. Use `.env.example` placeholders only.
+- **Open decisions (resolve before affected implementation):** Spatie scope = `A` (replace auth, high impact — specify package) or `B` (recommended: Spatie Permission authorization on existing Laravel session guards). UI/UX depth = `1` light polish, `2` moderate upgrade (recommended), `3` major redesign.
+
+## Module 0 — Baseline & docs
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M0-01 | Inventory gaps and evidence | controllers, routes, views, auth, DB config, seeders | — | no | checklist captured in docs | done | Baseline captured in `doc/PLAN.md` (current state/evidence). |
+| M0-02 | Create `AGENTS.md` (root) | `AGENTS.md` | M0-01 | no | includes stack, setup w/o secrets, commits allowed/no push, **no seed/reseed without permission**, guard/Spatie/local simulation notes | done | Created with git/seeding/auth/data/UI policies. |
+| M0-03 | Create `GOALS.md` | `GOALS.md` | M0-01 | no | goals match current situation/upgrades/bugs | done | Created with goals/success criteria. |
+| M0-04 | Create `DECISIONS.md` | `DECISIONS.md` | M0-01 | no | records resolved decisions + open items | done | Includes resolved decisions, open D-OPEN-01/02, risks. |
+| M0-05 | Confirm open decisions | Spatie scope, UI/UX depth | M0-01 | no | user replies A/B and 1/2/3 | blocked | Needs reply: Spatie `A`/`B` (recommended `B`), UI/UX `1`/`2`/`3` (recommended `2`). Blocks M3 depth and M6 scope. |
+
+## Module 1 — PostgreSQL & environment
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M1-01 | Set PostgreSQL as local default | `config/database.php` | M0-01 | no | env-driven default; pgsql config correct; no MySQL-only assumptions | done | Default set to `env('DB_CONNECTION','pgsql')`; pgsql connection kept; MySQL connection retained for compatibility but not default. `php -l` passed. |
+| M1-02 | Sanitize/update env template | `.env.example` | M1-01 | no | pgsql placeholders, `MAIL_MAILER=log`, M-Pesa placeholders only, no secrets | done | Replaced with PostgreSQL placeholders, log mail, and non-secret M-Pesa placeholders (`MPESA_SIMULATE=true`). Real `.env` not modified. |
+| M1-03 | PG compatibility audit for migrations | `database/migrations/*` | M1-01 | no | enums/json/foreign keys/indexes/session/spatie tables reviewed | done | Scanned migrations: `foreignId`/`unsignedBigInteger`/timestamps/nullable are portable; `enum`/`json` used (Laravel 8 maps acceptably for PG/local testing — verify on real migration). Spatie migration has commented `//$table->engine('InnoDB')` only. No active MySQL-only schema calls found. Runtime verification blocked pending M1-05 permission. |
+| M1-04 | Audit raw SQL/DB portability | controllers, models, services | M1-01 | no | no MySQL-specific SQL remains where PG would break | done | `app/` + seeders/factories scan found `DB::raw` only in commented dashboard code (`app/Http/Controllers/Admin/DashboardController.php:130,131,147,148,184,185`) — no active runtime MySQL-specific SQL found. Re-audit when implementing dashboard aggregates. |
+| M1-05 | Run migrations locally | artisan migrate | M1-03,M1-04 | **yes** | schema builds on PostgreSQL | blocked | Requires explicit user permission before any migrate command. |
+| M1-06 | Run seeders locally | artisan db:seed / fresh --seed | M1-05 | **yes** | placeholder data loads; no destructive action without permission | blocked | Requires explicit user permission before any seed/destructive DB command. |
+
+## Module 2 — Auth & session isolation
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M2-01 | Remove email verification (local) | `User`, routes, `VerificationController`, views, kernel refs | M0-01 | no | no verification prompts/enforcement; registration/login usable | todo | Keep `email_verified_at` harmless unless schema decision needed. |
+| M2-02 | Fix user logout isolation | `app/Http/Controllers/Auth/LoginController.php` | M0-01 | no | web logout does not invalidate admin session | todo | Avoid full session invalidate/flush. |
+| M2-03 | Fix admin logout isolation | `app/Http/Controllers/Admin/Auth/AdminAuthController.php` | M0-01 | no | admin logout does not invalidate web session | todo | Regenerate CSRF safely. |
+| M2-04 | Guard-aware guest redirects | `RedirectIfAuthenticated`, route middleware | M2-02,M2-03 | no | web/admin guests redirect to correct homes | todo | |
+| M2-05 | Route/auth UX cleanup | `routes/web.php`, navs, forms | M2-01..M2-04 | no | correct endpoints, no duplicate profile routes, clear labels | todo | Fix duplicate `profile.update` routes. |
+| M2-06 | Manual auth isolation smoke test | browser/session flows | M2-05 | no | user+admin login/logout matrix documented | todo | Record same-session limitation if any. |
+
+## Module 3 — Spatie authorization
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M3-01 | Confirm Spatie scope | architecture decision | M0-05 | no | A or B selected and recorded | blocked | Recommended B: Spatie Permission authorization on existing guards. |
+| M3-02 | Align Spatie Permission config/models | `config/permission.php`, `Admin`, `User` as needed, migrations | M3-01 | no | guards/cache/tables/traits coherent | todo | Avoid breaking current auth. |
+| M3-03 | Define local roles/permissions map | seeders/docs | M3-02 | no | minimal useful roles/permissions for admin modules | todo | Placeholder/simulation-friendly. |
+| M3-04 | Seed roles/permissions | seeders | M3-03 | **yes** | roles/permissions exist locally | blocked | Requires explicit user permission. |
+| M3-05 | Protect admin actions | routes, controllers, middleware/policies | M3-02 | no | sensitive actions server-enforced | todo | UI hides/disables where practical. |
+| M3-06 | Spatie smoke test | admin flows | M3-04,M3-05 | no | allowed/denied behavior correct | todo | |
+
+## Module 4 — Controllers & domain flows
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M4-01 | Implement KnowledgeBaseCategory admin CRUD | `Admin/KnowledgeBaseCategoryController`, routes/views | M0-01 | no | full functional CRUD + validation | todo | Currently stubbed. |
+| M4-02 | Implement KnowledgeBase admin CRUD | `Admin/KnowledgeBaseController`, routes/views | M4-01 | no | full functional CRUD + relations/placeholders | todo | Currently stubbed. |
+| M4-03 | Implement KnowledgeBaseImage admin CRUD | `Admin/KnowledgeBaseImageController`, routes/views | M4-02 | no | full functional CRUD/upload or placeholder handling | todo | Currently stubbed. |
+| M4-04 | Make Dashboard useful | `Admin/DashboardController`, view | M0-01 | no | real/simulated safe aggregates render with empty DB | todo | Replace commented demo-only path. |
+| M4-05 | Audit all admin controllers | `app/Http/Controllers/Admin/*` | M3-05? | no | no stubs, actions functional, validation/errors sane | todo | Include profile-adjacent admin views if any. |
+| M4-06 | Audit public/profile/payment controllers | `PagesController`, `UserController`, `MpesaController`, services | M2-05 | no | local-testable flows, graceful null/empty handling | todo | Make “Completed” simulation explicit/local-only as needed. |
+| M4-07 | Local payment simulation strategy | controllers/services/config/views | M4-06 | no | pending/completed flow testable without gateway | todo | Gate by env/config; keep callback/status coherent. |
+
+## Module 5 — Data, placeholders & empty states
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M5-01 | Add/update factories and seed placeholders | `database/factories`, `database/seeders` | M1-03,M4-* as needed | no | realistic placeholder records for key entities | todo | Use safe placeholder images/text. |
+| M5-02 | Harden `DatabaseSeeder` behavior | `database/seeders/DatabaseSeeder.php` | M5-01 | no | clear, safe orchestration; no auto-run; docs aligned | todo | Still permission-gated to execute. |
+| M5-03 | Global Blade empty-state pass | `resources/views/**` | M4-06 | no | no 500s on fresh/empty DB; helpful empty UI | todo | Prioritize home, lists, profile, dashboard. |
+| M5-04 | Controller/view defensive null handling | controllers + views | M5-03 | no | `findOrFail`/optional/collection guards used appropriately | todo | |
+
+## Module 6 — UI/UX upgrade
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M6-01 | Confirm UI/UX depth | decision | M0-05 | no | 1/2/3 selected and recorded | blocked | Recommended 2: moderate upgrade. |
+| M6-02 | UI conventions/shared patterns | layouts, partials, CSS/JS entrypoints | M6-01 | no | consistent forms/tables/cards/badges/alerts | todo | Stay compatible with Blade/Mix/Bootstrap unless justified. |
+| M6-03 | Auth/profile/payment UX pass | auth/profile/bookings/payment views | M2-05,M6-02 | no | clearer flows, feedback, responsive basics | todo | |
+| M6-04 | Admin UX pass | admin layout/dashboard/CRUD views | M4-04,M4-05,M6-02 | no | navigable, clear actions, empty/loading/error states | todo | |
+| M6-05 | Public UX pass | home/catalog/portfolio/downloads/contact | M5-03,M6-02 | no | polished placeholders/empty states, consistent layout | todo | |
+| M6-06 | Accessibility/responsive sanity check | key screens | M6-03..M6-05 | no | labels, focus, contrast basics, mobile nav usable | todo | Lightweight pass unless depth=3. |
+
+## Module 7 — Validation & handoff
+| ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
+|---|---|---|---|---:|---|---|---|
+| M7-01 | Static checks | touched PHP files | relevant modules | no | `php -l` clean; project tests/lint if available | todo | |
+| M7-02 | Permission-gated DB setup/seed smoke | local DB | M1-05,M1-06,M3-04 | **yes** | migrate/seed only with explicit permission | blocked | |
+| M7-03 | End-to-end smoke flows | auth, guards, Spatie, CRUD, payments, UI | M7-01,M7-02 | no | key scenarios pass; residual risks listed | todo | |
+| M7-04 | Residual scan | codebase | M7-03 | no | no stubs, no `MustVerifyEmail` enforcement, no unsafe empty rendering in touched areas | todo | Document follow-ups. |
+
+## Suggested first implementation slice (after decisions)
+1. M0-02..M0-04 (docs/policies) — no permission gate.
+2. M1-01..M1-04 (Postgres/env/migration audit) — no permission gate.
+3. M2-01..M2-05 (email verification removal + guard-isolated logout + route cleanup).
+4. Resolve M0-05 (Spatie A/B, UI/UX 1/2/3), then proceed into M3/M4/M5/M6 in small reviewable batches.
