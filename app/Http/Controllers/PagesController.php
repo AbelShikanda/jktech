@@ -139,7 +139,7 @@ class PagesController extends Controller
         return view('pages.tutorials', compact('pageTitle', 'breadcrumbLinks'));
     }
 
-    public function tutorial_Details()
+    public function tutorial_details()
     {
         $pageTitle = 'Tutorial Details';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => route('tutorials'), 'label' => 'Tutorials'], ['url' => '', 'label' => 'Details']];
@@ -155,7 +155,7 @@ class PagesController extends Controller
         return view('pages.education', compact('pageTitle', 'breadcrumbLinks'));
     }
 
-    public function education_Details()
+    public function education_details()
     {
         $pageTitle = 'Education Details';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => route('education'), 'label' => 'Education'], ['url' => '', 'label' => 'Details']];

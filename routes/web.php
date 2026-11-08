@@ -116,11 +116,11 @@ Route::get('/portfolio', [PagesController::class, 'portfolio'])->name('portfolio
 Route::get('/portfolio/details', [PagesController::class, 'portfolio_details'])->name('portfolio_details');
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Route::get('/tutorials', [PagesController::class, 'tutorials'])->name('tutorials');
-Route::get('/tutorials/details', [PagesController::class, 'tutorial_Details'])->name('tutorials_details');
-Route::get('/tutorials/datails', [PagesController::class, 'tutorial_Details'])->name('tutorials_datails');
+Route::get('/tutorials/details', [PagesController::class, 'tutorial_details'])->name('tutorials_details');
+Route::get('/tutorials/datails', [PagesController::class, 'tutorial_details'])->name('tutorials_datails');
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Route::get('/education', [PagesController::class, 'education'])->name('education');
-Route::get('/education/details', [PagesController::class, 'education_Details'])->name('education_details');
+Route::get('/education/details', [PagesController::class, 'education_details'])->name('education_details');
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Route::get('/downloads', [PagesController::class, 'downloads'])->name('downloads');
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
