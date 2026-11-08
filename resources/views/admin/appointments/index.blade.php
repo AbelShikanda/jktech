@@ -36,11 +36,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($appointments as $appointment)
+                                        @forelse (($appointments ?? collect()) as $appointment)
                                             <tr>
-                                                <td>{{ $appointment->user->first_name ?? 'N/A' }}</td>
-                                                <td>{{ $appointment->date }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }}</td>
+                                                <td>{{ optional($appointment->user)->first_name ?? optional($appointment->user)->email ?? 'N/A' }}</td>
+                                                <td>{{ optional($appointment->date)->format('Y-m-d') ?? $appointment->date ?? 'N/A' }}</td>
+                                                <td>{{ $appointment->start_time ? \Carbon\Carbon::parse($appointment->start_time)->format('H:i') : 'N/A' }}</td>
                                                 <td>
                                                     @if ($appointment->confirmed)
                                                         <span class="badge bg-success">Yes</span>
@@ -49,21 +49,18 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('appointment.edit', $appointment->id) }}">Edit</a>
-
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('appointment.show', $appointment->id) }}">View</a>
+                                                        <a class="dropdown-item" href="{{ route('appointment.edit', $appointment->id) }}">Edit</a>
+                                                        <a class="dropdown-item" href="{{ route('appointment.show', $appointment->id) }}">View</a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="5" class="text-muted text-center">No appointments found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

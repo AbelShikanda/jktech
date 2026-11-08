@@ -40,41 +40,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($types as $item)
+                                        @forelse (($types ?? collect()) as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <!-- <td>{{ $item->slug }}</td> -->
-                                                <td>Ksh{{ number_format($item->price, 2) }}</td>
-                                                <!-- <td>{{ $item->created_at }}</td> -->
-                                                <td>{{ $item->updated_at }}</td>
+                                                <td>KES {{ number_format((float) ($item->price ?? 0), 2) }}</td>
+                                                <td>{{ optional($item->updated_at)->format('Y-m-d H:i') ?? 'N/A' }}</td>
                                                 <td>
-                                                    <button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('types.edit', $item->id) }}">Edit</a>
-
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('types.destroy', $item->id) }}"
-                                                            onclick="event.preventDefault();
-                            document.getElementById('destroy-type-{{ $item->id }}').submit();">
-                                                            {{ __('Remove') }}
-                                                        </a>
-
-                                                        <form id="destroy-type-{{ $item->id }}"
-                                                            action="{{ route('types.destroy', $item->id) }}" method="POST"
-                                                            class="d-none">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
+                                                        <a class="dropdown-item" href="{{ route('types.edit', $item->id) }}">Edit</a>
+                                                        <a class="dropdown-item" href="{{ route('types.destroy', $item->id) }}" onclick="event.preventDefault(); document.getElementById('destroy-type-{{ $item->id }}').submit();">{{ __('Remove') }}</a>
+                                                        <form id="destroy-type-{{ $item->id }}" action="{{ route('types.destroy', $item->id) }}" method="POST" class="d-none">@csrf @method('DELETE')</form>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="5" class="text-muted text-center">No service types found.</td></tr>
+                                        @endforelse
                                     </tbody>
 
                                 </table>

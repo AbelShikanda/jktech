@@ -37,8 +37,6 @@ class ServiceTypeController extends Controller
 
             $type = ServiceTypes::create($validated);
 
-            // dd($type);
-
             DB::commit();
             return redirect()->route('types.index')->with('message', 'Type created successfully');
         } catch (\Throwable $th) {

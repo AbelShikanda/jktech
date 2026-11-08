@@ -22,12 +22,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($payments as $payment)
+            @forelse(($payments ?? collect()) as $payment)
                 <tr>
-                    <td>{{ $payment->payment_for }}</td>
-                    <td>{{ $payment->amount }}</td>
-                    <td>{{ $payment->mpesa_receipt_number }}</td>
-                    <td><span class="badge bg-{{ $payment->status === 'Success' ? 'success' : ($payment->status === 'Failed' ? 'danger' : 'secondary') }}">{{ $payment->status }}</span></td>
+                    <td>{{ $payment->payment_for ?? 'N/A' }}</td>
+                    <td>{{ number_format((float) ($payment->amount ?? 0), 2) }}</td>
+                    <td>{{ $payment->mpesa_receipt_number ?? $payment->checkout_request_id ?? 'N/A' }}</td>
+                    <td><span class="badge bg-{{ in_array($payment->status, ['Success','Completed']) ? 'success' : ($payment->status === 'Failed' ? 'danger' : 'secondary') }}">{{ $payment->status ?? 'N/A' }}</span></td>
                     <td>
                         <a href="{{ route('payments.show', $payment->id) }}" class="btn btn-sm btn-secondary">View</a>
                         <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-sm btn-info">Edit</a>
@@ -38,7 +38,9 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="5" class="text-muted text-center">No M-Pesa payments found.</td></tr>
+            @endforelse
         </tbody>
     </table>
 </div>

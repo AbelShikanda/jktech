@@ -41,40 +41,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($work as $w)
+                                        @forelse (($work ?? collect()) as $w)
                                             <tr>
                                                 <td>{{ $w->id }}</td>
                                                 <td>{{ $w->day_of_week }}</td>
-                                                <td>{{ $w->start_time }}</td>
-                                                <td>{{ $w->end_time }}</td>
-                                                <td>{{ $w->is_off_day }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                <td>{{ $w->start_time ?? 'N/A' }}</td>
+                                                <td>{{ $w->end_time ?? 'N/A' }}</td>
+                                                <td>{{ ($w->is_off_day ?? false) ? 'Yes' : 'No' }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <!-- <a class="dropdown-item"
-                                                            href="{{ route('work.show', $w->id) }}">view</a> -->
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('work.edit', $w->id) }}">Edit</a>
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('work.destroy', $w->id) }}"
-                                                                onclick="event.preventDefault();
-                                                            document.getElementById('destroy-work').submit();">
-                                                                {{ __('Remove') }}
-                                                            </a>
-
-                                                            <form id="destroy-work"
-                                                                action="{{ route('work.destroy', $w->id) }}"
-                                                                method="POST" class="d-none">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                            </form>
+                                                        <a class="dropdown-item" href="{{ route('work.edit', $w->id) }}">Edit</a>
+                                                        <form action="{{ route('work.destroy', $w->id) }}" method="POST" onsubmit="return confirm('Delete this schedule?')">@csrf @method('DELETE')<button class="dropdown-item" type="submit">Remove</button></form>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="6" class="text-muted text-center">No work schedules found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

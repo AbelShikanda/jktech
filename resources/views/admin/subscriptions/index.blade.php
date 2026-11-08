@@ -21,13 +21,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($subscriptions as $subscription)
+            @forelse(($subscriptions ?? collect()) as $subscription)
                 <tr>
-                    <td>{{ $subscription->user->first_name }}</td>
-                    <td>{{ $subscription->bundle->name }}</td>
-                    <td>{{ $subscription->start_date }}</td>
-                    <td>{{ $subscription->end_date }}</td>
-                    <td><span class="badge bg-{{ $subscription->status === 'active' ? 'success' : ($subscription->status === 'expired' ? 'secondary' : 'danger') }}">{{ ucfirst($subscription->status) }}</span></td>
+                    <td>{{ optional($subscription->user)->first_name ?? optional($subscription->user)->email ?? 'N/A' }}</td>
+                    <td>{{ optional($subscription->bundle)->name ?? 'N/A' }}</td>
+                    <td>{{ optional($subscription->start_date)->format('Y-m-d') ?? $subscription->start_date ?? 'N/A' }}</td>
+                    <td>{{ optional($subscription->end_date)->format('Y-m-d') ?? $subscription->end_date ?? 'N/A' }}</td>
+                    <td><span class="badge bg-{{ ($subscription->status ?? '') === 'active' ? 'success' : (($subscription->status ?? '') === 'expired' ? 'secondary' : 'danger') }}">{{ ucfirst($subscription->status ?? 'N/A') }}</span></td>
                     <td>
                         <a href="{{ route('user-bundles.show', $subscription->id) }}" class="btn btn-sm btn-secondary">View</a>
                         <a href="{{ route('user-bundles.edit', $subscription->id) }}" class="btn btn-sm btn-info">Edit</a>
@@ -38,7 +38,9 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="6" class="text-muted text-center">No subscriptions found.</td></tr>
+            @endforelse
         </tbody>
     </table>
 </div>

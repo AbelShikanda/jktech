@@ -40,36 +40,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($serviceCategories as $item)
+                                        @forelse (($serviceCategories ?? collect()) as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->created_at }}</td>
-                                                <td>{{ $item->updated_at }}</td>
-                                                <td><button class="btn btn-sm dropdown-toggle more-horizontal"
-                                                        type="button" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                <td>{{ optional($item->created_at)->format('Y-m-d H:i') ?? 'N/A' }}</td>
+                                                <td>{{ optional($item->updated_at)->format('Y-m-d H:i') ?? 'N/A' }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item" href="{{ route('service_categories.edit', $item->id) }}">Edit</a>
-                                                        
-
-                                                        <a class="dropdown-item" href="{{ route('service_categories.destroy', $item->id) }}"
-                                                            onclick="event.preventDefault();
-                                                            document.getElementById('destroy-category').submit();">
-                                                            {{ __('Remove') }}
-                                                        </a>
-
-                                                        <form id="destroy-category" action="{{ route('service_categories.destroy', $item->id) }}"
-                                                            method="POST" class="d-none">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
+                                                        <form action="{{ route('service_categories.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this category?')">@csrf @method('DELETE')<button class="dropdown-item" type="submit">Remove</button></form>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="5" class="text-muted text-center">No service categories found.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

@@ -26,12 +26,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($bundles as $bundle)
+                            @forelse (($bundles ?? collect()) as $bundle)
                                 <tr>
                                     <td>{{ $bundle->name }}</td>
-                                    <td>{{ number_format($bundle->price, 2) }}</td>
+                                    <td>{{ number_format((float) ($bundle->price ?? 0), 2) }}</td>
                                     <td>{{ $bundle->is_recurring ? 'Yes' : 'No' }}</td>
-                                    <td>{{ $bundle->trial_days }} days</td>
+                                    <td>{{ $bundle->trial_days ?? 0 }} days</td>
                                     <td class="d-flex gap-1 flex-wrap">
                                         <a href="{{ route('bundles.show', $bundle->id) }}" class="btn btn-sm btn-secondary">View</a>
                                         <a href="{{ route('bundles.edit', $bundle->id) }}" class="btn btn-sm btn-info">Edit</a>
@@ -42,7 +42,9 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr><td colspan="5" class="text-muted text-center">No bundles found.</td></tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
