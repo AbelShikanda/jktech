@@ -35,7 +35,7 @@ class ServiceCategoryController extends Controller
     public function show(string $id)
     {
         $category = ServiceCategories::findOrFail($id);
-        return view('admin.categories.edit', compact('category'));
+        return view('admin.categories.show', compact('category'));
     }
 
     public function edit($id)
