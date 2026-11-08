@@ -29,14 +29,7 @@ class PagesController extends Controller
         $pageTitle = 'Appointment';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => '', 'label' => 'Appointment']];
 
-        return view(
-            'bookings.index',
-            with([
-                'services' => $services,
-                'pageTitle' => $pageTitle,
-                'breadcrumbLinks' => $breadcrumbLinks,
-            ]),
-        );
+        return view('bookings.index', compact('services', 'pageTitle', 'breadcrumbLinks'));
     }
 
     public function bookingStore(Request $request, MpesaService $mpesaService)
@@ -131,17 +124,9 @@ class PagesController extends Controller
     {
         $pageTitle = 'Portfolio';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => '', 'label' => 'Portfolio']];
+        $portfolio = Portfolio::all();
 
-        $portfolio = Portfolio::latest()->get();
-
-        return view(
-            'pages.portfolio',
-            with([
-                'portfolio' => $portfolio,
-                'pageTitle' => $pageTitle,
-                'breadcrumbLinks' => $breadcrumbLinks,
-            ]),
-        );
+        return view('pages.portfolio', compact('pageTitle', 'breadcrumbLinks', 'portfolio'));
     }
 
     public function portfolio_details()
@@ -154,13 +139,7 @@ class PagesController extends Controller
         $pageTitle = 'Tutorials';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => '', 'label' => 'Tutorials']];
 
-        return view(
-            'pages.tutorials',
-            with([
-                'pageTitle' => $pageTitle,
-                'breadcrumbLinks' => $breadcrumbLinks,
-            ]),
-        );
+        return view('pages.tutorials', compact('pageTitle', 'breadcrumbLinks'));
     }
 
     public function tutorial_Details()
@@ -176,13 +155,7 @@ class PagesController extends Controller
         $pageTitle = 'Learning';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => '', 'label' => 'Learning']];
 
-        return view(
-            'pages.education',
-            with([
-                'pageTitle' => $pageTitle,
-                'breadcrumbLinks' => $breadcrumbLinks,
-            ]),
-        );
+        return view('pages.education', compact('pageTitle', 'breadcrumbLinks'));
     }
 
     public function education_Details()
@@ -258,13 +231,6 @@ class PagesController extends Controller
 
         $softwares = Software::with('releases')->get();
 
-        return view(
-            'pages.download',
-            with([
-                'pageTitle' => $pageTitle,
-                'breadcrumbLinks' => $breadcrumbLinks,
-                'softwares' => $softwares,
-            ]),
-        );
+        return view('pages.download', compact('pageTitle', 'breadcrumbLinks', 'softwares'));
     }
 }

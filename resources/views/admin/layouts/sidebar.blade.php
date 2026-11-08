@@ -44,6 +44,7 @@
                 </ul>
             </li>
         </ul>
+        @if($canSettings)
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>Work Schedule</span>
         </p>
@@ -67,9 +68,21 @@
                 </ul>
             </li>
         </ul>
+        @endif
         @php
             $admin = \Illuminate\Support\Facades\Auth::guard('admin')->user();
             $canManage = $admin && (method_exists($admin, 'hasAnyRole') ? $admin->hasAnyRole(['super-admin','manager']) : (bool) ($admin->is_admin ?? false));
+            $can = function (string $perm) use ($admin) {
+                if (!$admin) return false;
+                if (method_exists($admin, 'hasAnyRole') && $admin->hasAnyRole(['super-admin'])) return true;
+                if (method_exists($admin, 'can')) { try { return $admin->can($perm); } catch (\Throwable $e) {} }
+                return (bool) ($admin->is_admin ?? false);
+            };
+            $canSettings = $can('admin.settings.manage');
+            $canServices = $can('admin.services.manage');
+            $canContent = $can('admin.content.manage');
+            $canBookings = $can('admin.bookings.manage');
+            $canPayments = $can('admin.payments.view');
         @endphp
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>Booking Components</span>
