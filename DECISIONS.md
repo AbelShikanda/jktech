@@ -17,15 +17,11 @@ Record key decisions, rationale, and open items for the JKE local-dev migration/
 | 2026-11-08 | Controllers must be complete/functional (no stubs) | Stubs block testing/admin workflows | Implement missing CRUD/actions, especially KnowledgeBase admin stubs and weak dashboard/payment/profile paths |
 | 2026-11-08 | Use placeholders/simulation for local testing | External services/data may be unavailable | Safe placeholder images/content; explicit local payment simulation strategy (env/config gated) |
 | 2026-11-08 | Project docs live in repo root / `doc/` | `.kilo/` removed at user request; plan moved | `AGENTS.md`, `GOALS.md`, `DECISIONS.md` at root; `doc/PLAN.md`, `doc/TASKS.md` in `doc/` |
+| 2026-11-08 | Spatie scope = **B** (authorization) | Fits current Laravel 8 + dual-guard session auth; avoids risky auth rewrite | Use Spatie Permission for roles/permissions/middleware/policies on existing `web`/`admin` guards; do not replace login with a Spatie auth package |
+| 2026-11-08 | UI/UX depth = **2** (moderate upgrade) | Balances impact and risk on existing Blade/Mix stack | Shared patterns, navigation/forms/tables/cards, responsive/accessibility pass on key screens; no full redesign |
 
-## Open decisions (must resolve before affected implementation)
-
-| ID | Question | Recommended | Options | Blocks |
-|---|---|---|---|---|
-| D-OPEN-01 | Spatie scope | **B** | **A)** replace app authentication/login with a Spatie package (high impact on Laravel 8 + dual guards; specify package). **B)** use Spatie Permission as authorization (roles/permissions/middleware/policies) on top of existing Laravel session/guard login. | M3 implementation depth/details |
-| D-OPEN-02 | UI/UX depth | **2** | **1)** light polish. **2)** moderate upgrade (shared patterns, navigation/forms/tables/cards, responsive/accessibility pass on key screens). **3)** major redesign. | M6 scope/effort |
-
-## Risks / notes
+## Open decisions
+No open decisions. D-OPEN-01 resolved as **B** (Spatie Permission authorization on existing guards) and D-OPEN-02 resolved as **2** (moderate UI/UX upgrade) on 2026-11-08.
 - **`.env` secret exposure risk:** local `.env` contains sensitive values (DB/M-Pesa credentials). Do not propagate or document secret values; recommend rotation outside the repo.
 - **Session isolation nuance:** Laravel stores auth per guard, but full session invalidation and shared cookie behavior can create edge cases. Guard-scoped logout must be implemented carefully and smoke-tested; document any same-browser limitation.
 - **Payment semantics:** current code marks some payments/bookings as completed. Local simulation must be explicit and env/config gated so it is not mistaken for production settlement.
