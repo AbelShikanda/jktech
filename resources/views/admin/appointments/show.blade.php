@@ -20,15 +20,15 @@
                     <div class="col">
                         <div class="row align-items-center">
                             <div class="col-sm-12 col-md-6">
-                                <h4 class="mb-1">appointment for {{ $appointment->date }}</h4>
+                                <h4 class="mb-1">Appointment for {{ optional($appointment->date)->format('Y-m-d') ?? $appointment->date ?? 'N/A' }}</h4>
                                 <p class="small mb-3">
                                     <span class="badge badge-dark">
-                                        Created on: {{ optional($appointment->created_at)->format('F j, Y') }}
+                                        Created on: {{ optional($appointment->created_at)->format('F j, Y') ?? 'N/A' }}
                                     </span>
                                 </p>
                                 <div>
-                                    <p><strong>Start Time:</strong> {{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }}</p>
-                                    <p><strong>End Time:</strong> {{ \Carbon\Carbon::parse($appointment->end_time)->format('H:i') }}</p>
+                                    <p><strong>Start Time:</strong> {{ $appointment->start_time ? \Carbon\Carbon::parse($appointment->start_time)->format('H:i') : 'N/A' }}</p>
+                                    <p><strong>End Time:</strong> {{ $appointment->end_time ? \Carbon\Carbon::parse($appointment->end_time)->format('H:i') : 'N/A' }}</p>
                                     <p>
                                         <strong>Status:</strong>
                                         @if ($appointment->confirmed)
