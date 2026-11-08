@@ -9,39 +9,13 @@
             <h5 class="card-title">Subscription #{{ $subscription->id }}</h5>
 
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <strong>User:</strong>
-                    {{ $subscription->user->name }} ({{ $subscription->user->email }})
-                </li>
-                <li class="list-group-item">
-                    <strong>Bundle:</strong>
-                    {{ $subscription->bundle->name }} – {{ $subscription->bundle->description }}
-                </li>
-                <li class="list-group-item">
-                    <strong>Start Date:</strong>
-                    {{ $subscription->start_date->format('M d, Y') }}
-                </li>
-                <li class="list-group-item">
-                    <strong>End Date:</strong>
-                    {{ $subscription->end_date->format('M d, Y') }}
-                </li>
-                <li class="list-group-item">
-                    <strong>Status:</strong>
-                    <span class="badge 
-                        @if ($subscription->status === 'active') bg-success
-                        @elseif ($subscription->status === 'expired') bg-secondary
-                        @else bg-danger @endif">
-                        {{ ucfirst($subscription->status) }}
-                    </span>
-                </li>
-                <li class="list-group-item">
-                    <strong>Created At:</strong>
-                    {{ $subscription->created_at->format('M d, Y H:i') }}
-                </li>
-                <li class="list-group-item">
-                    <strong>Updated At:</strong>
-                    {{ $subscription->updated_at->format('M d, Y H:i') }}
-                </li>
+                <li class="list-group-item"><strong>User:</strong> {{ optional($subscription->user)->name ?? trim((optional($subscription->user)->first_name ?? '').' '.(optional($subscription->user)->last_name ?? '')) ?: optional($subscription->user)->email ?? 'N/A' }} ({{ optional($subscription->user)->email ?? 'N/A' }})</li>
+                <li class="list-group-item"><strong>Bundle:</strong> {{ optional($subscription->bundle)->name ?? 'N/A' }} – {{ optional($subscription->bundle)->description ?? '' }}</li>
+                <li class="list-group-item"><strong>Start Date:</strong> {{ optional($subscription->start_date)->format('M d, Y') ?? 'N/A' }}</li>
+                <li class="list-group-item"><strong>End Date:</strong> {{ optional($subscription->end_date)->format('M d, Y') ?? 'N/A' }}</li>
+                <li class="list-group-item"><strong>Status:</strong> <span class="badge @if (($subscription->status ?? '') === 'active') bg-success @elseif (($subscription->status ?? '') === 'expired') bg-secondary @else bg-danger @endif">{{ ucfirst($subscription->status ?? 'N/A') }}</span></li>
+                <li class="list-group-item"><strong>Created At:</strong> {{ optional($subscription->created_at)->format('M d, Y H:i') ?? 'N/A' }}</li>
+                <li class="list-group-item"><strong>Updated At:</strong> {{ optional($subscription->updated_at)->format('M d, Y H:i') ?? 'N/A' }}</li>
             </ul>
 
             <div class="mt-4">
