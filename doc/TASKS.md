@@ -9,7 +9,7 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 - **Git:** local commits are allowed when explicitly requested/approved; **never push** unless the user explicitly requests it.
 - **Quality gates for touched modules:** handle empty DB states gracefully; enforce authorization on the server; keep UI feedback clear (success/error/empty/loading where relevant).
 - **Secrets:** do not copy `.env` secrets into docs or commits. Use `.env.example` placeholders only.
-- **Open decisions (resolve before affected implementation):** Spatie scope = `A` (replace auth, high impact — specify package) or `B` (recommended: Spatie Permission authorization on existing Laravel session guards). UI/UX depth = `1` light polish, `2` moderate upgrade (recommended), `3` major redesign.
+- **Open decisions:** resolved 2026-11-08 — Spatie scope **B**, UI/UX depth **2**.
 
 ## Module 0 — Baseline & docs
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
@@ -18,7 +18,7 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 | M0-02 | Create `AGENTS.md` (root) | `AGENTS.md` | M0-01 | no | includes stack, setup w/o secrets, commits allowed/no push, **no seed/reseed without permission**, guard/Spatie/local simulation notes | done | Created with git/seeding/auth/data/UI policies. |
 | M0-03 | Create `GOALS.md` | `GOALS.md` | M0-01 | no | goals match current situation/upgrades/bugs | done | Created with goals/success criteria. |
 | M0-04 | Create `DECISIONS.md` | `DECISIONS.md` | M0-01 | no | records resolved decisions + open items | done | Includes resolved decisions, open D-OPEN-01/02, risks. |
-| M0-05 | Confirm open decisions | Spatie scope, UI/UX depth | M0-01 | no | user replies A/B and 1/2/3 | blocked | Needs reply: Spatie `A`/`B` (recommended `B`), UI/UX `1`/`2`/`3` (recommended `2`). Blocks M3 depth and M6 scope. |
+| M0-05 | Confirm open decisions | Spatie scope, UI/UX depth | M0-01 | no | user replies A/B and 1/2/3 | done | User selected **B,2** (2026-11-08): Spatie Permission as authorization on existing Laravel `web`/`admin` session guards; moderate UI/UX upgrade. Unblocks M3 depth and M6 scope. |
 
 ## Module 1 — PostgreSQL & environment
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
