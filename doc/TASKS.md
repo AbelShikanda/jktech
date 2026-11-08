@@ -70,10 +70,10 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
 | M6-01 | Confirm UI/UX depth | decision | M0-05 | no | 1/2/3 selected and recorded | done | Resolved as **2** (2026-11-08): moderate UI/UX upgrade. |
-| M6-02 | UI conventions/shared patterns | layouts, partials, CSS/JS entrypoints | M6-01 | no | consistent forms/tables/cards/badges/alerts | todo | Stay compatible with Blade/Mix/Bootstrap unless justified. |
-| M6-03 | Auth/profile/payment UX pass | auth/profile/bookings/payment views | M2-05,M6-02 | no | clearer flows, feedback, responsive basics | todo | |
-| M6-04 | Admin UX pass | admin layout/dashboard/CRUD views | M4-04,M4-05,M6-02 | no | navigable, clear actions, empty/loading/error states | todo | |
-| M6-05 | Public UX pass | home/catalog/portfolio/downloads/contact | M5-03,M6-02 | no | polished placeholders/empty states, consistent layout | todo | |
+| M6-02 | UI conventions/shared patterns | layouts, partials, CSS/JS entrypoints | M6-01 | no | consistent forms/tables/cards/badges/alerts | in_progress | Added shared alert partials: `resources/views/layouts/partials/alerts.blade.php` (BS5/public) and `resources/views/admin/layouts/partials/alerts.blade.php` (admin theme) + admin layout injection. Remaining: shared table/form/card conventions across all CRUD screens. |
+| M6-03 | Auth/profile/payment UX pass | auth/profile/bookings/payment views | M2-05,M6-02 | no | clearer flows, feedback, responsive basics | in_progress | Improved user register validation feedback/old input; admin login feedback copy/accessibility; profile/waiting/payment detail flows already hardened in prior passes. Remaining: full responsive/a11y pass on all auth/profile/payment screens. |
+| M6-04 | Admin UX pass | admin layout/dashboard/CRUD views | M4-04,M4-05,M6-02 | no | navigable, clear actions, empty/loading/error states | in_progress | Admin layout now renders global alerts; dashboard has safe metrics/empty states; KB/nav/permission-aware actions added. Remaining: consistent forms/tables/cards/empty-loading across all CRUD views. |
+| M6-05 | Public UX pass | home/catalog/portfolio/downloads/contact | M5-03,M6-02 | no | polished placeholders/empty states, consistent layout | in_progress | Contact shows validation errors; catalog/downloads/portfolio/comments received placeholder/empty-state hardening in prior passes. Remaining: consistent shared patterns and responsive polish across public key screens. |
 | M6-06 | Accessibility/responsive sanity check | key screens | M6-03..M6-05 | no | labels, focus, contrast basics, mobile nav usable | todo | Lightweight pass unless depth=3. |
 
 ## Module 7 — Validation & handoff
