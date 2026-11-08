@@ -44,17 +44,15 @@ class BookingService
 
         // ✅ Create the booking
         $booking = Booking::create([
-            'user_id' => $data['user_id'],
+            'user_id' => auth()->id(),
             'date' => $data['date'],
-            'start_time' => $data['start_time'],
+            'start_time' => $startTime,
             'end_time' => $endTime,
-            'message' => $data['message'],
+            'message' => $data['message'] ?? null,
             'confirmed' => false,
         ]);
 
         $booking->services()->attach($data['service']);
-
-        // dd($booking);
 
         return ['success' => 'Booking successful.', 'booking' => $booking];
     }
