@@ -67,6 +67,10 @@
                 </ul>
             </li>
         </ul>
+        @php
+            $admin = \Illuminate\Support\Facades\Auth::guard('admin')->user();
+            $canManage = $admin && (method_exists($admin, 'hasAnyRole') ? $admin->hasAnyRole(['super-admin','manager']) : (bool) ($admin->is_admin ?? false));
+        @endphp
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>Booking Components</span>
         </p>
@@ -119,6 +123,7 @@
                 </ul>
             </li>
         </ul>
+        @if($canManage)
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>User Components</span>
         </p>
@@ -155,6 +160,7 @@
                 </ul>
             </li>
         </ul>
+        @endif
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>Blog Components</span>
         </p>
