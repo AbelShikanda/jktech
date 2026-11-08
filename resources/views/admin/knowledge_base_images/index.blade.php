@@ -4,7 +4,9 @@
     <h2 class="mb-2 page-title">Knowledge Base Images</h2>
     <p class="card-text">Image records with placeholder URLs for local testing.</p>
     @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+    @if(auth('admin')->user()?->can('admin.content.manage'))
     <a href="{{ route('knowledge-base-images.create') }}" class="btn btn-primary mb-3">Add Image</a>
+    @endif
     <div class="card shadow"><div class="card-body">
         @if(($images ?? collect())->isEmpty())
             <p class="text-muted mb-0">No knowledge base images found. Add one using a placeholder URL or local path.</p>
@@ -16,8 +18,10 @@
                 <td>{{ optional($image->knowledgeBases->first())->title ?? $image->knowledgeBases_id }}</td>
                 <td>@if($image->thumbnail)<img src="{{ $image->thumbnail }}" alt="" style="max-width:80px" class="img-thumbnail" onerror="this.src='https://placehold.co/80x60?text=img'">@else N/A @endif</td>
                 <td>
+                    @if(auth('admin')->user()?->can('admin.content.manage'))
                     <a class="btn btn-sm btn-outline-secondary" href="{{ route('knowledge-base-images.edit', $image->id) }}">Edit</a>
                     <form action="{{ route('knowledge-base-images.destroy', $image->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this image?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Delete</button></form>
+                    @endif
                 </td>
             </tr>
         @endforeach

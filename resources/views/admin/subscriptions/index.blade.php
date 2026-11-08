@@ -3,7 +3,9 @@
 @section('content')
 <div class="container">
     <h2>User Subscriptions</h2>
+    @if(auth('admin')->user()?->can('admin.bookings.manage'))
     <a href="{{ route('user-bundles.create') }}" class="btn btn-primary mb-3">+ Add Subscription</a>
+    @endif
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -30,12 +32,14 @@
                     <td><span class="badge bg-{{ ($subscription->status ?? '') === 'active' ? 'success' : (($subscription->status ?? '') === 'expired' ? 'secondary' : 'danger') }}">{{ ucfirst($subscription->status ?? 'N/A') }}</span></td>
                     <td>
                         <a href="{{ route('user-bundles.show', $subscription->id) }}" class="btn btn-sm btn-secondary">View</a>
+                        @if(auth('admin')->user()?->can('admin.bookings.manage'))
                         <a href="{{ route('user-bundles.edit', $subscription->id) }}" class="btn btn-sm btn-info">Edit</a>
                         <form action="{{ route('user-bundles.destroy', $subscription->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty

@@ -21,7 +21,7 @@
                         @if ($image && $image->thumbnail)
                             <img src="{{ asset('storage/' . $image->thumbnail) }}" alt="{{ $s->name }}"
                                 class="card-img-top img-fluid" width="100">
-                        @else
+                        @elseif(auth('admin')->user()?->can('admin.services.manage'))
                             <div class="text-center p-4">
                                 <a href="{{ route('service_Images.create', $s->id) }}"
                                     class="btn btn-sm btn-outline-warning">
@@ -45,22 +45,20 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $s->id }}">
-                                    @if ($s->serviceImage)
-                                        <a class="dropdown-item" href="{{ route('service_Images.edit', $s->serviceImage->id) }}">
-                                            Edit Image
-                                        </a>
-
-                                        <form action="{{ route('service_Images.destroy', $s->serviceImage->id) }}" method="POST"
-                                            onsubmit="return confirm('Are you sure you want to delete this image?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger">Delete Image</button>
-                                        </form>
+                                    @if(auth('admin')->user()?->can('admin.services.manage'))
+                                        @if ($s->serviceImage)
+                                            <a class="dropdown-item" href="{{ route('service_Images.edit', $s->serviceImage->id) }}">Edit Image</a>
+                                            <form action="{{ route('service_Images.destroy', $s->serviceImage->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this image?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger">Delete Image</button>
+                                            </form>
+                                        @else
+                                            <a class="dropdown-item" href="{{ route('service_Images.create', $s->id) }}">Add Image</a>
+                                        @endif
+                                        <a class="dropdown-item" href="{{ route('services.edit', $s->id) }}">Edit Service</a>
                                     @else
-                                        <a class="dropdown-item" href="{{ route('service_Images.create', $s->id) }}">Add Image</a>
+                                        <span class="dropdown-item text-muted">No actions available</span>
                                     @endif
-
-                                    <a class="dropdown-item" href="{{ route('services.edit', $s->id) }}">Edit Service</a>
                                 </div>
                             </div>
                         </div>
