@@ -5,48 +5,37 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-     * |--------------------------------------------------------------------------
-     * | Login Controller
-     * |--------------------------------------------------------------------------
-     * |
-     * | This controller handles authenticating users for the application and
-     * | redirecting them to your home screen. The controller uses a trait
-     * | to conveniently provide its functionality to your applications.
-     * |
-     */
-
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
-    /**
-     * The user has been authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return \Illuminate\Http\Response
-     */
     protected function authenticated($request, $user)
     {
-        return redirect()->intended(route('profile.show'))->with('success', 'Welcome back, ' . $user->name . '!');
+        $name = trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? ''));
+        if ($name === '') {
+            $name = $user->email ?? 'back';
+        }
+
+        return redirect()->intended(route('profile.show'))->with('success', 'Welcome back, ' . $name . '!');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->forget('login_web_' . sha1('Illuminate\Auth\SessionGuardweb'));
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'You have logged out successfully.');
     }
 }

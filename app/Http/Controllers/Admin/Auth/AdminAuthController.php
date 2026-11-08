@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAuthController extends Controller
 {
@@ -19,22 +20,28 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (auth()->guard('admin')->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
-            $user = auth()->guard('admin')->user();
-            if (!$user->is_admin == 1) {
-                return redirect()->back()->with('error', 'You have to be an Admin');
-            } else {
-                return redirect()->route('dashboard.index')->with('success', 'You are Logged in sucessfully.');
+        if (Auth::guard('admin')->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+            $user = Auth::guard('admin')->user();
+            if (!$user || (int) ($user->is_admin ?? 0) !== 1) {
+                Auth::guard('admin')->logout();
+                return redirect()->back()->with('error', 'You do not have admin access.');
             }
-        } else {
-            return redirect()->back()->with('error', 'Whoops! Invalid Credentials');
+
+            $request->session()->regenerate();
+
+            return redirect()->route('dashboard.index')->with('success', 'You are logged in successfully.');
         }
+
+        return redirect()->back()->withInput($request->only('email'))->with('error', 'Invalid credentials.');
     }
 
     public function adminLogout(Request $request)
     {
-        auth()->guard('admin')->logout();
-        // Session::flush();
-        return redirect(route('getLogin'))->with('success', 'You have loged out sucessfully');
+        Auth::guard('admin')->logout();
+
+        $request->session()->forget('login_admin_' . sha1('Illuminate\Auth\SessionGuardadmin'));
+        $request->session()->regenerateToken();
+
+        return redirect()->route('getLogin')->with('success', 'You have logged out successfully.');
     }
 }

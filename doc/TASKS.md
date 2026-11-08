@@ -33,12 +33,12 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 ## Module 2 — Auth & session isolation
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
-| M2-01 | Remove email verification (local) | `User`, routes, `VerificationController`, views, kernel refs | M0-01 | no | no verification prompts/enforcement; registration/login usable | todo | Keep `email_verified_at` harmless unless schema decision needed. |
-| M2-02 | Fix user logout isolation | `app/Http/Controllers/Auth/LoginController.php` | M0-01 | no | web logout does not invalidate admin session | todo | Avoid full session invalidate/flush. |
-| M2-03 | Fix admin logout isolation | `app/Http/Controllers/Admin/Auth/AdminAuthController.php` | M0-01 | no | admin logout does not invalidate web session | todo | Regenerate CSRF safely. |
-| M2-04 | Guard-aware guest redirects | `RedirectIfAuthenticated`, route middleware | M2-02,M2-03 | no | web/admin guests redirect to correct homes | todo | |
-| M2-05 | Route/auth UX cleanup | `routes/web.php`, navs, forms | M2-01..M2-04 | no | correct endpoints, no duplicate profile routes, clear labels | todo | Fix duplicate `profile.update` routes. |
-| M2-06 | Manual auth isolation smoke test | browser/session flows | M2-05 | no | user+admin login/logout matrix documented | todo | Record same-session limitation if any. |
+| M2-01 | Remove email verification (local) | `User`, routes, `VerificationController`, views, kernel refs | M0-01 | no | no verification prompts/enforcement; registration/login usable | done | Removed `MustVerifyEmail` import from `User`; removed `verified` middleware alias from kernel; `Auth::routes(['verify'=>false])`; `email_verified_at` cast left harmless. `verify.blade.php` remains unused. |
+| M2-02 | Fix user logout isolation | `app/Http/Controllers/Auth/LoginController.php` | M0-01 | no | web logout does not invalidate admin session | done | Overrode logout to `Auth::guard('web')->logout()`, forget web guard session key, `regenerateToken()` only (no full invalidate/flush). Fixed welcome name to use `first_name/last_name/email`. |
+| M2-03 | Fix admin logout isolation | `app/Http/Controllers/Admin/Auth/AdminAuthController.php` | M0-01 | no | admin logout does not invalidate web session | done | Guard-scoped admin logout; forget admin guard key; `regenerateToken()`; login regenerates session; tightened `is_admin` check. |
+| M2-04 | Guard-aware guest redirects | `RedirectIfAuthenticated`, route middleware | M2-02,M2-03 | no | web/admin guests redirect to correct homes | done | `admin` guard redirects to `dashboard.index`; others use `RouteServiceProvider::HOME`. |
+| M2-05 | Route/auth UX cleanup | `routes/web.php`, navs, forms | M2-01..M2-04 | no | correct endpoints, no duplicate profile routes, clear labels | done | Admin login routes under `guest:admin`; admin logout/dashboard guarded; removed duplicate `profile.update` mapping (now `PUT /profile` → `updateProfile`); grouped profile/subscription routes under `auth:web`. |
+| M2-06 | Manual auth isolation smoke test | browser/session flows | M2-05 | no | user+admin login/logout matrix documented | todo | Requires local runtime/browser check; DB/app run not executed. |
 
 ## Module 3 — Spatie authorization
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |

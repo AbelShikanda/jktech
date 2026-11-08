@@ -109,12 +109,13 @@ Route::post('/m_pesa/callback', [MpesaController::class, 'mpesaCallback'])->with
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Route::post('/api/holidays/${year}/${month}', [PagesController::class, 'getHolidays'])->name('getHolidays');
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Route::get('/profile', [UserController::class, 'profile'])->name('profile.show');
-Route::put('/profile', [UserController::class, 'update'])->name('profile.update');
-Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
-Route::post('/subscribe/{bundle}', [UserController::class, 'subscribe'])->name('subscribe.bundle');
-Route::get('/subscriptions/retry/{id}', [UserController::class, 'retrySubscription'])->name('subscription.retry');
-Route::post('/subscription/{id}/renew', [UserController::class, 'renew'])->name('subscription.renew');
-Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
+Route::middleware('auth:web')->group(function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.show');
+    Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/subscribe/{bundle}', [UserController::class, 'subscribe'])->name('subscribe.bundle');
+    Route::get('/subscriptions/retry/{id}', [UserController::class, 'retrySubscription'])->name('subscription.retry');
+    Route::post('/subscription/{id}/renew', [UserController::class, 'renew'])->name('subscription.renew');
+    Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
+});
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
