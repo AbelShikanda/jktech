@@ -44,7 +44,7 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
 | M3-01 | Confirm Spatie scope | architecture decision | M0-05 | no | A or B selected and recorded | done | Resolved as **B** (2026-11-08): Spatie Permission for authorization on existing session guards. |
-| M3-02 | Align Spatie Permission config/models | `config/permission.php`, `Admin`, `User` as needed, migrations | M3-01 | no | guards/cache/tables/traits coherent | todo | Avoid breaking current auth. |
+| M3-02 | Align Spatie Permission config/models | `config/permission.php`, `Admin`, `User` as needed, migrations | M3-01 | no | guards/cache/tables/traits coherent | in_progress | `Admin`/`User` now have `HasRoles` + `guard_name` (`admin`/`web`); permission config uses default tables/cache (teams off). Role/permission map, route protection, UI reflection, and seeded roles remain pending (M3-04 seeding permission-gated). |
 | M3-03 | Define local roles/permissions map | seeders/docs | M3-02 | no | minimal useful roles/permissions for admin modules | todo | Placeholder/simulation-friendly. |
 | M3-04 | Seed roles/permissions | seeders | M3-03 | **yes** | roles/permissions exist locally | blocked | Requires explicit user permission. |
 | M3-05 | Protect admin actions | routes, controllers, middleware/policies | M3-02 | no | sensitive actions server-enforced | todo | UI hides/disables where practical. |
