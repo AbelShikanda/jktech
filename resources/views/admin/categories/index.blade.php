@@ -12,7 +12,9 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.services.manage'))
                         <a href="{{ route('service_categories.create')}}" type="button" class=" float-right btn mb-2 btn-outline-primary">Add Product Category</a>
+                        @endif
                     </div>
                 </div>
                 <p class="card-text">
@@ -51,8 +53,10 @@
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        @if(auth('admin')->user()?->can('admin.services.manage'))
                                                         <a class="dropdown-item" href="{{ route('service_categories.edit', $item->id) }}">Edit</a>
                                                         <form action="{{ route('service_categories.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this category?')">@csrf @method('DELETE')<button class="dropdown-item" type="submit">Remove</button></form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

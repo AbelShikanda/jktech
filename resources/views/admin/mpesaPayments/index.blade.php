@@ -3,8 +3,10 @@
 @section('content')
 <div class="container">
     <h2>M-Pesa Transactions</h2>
+    @if(auth('admin')->user()?->can('admin.payments.view'))
     <a href="{{ route('payments.create') }}" class="btn btn-primary mb-3">+ Add Payment</a>
     <a href="{{ route('payments.export') }}" class="btn btn-success mb-3">Export to Excel</a>
+    @endif
 
 
     @if(session('success'))
@@ -30,12 +32,14 @@
                     <td><span class="badge bg-{{ in_array($payment->status, ['Success','Completed']) ? 'success' : ($payment->status === 'Failed' ? 'danger' : 'secondary') }}">{{ $payment->status ?? 'N/A' }}</span></td>
                     <td>
                         <a href="{{ route('payments.show', $payment->id) }}" class="btn btn-sm btn-secondary">View</a>
+                        @if(auth('admin')->user()?->can('admin.payments.view'))
                         <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-sm btn-info">Edit</a>
                         <form action="{{ route('payments.destroy', $payment->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty

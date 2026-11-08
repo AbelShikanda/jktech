@@ -12,8 +12,10 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.settings.manage'))
                         <a href="{{ route('work.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add work Schedule</a>
+                        @endif
                     </div>
                 </div>
 
@@ -53,8 +55,10 @@
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        @if(auth('admin')->user()?->can('admin.settings.manage'))
                                                         <a class="dropdown-item" href="{{ route('work.edit', $w->id) }}">Edit</a>
                                                         <form action="{{ route('work.destroy', $w->id) }}" method="POST" onsubmit="return confirm('Delete this schedule?')">@csrf @method('DELETE')<button class="dropdown-item" type="submit">Remove</button></form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

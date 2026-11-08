@@ -12,8 +12,10 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.services.manage'))
                         <a href="{{ route('types.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add Type</a>
+                        @endif
                     </div>
                 </div>
 
@@ -51,9 +53,11 @@
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        @if(auth('admin')->user()?->can('admin.services.manage'))
                                                         <a class="dropdown-item" href="{{ route('types.edit', $item->id) }}">Edit</a>
                                                         <a class="dropdown-item" href="{{ route('types.destroy', $item->id) }}" onclick="event.preventDefault(); document.getElementById('destroy-type-{{ $item->id }}').submit();">{{ __('Remove') }}</a>
                                                         <form id="destroy-type-{{ $item->id }}" action="{{ route('types.destroy', $item->id) }}" method="POST" class="d-none">@csrf @method('DELETE')</form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

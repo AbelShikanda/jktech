@@ -3,7 +3,9 @@
 @section('content')
 <div class="container">
     <h2>Software List</h2>
+    @if(auth('admin')->user()?->can('admin.services.manage'))
     <a href="{{ route('software.create') }}" class="btn btn-primary mb-3">+ Add Software</a>
+    @endif
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -34,11 +36,13 @@
                     </td>
                     <td>
                         <a href="{{ route('software.show', $item->id) }}" class="btn btn-sm btn-secondary">View</a>
+                        @if(auth('admin')->user()?->can('admin.services.manage'))
                         <a href="{{ route('software.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
                         <form action="{{ route('software.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                             @csrf @method('DELETE')
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty

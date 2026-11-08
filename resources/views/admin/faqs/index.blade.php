@@ -12,8 +12,10 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.content.manage'))
                         <a href="{{ route('faqs.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add FAQ</a>
+                        @endif
                     </div>
                 </div>
 
@@ -58,8 +60,10 @@
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        @if(auth('admin')->user()?->can('admin.content.manage'))
                                                         <a class="dropdown-item" href="{{ route('faqs.edit', $item->id) }}">Edit</a>
                                                         <form action="{{ route('faqs.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this FAQ?')">@csrf @method('DELETE')<button class="dropdown-item" type="submit">Remove</button></form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

@@ -12,8 +12,10 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.content.manage'))
                         <a href="{{ route('portfolios.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add Work</a>
+                        @endif
                     </div>
                 </div>
 
@@ -52,7 +54,9 @@
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item" href="{{ route('portfolios.show', $w->id) }}">View</a>
+                                                        @if(auth('admin')->user()?->can('admin.content.manage'))
                                                         <a class="dropdown-item" href="{{ route('portfolios.edit', $w->id) }}">Edit</a>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
