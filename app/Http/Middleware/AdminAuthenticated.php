@@ -11,7 +11,8 @@ class AdminAuthenticated
     public function handle(Request $request, Closure $next)
     {
         $admin = Auth::guard('admin')->user();
-        if ($admin && (int) ($admin->is_admin ?? 0) === 1) {
+
+        if ($admin && ((int) ($admin->is_admin ?? 0) === 1 || method_exists($admin, 'hasAnyRole') && $admin->hasAnyRole(['super-admin', 'manager', 'viewer']))) {
             return $next($request);
         }
 
@@ -23,6 +24,6 @@ class AdminAuthenticated
             return response('Unauthorized.', 401);
         }
 
-        return redirect()->route('getLogin');
+        return redirect()->route('getLogin')->with('error', 'Unauthorized admin access.');
     }
 }

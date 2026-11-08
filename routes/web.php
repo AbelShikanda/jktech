@@ -41,34 +41,51 @@ Route::group(['prefix' => '/admin'], function () {
 });
 
 Route::middleware('adminauth')->prefix('admin')->group(function () {
-    Route::resource('types', ServiceTypeController::class);
-    Route::resource('service_categories', ServiceCategoryController::class);
-    Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class);
-    Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class);
-    Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class);
-    Route::get('/services/image', [ServiceImagesController::class, 'index'])->name('service_Images.index');
-    Route::get('/services/{id}/image/create', [ServiceImagesController::class, 'create'])->name('service_Images.create');
-    Route::post('/service-images', [ServiceImagesController::class, 'store'])->name('service_Images.store');
-    Route::get('/service-images/{id}/edit', [ServiceImagesController::class, 'edit'])->name('service_Images.edit');
-    Route::put('/service-images/{id}', [ServiceImagesController::class, 'update'])->name('service_Images.update');
-    Route::delete('/service-images/{id}', [ServiceImagesController::class, 'destroy'])->name('service_Images.destroy');
+    Route::middleware('role:super-admin|manager')->group(function () {
+        Route::resource('types', ServiceTypeController::class)->except(['index', 'show']);
+        Route::resource('service_categories', ServiceCategoryController::class)->except(['index', 'show']);
+        Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class)->except(['index', 'show']);
+        Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class)->except(['index', 'show']);
+        Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class)->except(['index', 'show']);
+        Route::get('/services/{id}/image/create', [ServiceImagesController::class, 'create'])->name('service_Images.create');
+        Route::post('/service-images', [ServiceImagesController::class, 'store'])->name('service_Images.store');
+        Route::get('/service-images/{id}/edit', [ServiceImagesController::class, 'edit'])->name('service_Images.edit');
+        Route::put('/service-images/{id}', [ServiceImagesController::class, 'update'])->name('service_Images.update');
+        Route::delete('/service-images/{id}', [ServiceImagesController::class, 'destroy'])->name('service_Images.destroy');
+        Route::resource('services', ServicesController::class)->except(['index', 'show']);
+        Route::resource('work', WorkScheduleController::class)->except(['index', 'show']);
+        Route::resource('holiday', HolidayController::class)->except(['index', 'show']);
+        Route::resource('faqs', FaqsController::class)->except(['index', 'show']);
+        Route::resource('portfolios', PortfolioController::class)->except(['index', 'show']);
+        Route::resource('memes', MemesController::class)->except(['index', 'show']);
+        Route::resource('bundles', BundleController::class)->except(['index', 'show']);
+        Route::resource('user-bundles', UserSubscriptionController::class)->except(['index', 'show']);
+        Route::resource('payments', MpesaPaymentsController::class)->except(['index', 'show']);
+        Route::resource('software', SoftwareController::class)->except(['index', 'show']);
+        Route::get('/appointments/{id}/edit', [AppointmentsController::class, 'edit'])->name('appointment.edit');
+        Route::put('/appointments/{id}', [AppointmentsController::class, 'update'])->name('appointment.update');
+    });
 
-    Route::resource('services', ServicesController::class);
-    Route::resource('work', WorkScheduleController::class);
-    Route::resource('holiday', HolidayController::class);
-    Route::resource('faqs', FaqsController::class);
-    Route::resource('portfolios', PortfolioController::class);
-    Route::resource('memes', MemesController::class);
-    Route::resource('bundles', BundleController::class);
-    Route::resource('user-bundles', UserSubscriptionController::class);
-    Route::resource('payments', MpesaPaymentsController::class);
-    Route::resource('software', SoftwareController::class);
+    Route::resource('types', ServiceTypeController::class)->only(['index', 'show']);
+    Route::resource('service_categories', ServiceCategoryController::class)->only(['index', 'show']);
+    Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class)->only(['index', 'show']);
+    Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class)->only(['index', 'show']);
+    Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class)->only(['index', 'show']);
+    Route::get('/services/image', [ServiceImagesController::class, 'index'])->name('service_Images.index');
+    Route::resource('services', ServicesController::class)->only(['index', 'show']);
+    Route::resource('work', WorkScheduleController::class)->only(['index', 'show']);
+    Route::resource('holiday', HolidayController::class)->only(['index', 'show']);
+    Route::resource('faqs', FaqsController::class)->only(['index', 'show']);
+    Route::resource('portfolios', PortfolioController::class)->only(['index', 'show']);
+    Route::resource('memes', MemesController::class)->only(['index', 'show']);
+    Route::resource('bundles', BundleController::class)->only(['index', 'show']);
+    Route::resource('user-bundles', UserSubscriptionController::class)->only(['index', 'show']);
+    Route::resource('payments', MpesaPaymentsController::class)->only(['index', 'show']);
+    Route::resource('software', SoftwareController::class)->only(['index', 'show']);
 
     Route::get('/payments/export', [MpesaPaymentsController::class, 'export'])->name('payments.export');
     Route::get('/appointments', [AppointmentsController::class, 'index'])->name('appointment.index');
     Route::get('/appointments/{id}', [AppointmentsController::class, 'show'])->name('appointment.show');
-    Route::get('/appointments/{id}/edit', [AppointmentsController::class, 'edit'])->name('appointment.edit');
-    Route::put('/appointments/{id}', [AppointmentsController::class, 'update'])->name('appointment.update');
 });
 
 Auth::routes(['verify' => false]);
