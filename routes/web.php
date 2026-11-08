@@ -79,7 +79,8 @@ Route::middleware('adminauth')->prefix('admin')->group(function () {
         Route::resource('user-bundles', UserSubscriptionController::class)->except(['index', 'show']);
         Route::get('/appointments/{id}/edit', [AppointmentsController::class, 'edit'])->name('appointment.edit');
         Route::put('/appointments/{id}', [AppointmentsController::class, 'update'])->name('appointment.update');
-        // Payments mutations/export: manager-level booking ops until admin.payments.manage is seeded (permission-gated)
+    });
+    Route::middleware('permission:admin.payments.manage,admin')->group(function () {
         Route::resource('payments', MpesaPaymentsController::class)->except(['index', 'show']);
         Route::get('/payments/export', [MpesaPaymentsController::class, 'export'])->name('payments.export');
     });

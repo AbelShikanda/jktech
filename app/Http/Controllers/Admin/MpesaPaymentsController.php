@@ -15,7 +15,7 @@ class MpesaPaymentsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:admin.bookings.manage,admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'export']);
+        $this->middleware('permission:admin.payments.manage,admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'export']);
     }
 
     /**

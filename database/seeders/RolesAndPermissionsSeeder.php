@@ -24,6 +24,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'admin.services.manage',
             'admin.bookings.manage',
             'admin.payments.view',
+            'admin.payments.manage',
             'admin.users.view',
             'admin.content.manage',
             'admin.settings.manage',
@@ -42,7 +43,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'admin.services.manage',
             'admin.bookings.manage',
             'admin.payments.view',
+            'admin.payments.manage',
             'admin.content.manage',
+            'admin.settings.manage',
         ]);
 
         $viewer = Role::findOrCreate('viewer', $guard);

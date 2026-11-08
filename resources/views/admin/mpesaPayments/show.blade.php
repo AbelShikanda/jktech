@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Payment Details</h2>
     <div class="mb-3">
-        @if(auth('admin')->user()?->can('admin.bookings.manage'))
+        @if(auth('admin')->user()?->can('admin.payments.manage'))
         <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-info">Edit</a>
         @endif
         <a href="{{ route('payments.index') }}" class="btn btn-secondary">Back</a>
