@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@can('admin.services.manage', auth('admin')->user())
     <div class="container">
         <h3 class="mb-4">Edit Image for: {{ $service->name }}</h3>
 
@@ -31,4 +32,7 @@
             <button type="submit" class="btn btn-primary">Update Image</button>
         </form>
     </div>
+@else
+<div class="container-fluid"><div class="alert alert-danger mt-3">You do not have permission to access this form.</div></div>
+@endcan
 @endsection

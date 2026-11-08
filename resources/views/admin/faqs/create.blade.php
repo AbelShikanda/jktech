@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@can('admin.content.manage', auth('admin')->user())
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
@@ -55,4 +56,7 @@
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
     @include('admin.layouts.partials.modals')
+@else
+<div class="container-fluid"><div class="alert alert-danger mt-3">You do not have permission to access this form.</div></div>
+@endcan
 @endsection

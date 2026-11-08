@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
+@can('admin.content.manage', auth('admin')->user())
 <div class="container-fluid"><div class="row justify-content-center"><div class="col-lg-10">
     <h2 class="page-title">Edit Knowledge Base Article</h2>
     @if ($errors->any())<div class="alert alert-danger"><ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
@@ -15,4 +16,7 @@
         </form>
     </div></div>
 </div></div></div>
+@else
+<div class="container-fluid"><div class="alert alert-danger mt-3">You do not have permission to access this form.</div></div>
+@endcan
 @endsection

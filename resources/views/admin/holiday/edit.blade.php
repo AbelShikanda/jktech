@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@can('admin.settings.manage', auth('admin')->user())
 <div class="container">
     <h2>Edit Holiday</h2>
 
@@ -21,4 +22,7 @@
         <button type="submit" class="btn btn-primary">Update Holiday</button>
     </form>
 </div>
+@else
+<div class="container-fluid"><div class="alert alert-danger mt-3">You do not have permission to access this form.</div></div>
+@endcan
 @endsection

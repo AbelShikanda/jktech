@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+@can('admin.services.manage', auth('admin')->user())
 <div class="container">
     <h2>Edit Bundle: {{ $bundle->name }}</h2>
 
@@ -22,4 +23,7 @@
 
     </form>
 </div>
+@else
+<div class="container-fluid"><div class="alert alert-danger mt-3">You do not have permission to access this form.</div></div>
+@endcan
 @endsection
