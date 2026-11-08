@@ -55,8 +55,8 @@
                 <div class="dropdown-menu bg-light border-0 m-0">
                     <a href="{{ route('downloads') }}" class="dropdown-item">Downloads</a>
                     <a href="{{ route('bookings.index') }}" class="dropdown-item">Appointment</a>
+                    <a href="{{ route('tutorials') }}" class="dropdown-item">Tutorials</a>
                     <!-- <a href="{{ route('underConstruction') }}" class="dropdown-item">Learning</a> -->
-                    <!-- <a href="{{ route('underConstruction') }}" class="dropdown-item">Help Center</a> -->
                 </div>
             </div>
             <a href="{{ route('contact') }}" class="nav-item nav-link">Contact Us</a><!-- Authentication Links -->
