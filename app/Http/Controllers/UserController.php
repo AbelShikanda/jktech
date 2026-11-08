@@ -34,21 +34,43 @@ class UserController extends Controller
             return redirect()->route('login')->with('error', 'Please log in to view your profile.');
         }
 
-        $bookings = $user->bookings()->with('services')->get();
-        $transactions = $user->payments()->latest()->get();
-        $subscriptionTransactions = $user->mpesaPayments()->get();
-        $allTransactions = $transactions
-            ->merge($subscriptionTransactions)
-            ->sortByDesc('created_at')  // or 'transaction_date'
-            ->values();
-        $bundles = Bundle::all();
+        $bookings = collect();
+        $transactions = collect();
+        $subscriptionTransactions = collect();
+        $bundles = collect();
+        $recentlyExpired = collect();
 
-        // 👇 Get subscriptions that expired in the last 7 days
-        $recentlyExpired = $user
-            ->subscriptions()
-            ->where('status', 'expired')
-            ->where('end_date', '>=', now()->subDays(7))
-            ->get();
+        try {
+            $bookings = $user->bookings()->with('services')->latest()->get();
+        } catch (\Throwable $e) {
+            $bookings = collect();
+        }
+
+        try {
+            $transactions = $user->payments()->latest()->get();
+        } catch (\Throwable $e) {
+            $transactions = collect();
+        }
+
+        try {
+            $subscriptionTransactions = $user->mpesaPayments()->latest()->get();
+        } catch (\Throwable $e) {
+            $subscriptionTransactions = collect();
+        }
+
+        $allTransactions = $transactions->merge($subscriptionTransactions)->sortByDesc('created_at')->values();
+
+        try {
+            $bundles = Bundle::query()->get();
+        } catch (\Throwable $e) {
+            $bundles = collect();
+        }
+
+        try {
+            $recentlyExpired = $user->subscriptions()->where('status', 'expired')->where('end_date', '>=', now()->subDays(7))->get();
+        } catch (\Throwable $e) {
+            $recentlyExpired = collect();
+        }
 
         return view('profile.index', [
             'pageTitle' => $pageTitle,
@@ -75,6 +97,20 @@ class UserController extends Controller
         return $phone;
     }
 
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        Auth::guard('web')->logout();
+        $user->delete();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Your account has been deleted.');
+    }
+
     private function createMpesaPayment(
         array $response,
         string $phone,
@@ -83,8 +119,8 @@ class UserController extends Controller
         int $user_id,
         $startDate,
         $endDate,
+        bool $simulate = false
     ) {
-        // dd('these are the dates', $startDate, $endDate);
         return MpesaPayment::create([
             'user_id' => $user_id,
             'bundle_id' => $bundle_id,
@@ -92,11 +128,11 @@ class UserController extends Controller
             'end_date' => $endDate,
             'payment_for' => 'bundle',
             'merchant_request_id' => $response['MerchantRequestID'] ?? null,
-            'checkout_request_id' => $response['CheckoutRequestID'] ?? null,
+            'checkout_request_id' => $response['CheckoutRequestID'] ?? ('SIM-' . strtoupper(uniqid())),
             'amount' => $amount,
             'phone_number' => $phone,
-            'status' => 'Completed',
-            // 'status' => 'pending',
+            'status' => $simulate ? 'Completed' : 'Pending',
+            'result_desc' => $simulate ? 'Simulated locally (MPESA_SIMULATE=true).' : null,
         ]);
     }
 
@@ -142,18 +178,15 @@ class UserController extends Controller
         $startDate = now();
         [$startDate, $endDate] = $this->calculateSubscriptionDates($bundle, $startDate);
 
-        $mpesa = $mpesaService->stkPushRequest($phone, $bundle->price, null, 'payment for bundle');
-
-        // if (isset($mpesa['error'])) {
-        //     return back()->with('error', $mpesa['error'])->with('tab', 'subscriptions');
-        // }
-
-        $payment = $this->createMpesaPayment($mpesa, $phone, $bundle->price, $bundle->id, auth()->id(), $startDate, $endDate);
+        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $mpesa = $simulate ? [] : $mpesaService->stkPushRequest($phone, $bundle->price, null, 'payment for bundle');
+        $payment = $this->createMpesaPayment($mpesa, $phone, $bundle->price, $bundle->id, auth()->id(), $startDate, $endDate, $simulate);
 
         return view('profile.waiting', [
             'payment_id' => $payment->id,
             'booking_id' => $bundle->id,
             'retry_url' => route('subscription.retry', $bundle->id),
+            'simulate' => $simulate,
         ]);
     }
 
@@ -189,18 +222,15 @@ class UserController extends Controller
 
         // dd($startDate, $endDate);
 
-        $mpesa = $mpesaService->stkPushRequest($phone, $bundle->price, null, 'payment for bundle');
-
-        // if (isset($mpesa['error'])) {
-        //     return back()->with('error', $mpesa['error'])->with('tab', 'subscriptions');
-        // }
-
-        $payment = $this->createMpesaPayment($mpesa, $phone, $bundle->price, $bundle->id, auth()->id(), $startDate, $endDate);
+        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $mpesa = $simulate ? [] : $mpesaService->stkPushRequest($phone, $bundle->price, null, 'payment for bundle');
+        $payment = $this->createMpesaPayment($mpesa, $phone, $bundle->price, $bundle->id, auth()->id(), $startDate, $endDate, $simulate);
 
         return view('profile.waiting', [
             'payment_id' => $payment->id,
             'booking_id' => $bundle->id,
             'retry_url' => route('subscription.renew', $subscriptionId),
+            'simulate' => $simulate,
         ]);
     }
 

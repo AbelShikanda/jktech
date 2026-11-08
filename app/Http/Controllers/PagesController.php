@@ -45,81 +45,64 @@ class PagesController extends Controller
             return redirect()->route('login');
         }
 
-        if (!$request->service) {
-            return redirect()
-                ->back()
-                ->with([
-                    'error' => 'missing services',
-                ]);
-        }
-
         $validated = $request->validate([
             'service' => 'required',
             'date' => 'required',
             'start_time' => 'required',
-            'message' => '',
+            'message' => 'nullable|string',
             'phone' => 'required|string',
         ]);
 
-        $cleanedPhone = preg_replace('/\s+/', '', $request->phone);  // remove all spaces
-
-        // Normalize: Convert +254 and 0 to 254
+        $cleanedPhone = preg_replace('/\s+/', '', $request->phone);
         if (strpos($cleanedPhone, '+254') === 0) {
             $cleanedPhone = substr($cleanedPhone, 1);
         } elseif (strpos($cleanedPhone, '0') === 0) {
             $cleanedPhone = '254' . substr($cleanedPhone, 1);
         }
-
-        // Format: 254 712 345 678
-        $formattedPhone = preg_replace('/^(\d{3})(\d{3})(\d{3})$/', '$1 $2 $3', $cleanedPhone);
+        $formattedPhone = preg_replace('/^(\d{3})(\d{3})(\d{3})$/', '$1 $2 $3', $cleanedPhone) ?: $cleanedPhone;
 
         $service = $this->bookingService->createBooking($validated);
-
         if (isset($service['error'])) {
-            return redirect()
-                ->route('bookings.index')
-                ->with([
-                    'error' => $service['error'],
-                ]);
+            return redirect()->route('bookings.index')->with('error', $service['error']);
         }
 
-        // ✅ Trigger STK Push
-        $phone = $formattedPhone;
         $booking = $service['booking'];
-        $amount = 2000;  // You can customize this
-
-        $stkResponse = $mpesaService->stkPushRequest($phone, $amount, $booking->id, $reason = 'payment for booking');
-
-        // if (isset($stkResponse['error'])) {
-        //     return back()->with('error', $stkResponse['error'])->with('tab', 'subscriptions');
-        // }
+        $amount = 2000;
+        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $stkResponse = $simulate ? [] : $mpesaService->stkPushRequest($formattedPhone, $amount, $booking->id, 'payment for booking');
 
         $mpesaPayment = MpesaPayment::create([
             'booking_id' => $booking->id,
             'payment_for' => 'booking',
-            'phone_number' => $phone,
+            'phone_number' => $formattedPhone,
             'amount' => $amount,
             'merchant_request_id' => $stkResponse['MerchantRequestID'] ?? null,
-            'checkout_request_id' => $stkResponse['CheckoutRequestID'] ?? null,
-            // 'status' => 'Pending',
-            'status' => 'Completed',
+            'checkout_request_id' => $stkResponse['CheckoutRequestID'] ?? ('SIM-' . strtoupper(uniqid())),
+            'status' => $simulate ? 'Completed' : 'Pending',
+            'result_desc' => $simulate ? 'Simulated locally (MPESA_SIMULATE=true).' : null,
         ]);
+
+        if ($simulate) {
+            $booking->confirmed = true;
+            $booking->save();
+        }
+
         DB::commit();
 
-        // 🚀 Show waiting page and poll for status
         return view('bookings.waiting', [
             'payment_id' => $mpesaPayment->id,
             'booking_id' => $booking->id,
+            'simulate' => $simulate,
         ]);
     }
 
     public function retryBookingPayment($id, MpesaService $mpesaService)
     {
         $booking = Booking::findOrFail($id);
-        $phone = MpesaPayment::where('booking_id', $id)->latest()->value('phone_number');
-        $amount = 500;
-
-        $stkResponse = $mpesaService->stkPushRequest($phone, $amount, $booking->id, $reason = 'payment for booking');
+        $phone = MpesaPayment::where('booking_id', $id)->latest()->value('phone_number') ?: '254700000000';
+        $amount = 2000;
+        $simulate = filter_var(env('MPESA_SIMULATE', true), FILTER_VALIDATE_BOOLEAN);
+        $stkResponse = $simulate ? [] : $mpesaService->stkPushRequest($phone, $amount, $booking->id, 'payment for booking');
 
         $payment = MpesaPayment::create([
             'booking_id' => $booking->id,
@@ -127,14 +110,20 @@ class PagesController extends Controller
             'phone_number' => $phone,
             'amount' => $amount,
             'merchant_request_id' => $stkResponse['MerchantRequestID'] ?? null,
-            'checkout_request_id' => $stkResponse['CheckoutRequestID'] ?? null,
-            // 'status' => 'Pending',
-            'status' => 'Completed',
+            'checkout_request_id' => $stkResponse['CheckoutRequestID'] ?? ('SIM-' . strtoupper(uniqid())),
+            'status' => $simulate ? 'Completed' : 'Pending',
+            'result_desc' => $simulate ? 'Simulated locally (MPESA_SIMULATE=true).' : null,
         ]);
+
+        if ($simulate) {
+            $booking->confirmed = true;
+            $booking->save();
+        }
 
         return view('bookings.waiting', [
             'payment_id' => $payment->id,
             'booking_id' => $booking->id,
+            'simulate' => $simulate,
         ]);
     }
 

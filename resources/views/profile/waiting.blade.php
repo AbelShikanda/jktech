@@ -10,7 +10,11 @@
 @section('content')
     <div class="container py-5 text-center">
         <h3>Awaiting M-Pesa Payment Confirmation...</h3>
-        <p class="text-muted">Check your phone and approve the M-pesa prompt.</p>
+        @if(!empty($simulate))
+            <div class="alert alert-info">Local simulation mode is active (<code>MPESA_SIMULATE=true</code>). This payment is not sent to M-Pesa.</div>
+        @else
+            <p class="text-muted">Check your phone and approve the M-pesa prompt.</p>
+        @endif
 
         <div id="spinner" class="spinner-border text-primary my-4" role="status">
             <span class="visually-hidden">Loading...</span>

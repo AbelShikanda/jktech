@@ -48,7 +48,7 @@
                 <!-- Profile Overview -->
                 <div class="col-lg-4">
                     <div class="bg-white rounded shadow-sm p-4 profile-overview">
-                        <h5 class="mb-3">Welcome, {{ auth()->user()->name }}!</h5>
+                        <h5 class="mb-3">Welcome, {{ trim((auth()->user()->first_name ?? '').' '.(auth()->user()->last_name ?? '')) ?: auth()->user()->email }}!</h5>
                         <p class="text-muted mb-2"><strong>Email:</strong> {{ auth()->user()->email }}</p>
                         <p class="text-muted mb-2"><strong>Phone:</strong> {{ auth()->user()->phone ?? 'N/A' }}</p>
                         <p class="text-muted mb-2"><strong>Location:</strong> {{ auth()->user()->location ?? 'N/A' }}</p>
@@ -89,21 +89,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($bookings as $booking)
+                                        @forelse ($bookings as $booking)
                                             <tr>
-                                                <td>{{ $booking->date->format('M d, Y') }}</td>
+                                                <td>{{ optional($booking->date)->format('M d, Y') ?? optional($booking->created_at)->format('M d, Y') ?? 'N/A' }}</td>
                                                 <td>
-                                                    @foreach ($booking->services as $service)
-                                                        {{ $service->name }}
-                                                        @if (!$loop->last)
-                                                            ,
-                                                        @endif
-                                                    @endforeach
+                                                    @forelse ($booking->services ?? [] as $service)
+                                                        {{ $service->name }}@if (!$loop->last), @endif
+                                                    @empty
+                                                        N/A
+                                                    @endforelse
                                                 </td>
-                                                <td>{{ $booking->start_time }}</td>
-                                                <td>{{ $booking->end_time }}</td>
+                                                <td>{{ $booking->start_time ?? 'N/A' }}</td>
+                                                <td>{{ $booking->end_time ?? 'N/A' }}</td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="4" class="text-muted">No bookings yet.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -120,14 +121,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($transactions as $txn)
+                                        @forelse ($transactions as $txn)
                                             <tr>
-                                                <td>{{ \Carbon\Carbon::parse($txn->transaction_date)->format('M d, Y') }}
-                                                </td>
-                                                <td>KES {{ number_format($txn->amount, 2) }}</td>
-                                                <td>{{ $txn->mpesa_receipt_number }}</td>
+                                                <td>{{ optional($txn->transaction_date ?? $txn->created_at)->format('M d, Y') ?? 'N/A' }}</td>
+                                                <td>KES {{ number_format((float) ($txn->amount ?? 0), 2) }}</td>
+                                                <td>{{ $txn->mpesa_receipt_number ?? $txn->checkout_request_id ?? 'N/A' }}</td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr><td colspan="3" class="text-muted">No transactions yet.</td></tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -156,15 +158,13 @@
                                     <!-- Active Subscriptions -->
                                     <div class="tab-pane fade show active" id="active-subs">
                                         <div class="sub-card-container">
-                                            @forelse (auth()->user()->subscriptions->where('status', 'active') as $sub)
+                                            @forelse (collect(optional(auth()->user())->subscriptions)->where('status', 'active') as $sub)
                                                 <div class="card fixed-sub-card">
                                                     <div class="card-body">
-                                                        <h6 class="card-title">{{ $sub->bundle->name }}</h6>
-                                                        <small class="card-title">{{ $sub->bundle->description }}</small>
-                                                        <p class="mb-1"><strong>Start Date:</strong>
-                                                            {{ $sub->start_date->format('M d, Y') }}</p>
-                                                        <p class="mb-1"><strong>End Date:</strong>
-                                                            {{ $sub->end_date->format('M d, Y') }}</p>
+                                                        <h6 class="card-title">{{ optional($sub->bundle)->name ?? 'Bundle' }}</h6>
+                                                        <small class="card-title">{{ optional($sub->bundle)->description ?? '' }}</small>
+                                                        <p class="mb-1"><strong>Start Date:</strong> {{ optional($sub->start_date)->format('M d, Y') ?? 'N/A' }}</p>
+                                                        <p class="mb-1"><strong>End Date:</strong> {{ optional($sub->end_date)->format('M d, Y') ?? 'N/A' }}</p>
                                                         <span class="badge bg-success">Active</span>
                                                     </div>
                                                 </div>
@@ -177,21 +177,14 @@
                                     <!-- Inactive Subscriptions -->
                                     <div class="tab-pane fade" id="inactive-subs">
                                         <div class="sub-card-container">
-                                            @forelse ($recentlyExpired as $expired)
+                                            @forelse (($recentlyExpired ?? collect()) as $expired)
                                                 <div class="card fixed-sub-card">
                                                     <div class="card-body">
-                                                        <h6 class="card-title">{{ $expired->bundle->name }}</h6>
-                                                        <small
-                                                            class="card-title">{{ $expired->bundle->description }}</small>
-                                                        <p class="mb-1"><strong>End Date:</strong>
-                                                            {{ $expired->end_date->format('M d, Y') }}</p>
+                                                        <h6 class="card-title">{{ optional($expired->bundle)->name ?? 'Bundle' }}</h6>
+                                                        <small class="card-title">{{ optional($expired->bundle)->description ?? '' }}</small>
+                                                        <p class="mb-1"><strong>End Date:</strong> {{ optional($expired->end_date)->format('M d, Y') ?? 'N/A' }}</p>
                                                         <span class="badge bg-secondary">Expired</span>
-                                                        <form action="{{ route('subscription.renew', $expired->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <button
-                                                                class="btn btn-sm btn-outline-primary mt-3">Renew</button>
-                                                        </form>
+                                                        <form action="{{ route('subscription.renew', $expired->id) }}" method="POST">@csrf <button class="btn btn-sm btn-outline-primary mt-3">Renew</button></form>
                                                     </div>
                                                 </div>
                                             @empty
@@ -204,30 +197,21 @@
                                     <!-- Available Plans -->
                                     <div class="tab-pane fade" id="available-subs">
                                         <div class="sub-card-container">
-                                            @foreach ($bundles as $bundle)
+                                            @forelse (($bundles ?? collect()) as $bundle)
                                                 <div class="card fixed-sub-card">
                                                     <div class="card-body">
                                                         <h6 class="card-title">{{ $bundle->name }}</h6>
                                                         <small class="card-title">{{ $bundle->description }}</small>
-                                                        <p class="mb-1"><strong>Price:</strong> KES
-                                                            {{ number_format($bundle->price, 2) }}</p>
-
-                                                        @if ($bundle->features)
-                                                            <ul class="text-muted small">
-                                                                @foreach ($bundle->features as $feature)
-                                                                    <li>{{ $feature }}</li>
-                                                                @endforeach
-                                                            </ul>
+                                                        <p class="mb-1"><strong>Price:</strong> KES {{ number_format((float) ($bundle->price ?? 0), 2) }}</p>
+                                                        @if (!empty($bundle->features))
+                                                            <ul class="text-muted small">@foreach ((array) $bundle->features as $feature)<li>{{ $feature }}</li>@endforeach</ul>
                                                         @endif
-
-                                                        <form action="{{ route('subscribe.bundle', $bundle->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <button class="btn btn-sm btn-success">Subscribe</button>
-                                                        </form>
+                                                        <form action="{{ route('subscribe.bundle', $bundle->id) }}" method="POST">@csrf <button class="btn btn-sm btn-success">Subscribe</button></form>
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                            @empty
+                                                <p class="text-muted">No bundles available yet. Add bundles in admin to test subscriptions.</p>
+                                            @endforelse
                                         </div>
                                     </div>
                                 </div>

@@ -19,12 +19,18 @@ class MpesaController extends Controller
             return response()->json(['status' => 'Unknown']);
         }
 
+        $simulate = filter_var(env('MPESA_SIMULATE', false), FILTER_VALIDATE_BOOLEAN);
+        if ($simulate && in_array($payment->status, ['Pending', 'pending', null, ''], true)) {
+            $payment->status = 'Completed';
+            $payment->result_desc = $payment->result_desc ?: 'Simulated locally (MPESA_SIMULATE=true).';
+            $payment->save();
+        }
+
         if ($payment->status === 'Completed') {
             if ($payment->payment_for === 'bundle' && $payment->bundle_id) {
-                // Use directly from $payment
                 $userId = $payment->user_id;
-                $start = Carbon::parse($payment->start_date);
-                $end = Carbon::parse($payment->end_date);
+                $start = $payment->start_date ? Carbon::parse($payment->start_date) : now();
+                $end = $payment->end_date ? Carbon::parse($payment->end_date) : now()->addMonth();
 
                 $subscription = UserBundle::where('user_id', $userId)
                     ->where('bundle_id', $payment->bundle_id)
@@ -33,20 +39,17 @@ class MpesaController extends Controller
 
                 if ($subscription) {
                     if ($subscription->status === 'expired') {
-                        // Renew expired subscription from scratch
                         $subscription->start_date = $start;
                         $subscription->end_date = $end;
                     } else {
-                        // Extend active subscription
-                        $subscription->end_date = $subscription->end_date->greaterThan(now())
-                            ? $subscription->end_date->addDays($end->diffInDays($start))
+                        $currentEnd = $subscription->end_date ? Carbon::parse($subscription->end_date) : now();
+                        $subscription->end_date = $currentEnd->greaterThan(now())
+                            ? $currentEnd->addDays(max(1, $end->diffInDays($start)))
                             : $end;
                     }
-
                     $subscription->status = 'active';
                     $subscription->save();
                 } else {
-                    // Create new subscription
                     UserBundle::create([
                         'user_id' => $userId,
                         'bundle_id' => $payment->bundle_id,
@@ -55,19 +58,15 @@ class MpesaController extends Controller
                         'status' => 'active',
                     ]);
                 }
-
-                return response()->json(['status' => 'Completed']);
             }
 
-            if ($payment->payment_for === 'booking') {
-                return response()->json(['status' => 'Completed']);
+            if ($payment->payment_for === 'booking' && $payment->booking_id) {
+                Booking::where('id', $payment->booking_id)->update(['confirmed' => true]);
             }
 
-            // Fallback
-            return response()->json(['status' => 'Completed']);
+            return response()->json(['status' => 'Completed', 'simulate' => $simulate]);
         }
 
-        // if status is not 'Completed'
         return response()->json(['status' => $payment->status]);
     }
 
