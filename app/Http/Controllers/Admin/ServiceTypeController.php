@@ -45,7 +45,7 @@ class ServiceTypeController extends Controller
         }
     }
 
-    public function edit($id)
+    public function show($id)
     {
         $type = ServiceTypes::findOrFail($id);
         return view('admin.types.edit', compact('type'));

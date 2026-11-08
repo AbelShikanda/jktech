@@ -14,14 +14,15 @@
             <p><strong>Type:</strong> {{ $bundle->type ?? 'N/A' }}</p>
 
             <p><strong>Features:</strong></p>
-            @if(is_array($bundle->features))
-                <ul>
-                    @foreach($bundle->features as $feature)
+            @php $features = is_array($bundle->features) ? $bundle->features : (is_string($bundle->features) ? array_filter(array_map('trim', explode(',', $bundle->features))) : []); @endphp
+            @if(count($features))
+                <ul class="mb-0">
+                    @foreach($features as $feature)
                         <li>{{ $feature }}</li>
                     @endforeach
                 </ul>
             @else
-                <p class="text-muted">No features listed.</p>
+                <p class="text-muted mb-0">No features listed.</p>
             @endif
         </div>
     </div>
