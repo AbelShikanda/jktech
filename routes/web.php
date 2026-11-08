@@ -41,31 +41,51 @@ Route::group(['prefix' => '/admin'], function () {
 });
 
 Route::middleware('adminauth')->prefix('admin')->group(function () {
-    Route::middleware('role:super-admin|manager')->group(function () {
+    // Dashboard - all authorized admins
+    // (route defined above: admin.dashboard.index)
+
+    // Settings/schedules - manager-level content/settings control
+    Route::middleware('permission:admin.settings.manage,admin')->group(function () {
+        Route::resource('work', WorkScheduleController::class)->except(['index', 'show']);
+        Route::resource('holiday', HolidayController::class)->except(['index', 'show']);
+    });
+
+    // Services/catalog management
+    Route::middleware('permission:admin.services.manage,admin')->group(function () {
         Route::resource('types', ServiceTypeController::class)->except(['index', 'show']);
         Route::resource('service_categories', ServiceCategoryController::class)->except(['index', 'show']);
-        Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class)->except(['index', 'show']);
-        Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class)->except(['index', 'show']);
-        Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class)->except(['index', 'show']);
         Route::get('/services/{id}/image/create', [ServiceImagesController::class, 'create'])->name('service_Images.create');
         Route::post('/service-images', [ServiceImagesController::class, 'store'])->name('service_Images.store');
         Route::get('/service-images/{id}/edit', [ServiceImagesController::class, 'edit'])->name('service_Images.edit');
         Route::put('/service-images/{id}', [ServiceImagesController::class, 'update'])->name('service_Images.update');
         Route::delete('/service-images/{id}', [ServiceImagesController::class, 'destroy'])->name('service_Images.destroy');
         Route::resource('services', ServicesController::class)->except(['index', 'show']);
-        Route::resource('work', WorkScheduleController::class)->except(['index', 'show']);
-        Route::resource('holiday', HolidayController::class)->except(['index', 'show']);
+        Route::resource('bundles', BundleController::class)->except(['index', 'show']);
+        Route::resource('software', SoftwareController::class)->except(['index', 'show']);
+    });
+
+    // Content management
+    Route::middleware('permission:admin.content.manage,admin')->group(function () {
+        Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class)->except(['index', 'show']);
+        Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class)->except(['index', 'show']);
+        Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class)->except(['index', 'show']);
         Route::resource('faqs', FaqsController::class)->except(['index', 'show']);
         Route::resource('portfolios', PortfolioController::class)->except(['index', 'show']);
         Route::resource('memes', MemesController::class)->except(['index', 'show']);
-        Route::resource('bundles', BundleController::class)->except(['index', 'show']);
+    });
+
+    // Bookings/payments/subscriptions management
+    Route::middleware('permission:admin.bookings.manage,admin')->group(function () {
         Route::resource('user-bundles', UserSubscriptionController::class)->except(['index', 'show']);
-        Route::resource('payments', MpesaPaymentsController::class)->except(['index', 'show']);
-        Route::resource('software', SoftwareController::class)->except(['index', 'show']);
         Route::get('/appointments/{id}/edit', [AppointmentsController::class, 'edit'])->name('appointment.edit');
         Route::put('/appointments/{id}', [AppointmentsController::class, 'update'])->name('appointment.update');
     });
+    Route::middleware('permission:admin.payments.view,admin')->group(function () {
+        Route::resource('payments', MpesaPaymentsController::class)->except(['index', 'show']);
+        Route::get('/payments/export', [MpesaPaymentsController::class, 'export'])->name('payments.export');
+    });
 
+    // Read routes (adminauth only; controller/UI can further restrict sensitive data)
     Route::resource('types', ServiceTypeController::class)->only(['index', 'show']);
     Route::resource('service_categories', ServiceCategoryController::class)->only(['index', 'show']);
     Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class)->only(['index', 'show']);
@@ -82,8 +102,6 @@ Route::middleware('adminauth')->prefix('admin')->group(function () {
     Route::resource('user-bundles', UserSubscriptionController::class)->only(['index', 'show']);
     Route::resource('payments', MpesaPaymentsController::class)->only(['index', 'show']);
     Route::resource('software', SoftwareController::class)->only(['index', 'show']);
-
-    Route::get('/payments/export', [MpesaPaymentsController::class, 'export'])->name('payments.export');
     Route::get('/appointments', [AppointmentsController::class, 'index'])->name('appointment.index');
     Route::get('/appointments/{id}', [AppointmentsController::class, 'show'])->name('appointment.show');
 });
