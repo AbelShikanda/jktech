@@ -9,6 +9,22 @@
                 <img src="{{ asset('admin/assets/images/logo.png') }}" alt="logo" class="w-50">
             </a>
         </div>
+        @php
+            $admin = \Illuminate\Support\Facades\Auth::guard('admin')->user();
+            $canManage = $admin && (method_exists($admin, 'hasAnyRole') ? $admin->hasAnyRole(['super-admin','manager']) : (bool) ($admin->is_admin ?? false));
+            $can = function (string $perm) use ($admin) {
+                if (!$admin) return false;
+                if (method_exists($admin, 'hasAnyRole') && $admin->hasAnyRole(['super-admin'])) return true;
+                if (method_exists($admin, 'can')) { try { return $admin->can($perm); } catch (\Throwable $e) {} }
+                return (bool) ($admin->is_admin ?? false);
+            };
+            $canSettings = $can('admin.settings.manage');
+            $canServices = $can('admin.services.manage');
+            $canContent = $can('admin.content.manage');
+            $canBookings = $can('admin.bookings.manage');
+            $canPayments = $can('admin.payments.view');
+            $canUsers = $can('admin.users.view');
+        @endphp
         <ul class="navbar-nav flex-fill w-100 mb-2">
             <li class="nav-item dropdown">
                 <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
@@ -69,21 +85,6 @@
             </li>
         </ul>
         @endif
-        @php
-            $admin = \Illuminate\Support\Facades\Auth::guard('admin')->user();
-            $canManage = $admin && (method_exists($admin, 'hasAnyRole') ? $admin->hasAnyRole(['super-admin','manager']) : (bool) ($admin->is_admin ?? false));
-            $can = function (string $perm) use ($admin) {
-                if (!$admin) return false;
-                if (method_exists($admin, 'hasAnyRole') && $admin->hasAnyRole(['super-admin'])) return true;
-                if (method_exists($admin, 'can')) { try { return $admin->can($perm); } catch (\Throwable $e) {} }
-                return (bool) ($admin->is_admin ?? false);
-            };
-            $canSettings = $can('admin.settings.manage');
-            $canServices = $can('admin.services.manage');
-            $canContent = $can('admin.content.manage');
-            $canBookings = $can('admin.bookings.manage');
-            $canPayments = $can('admin.payments.view');
-        @endphp
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>Booking Components</span>
         </p>
@@ -155,62 +156,52 @@
             <li class="nav-item dropdown">
                 <a href="#charts" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-pie-chart fe-16"></i>
-                    <span class="ml-3 item-text">User Components</span>
+                    <span class="ml-3 item-text">User Components <small class="text-muted">(planned)</small></span>
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="charts">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Users</span></a>
+                        <span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)"><span class="ml-1 item-text">Users — planned</span></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Contacts</span></a>
+                        <span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)"><span class="ml-1 item-text">Contacts — planned</span></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Admins</span></a>
+                        <span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)"><span class="ml-1 item-text">Admins — planned</span></span>
                     </li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
                 <a href="#chart" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-pie-chart fe-16"></i>
-                    <span class="ml-3 item-text">User Management</span>
+                    <span class="ml-3 item-text">User Management <small class="text-muted">(planned)</small></span>
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="chart">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Roles</span></a>
+                        <span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)"><span class="ml-1 item-text">Roles — planned</span></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Permissions</span></a>
+                        <span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)"><span class="ml-1 item-text">Permissions — planned</span></span>
                     </li>
                 </ul>
             </li>
         </ul>
         @endif
         <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Blog Components</span>
+            <span>Blog Components <small>(planned)</small></span>
         </p>
         <ul class="navbar-nav flex-fill w-100 mb-2">
-
             <li class="nav-item dropdown">
                 <a href="#tables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-grid fe-16"></i>
-                    <span class="ml-3 item-text">Blog Components</span>
+                    <span class="ml-3 item-text">Blog Components <small class="text-muted">(planned)</small></span>
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="tables">
-                    <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Articles</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Categories</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Images</span></a>
-                    </li>
+                    <li class="nav-item"><span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)">Articles — planned</span></li>
+                    <li class="nav-item"><span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)">Categories — planned</span></li>
+                    <li class="nav-item"><span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)">Images — planned</span></li>
+                    <li class="nav-item"><span class="nav-link pl-3 text-muted" title="No backing route/controller yet (M3-07)">Comments — planned</span></li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Comments</span></a>
-            </li>
-        </ul>
-        </li>
         </ul>
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>FAQs Components</span>
