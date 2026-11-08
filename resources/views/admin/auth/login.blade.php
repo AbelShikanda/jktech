@@ -8,22 +8,23 @@
 
 @section('content')
     <div class="row align-items-center h-100">
-        <form class="col-lg-3 col-md-4 col-10 mx-auto text-center" action="{{ route('postLogin') }}" method="POST">
+        <form class="col-lg-3 col-md-4 col-10 mx-auto text-center" action="{{ route('postLogin') }}" method="POST" novalidate>
             @csrf
-            @if (Session('error'))
-                <div class="text-danger text-center">
-                    <strong>{{ Session('error') }}</strong>
-                </div>
+            <h1 class="h5 mb-3 fw-normal">Admin sign in</h1>
+            @if (Session('error') || session('error'))
+                <div class="alert alert-danger py-2" role="alert">{{ Session::get('error') ?? session('error') }}</div>
             @endif
-            @if (Session('success'))
-                <div class="text-success text-center">
-                    <strong>{{ Session('success') }}</strong>
+            @if (Session('success') || session('success'))
+                <div class="alert alert-success py-2" role="alert">{{ Session::get('success') ?? session('success') }}</div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger py-2 text-left" role="alert">
+                    <ul class="mb-0 pl-3">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
                 </div>
             @endif
             <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ asset('/') }}">
-                <img src="{{ asset('admin/assets/images/logo.png') }}" alt="logo" class="w-50">
+                <img src="{{ asset('admin/assets/images/logo.png') }}" alt="JKE logo" class="w-50">
             </a>
-            <h1 class="h6 mb-3">Login in</h1>
             <div class="form-group">
                 <label for="inputEmail" class="sr-only">Email address</label>
                 <input type="email" id="inputEmail" class="form-control form-control-lg" placeholder="Email address"

@@ -46,6 +46,9 @@
             @include('admin.layouts.sidebar')
         @show
         <main role="main" class="main-content">
+            <div class="container-fluid pt-2">
+                @include('admin.layouts.partials.alerts')
+            </div>
             @yield('content')
         </main>
     </div>

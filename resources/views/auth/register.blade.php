@@ -72,28 +72,33 @@
                     <div class="card-body px-4 py-5 px-md-5">
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
+                            @if ($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+                                </div>
+                            @endif
 
                             <!-- First Name -->
                             <div class="form-outline mb-4">
-                                <input type="text" id="first_name" name="first_name" class="form-control" required />
+                                <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="form-control @error('first_name') is-invalid @enderror" required autocomplete="given-name" />
                                 <label class="form-label" for="first_name">First Name</label>
                             </div>
 
                             <!-- Last Name -->
                             <div class="form-outline mb-4">
-                                <input type="text" id="last_name" name="last_name" class="form-control" required />
+                                <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="form-control @error('last_name') is-invalid @enderror" required autocomplete="family-name" />
                                 <label class="form-label" for="last_name">Last Name</label>
                             </div>
 
                             <!-- Email -->
                             <div class="form-outline mb-4">
-                                <input type="email" id="email" name="email" class="form-control" required />
+                                <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required autocomplete="email" />
                                 <label class="form-label" for="email">Email Address</label>
                             </div>
 
                             <!-- Password -->
                             <div class="form-outline mb-4">
-                                <input type="password" id="password" name="password" class="form-control" required />
+                                <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password" />
                                 <label class="form-label" for="password">Password</label>
                             </div>
 
