@@ -110,7 +110,8 @@ Route::get('/mpesa/status-check', [MpesaController::class, 'checkStatus'])->name
 Route::get('/bookings/retry/{id}', [PagesController::class, 'retryBookingPayment'])->name('bookings.retry');
 Route::post('/m_pesa/callback', [MpesaController::class, 'mpesaCallback'])->withoutMiddleware(['auth']);
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Route::post('/api/holidays/${year}/${month}', [PagesController::class, 'getHolidays'])->name('getHolidays');
+Route::post('/api/holidays/{year}/{month}', [PagesController::class, 'getHolidays'])->name('getHolidays');
+Route::get('/api/holidays/{year}/{month}', [PagesController::class, 'getHolidays']);
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Route::middleware('auth:web')->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile.show');

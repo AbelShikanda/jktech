@@ -18,20 +18,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($holiday as $holiday)
+            @forelse(($holiday ?? collect()) as $item)
                 <tr>
-                    <td>{{ $holiday->date }}</td>
-                    <td>{{ $holiday->reason }}</td>
+                    <td>{{ $item->date }}</td>
+                    <td>{{ $item->reason ?? 'N/A' }}</td>
                     <td>
-                        <a href="{{ route('holiday.edit', $holiday->id) }}" class="btn btn-sm btn-info">Edit</a>
-                        <form action="{{ route('holiday.destroy', $holiday->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this holiday?')">
+                        <a href="{{ route('holiday.edit', $item->id) }}" class="btn btn-sm btn-info">Edit</a>
+                        <form action="{{ route('holiday.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this holiday?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="3" class="text-muted">No holidays found.</td></tr>
+            @endforelse
         </tbody>
     </table>
 </div>

@@ -124,10 +124,12 @@
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <select class="form-select" id="service" name="service" required>
-                                            <option selected disabled>Select Service</option>
-                                            @foreach ($services as $service)
+                                            <option selected disabled value="">Select Service</option>
+                                            @forelse (($services ?? collect()) as $service)
                                                 <option value="{{ $service->id }}">{{ $service->name }}</option>
-                                            @endforeach
+                                            @empty
+                                                <option disabled>No services available yet</option>
+                                            @endforelse
                                         </select>
                                         <label for="service">Service Type</label>
                                     </div>
@@ -241,30 +243,22 @@
                 </h1>
             </div>
             <div class="row g-4 justify-content-center">
-                @foreach ($services as $key => $service)
+                @forelse (($services ?? collect()) as $key => $service)
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="{{ 0.1 + ($key % 3) * 0.2 }}s">
                         <div class="service-item rounded h-100 p-5">
                             <div class="d-flex align-items-center ms-n5 mb-4">
                                 <div class="service-icon flex-shrink-0 bg-dark rounded-end me-4">
-                                    @if ($service->serviceImage && $service->serviceImage->thumbnail)
-                                        <img class="img-fluid"
-                                            src="{{ asset('storage/' . $service->serviceImage->thumbnail) }}"
-                                            alt="{{ $service->name }}" />
-                                    @else
-                                        <img class="img-fluid" src="{{ asset('img/default-icon.png') }}"
-                                            alt="Default Icon" />
-                                    @endif
+                                    @php $thumb = optional($service->serviceImage)->thumbnail; @endphp
+                                    <img class="img-fluid" src="{{ $thumb ? asset('storage/' . $thumb) : asset('img/default-icon.png') }}" alt="{{ $service->name ?? 'Service' }}" onerror="this.src='{{ asset('img/default-icon.png') }}'" />
                                 </div>
-                                <h4 class="mb-0">{{ $service->name }}</h4>
+                                <h4 class="mb-0">{{ $service->name ?? 'Service' }}</h4>
                             </div>
-                            <p class="mb-4">
-                                {{ Str::limit($service->description, 120) }}
-                            </p>
-                            <!-- <a class="btn btn-light px-3" href="{{ route('service', $service->id) }}">Read
-                                                            More</a> -->
+                            <p class="mb-4">{{ \Illuminate\Support\Str::limit($service->description ?? 'Service details coming soon.', 120) }}</p>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-12"><p class="text-center text-muted mb-0">No services available yet. Seed data or add services in admin to populate this section.</p></div>
+                @endforelse
             </div>
         </div>
     </div>

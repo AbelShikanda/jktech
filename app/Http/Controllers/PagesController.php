@@ -228,26 +228,30 @@ class PagesController extends Controller
 
     public function getHolidays($month, $year)
     {
-        // Fetch holidays for the given month and year
-        $holidays = \App\Models\Holiday::whereYear('date', $year)
+        $holidays = \App\Models\Holiday::query()
+            ->whereYear('date', $year)
             ->whereMonth('date', $month)
-            ->get(['date']);  // Fetch only the 'date' field
+            ->get(['date']);
 
         return response()->json($holidays);
     }
 
-    public function service()
+    public function catalog()
+    {
+        $pageTitle = 'Catalog';
+        $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => '', 'label' => 'Catalog']];
+        $services = Services::with(['serviceImage', 'serviceType'])->get();
+
+        return view('pages.catalog', compact('pageTitle', 'breadcrumbLinks', 'services'));
+    }
+
+    public function service($id)
     {
         $pageTitle = 'Service';
         $breadcrumbLinks = [['url' => '/', 'label' => 'Home'], ['url' => '', 'label' => 'Service']];
+        $service = Services::with(['serviceImage', 'serviceType', 'serviceCategories'])->findOrFail($id);
 
-        return view(
-            'pages.services',
-            with([
-                'pageTitle' => $pageTitle,
-                'breadcrumbLinks' => $breadcrumbLinks,
-            ]),
-        );
+        return view('pages.services', compact('pageTitle', 'breadcrumbLinks', 'service'));
     }
 
     public function downloads()

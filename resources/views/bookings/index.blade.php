@@ -72,10 +72,12 @@
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <select class="form-select" id="service" name="service" required>
-                                            <option selected disabled>Select Service</option>
-                                            @foreach ($services as $service)
+                                            <option selected disabled value="">Select Service</option>
+                                            @forelse (($services ?? collect()) as $service)
                                                 <option value="{{ $service->id }}">{{ $service->name }}</option>
-                                            @endforeach
+                                            @empty
+                                                <option disabled>No services available yet</option>
+                                            @endforelse
                                         </select>
                                         <label for="service">Service Type</label>
                                     </div>
