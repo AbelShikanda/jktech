@@ -12,8 +12,10 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.services.manage'))
                         <a href="{{ route('services.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add service</a>
+                        @endif
                     </div>
                 </div>
 
@@ -54,7 +56,9 @@
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item" href="{{ route('services.show', $s->id) }}">View</a>
+                                                        @if(auth('admin')->user()?->can('admin.services.manage'))
                                                         <a class="dropdown-item" href="{{ route('services.edit', $s->id) }}">Edit</a>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

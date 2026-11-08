@@ -53,7 +53,9 @@
                                                         <span class="text-muted sr-only">Action</span>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        @if(auth('admin')->user()?->can('admin.bookings.manage'))
                                                         <a class="dropdown-item" href="{{ route('appointment.edit', $appointment->id) }}">Edit</a>
+                                                        @endif
                                                         <a class="dropdown-item" href="{{ route('appointment.show', $appointment->id) }}">View</a>
                                                     </div>
                                                 </td>

@@ -81,57 +81,61 @@ class MpesaController extends Controller
         }
 
         $callback = $mpesaResponse['Body']['stkCallback'];
+        $checkoutRequestId = $callback['CheckoutRequestID'] ?? null;
+        if (!$checkoutRequestId) {
+            return response()->json(['message' => 'Missing checkout request id.'], 400);
+        }
 
-        $payment = MpesaPayment::where('checkout_request_id', $callback['CheckoutRequestID'])->first();
+        $payment = MpesaPayment::where('checkout_request_id', $checkoutRequestId)->first();
+        if (!$payment) {
+            Log::warning('Mpesa callback for unknown checkout request.', ['CheckoutRequestID' => $checkoutRequestId]);
+            return response()->json(['message' => 'Payment record not found.'], 404);
+        }
 
-        if ($payment && $callback['ResultCode'] == 0) {
-            $metadata = collect($callback['CallbackMetadata']['Item']);
+        // Idempotency: avoid reprocessing completed callbacks.
+        if (in_array($payment->status, ['Completed', 'completed'], true) && ($callback['ResultCode'] ?? null) == 0) {
+            return response()->json(['message' => 'Callback already processed.'], 200);
+        }
+
+        if (($callback['ResultCode'] ?? null) == 0) {
+            $metadata = collect(data_get($callback, 'CallbackMetadata.Item', []));
 
             $items = $metadata->mapWithKeys(function ($item) {
                 return [$item['Name'] => $item];
             });
 
-            Log::info('Mpesa Payment Details logging ...');
-
             try {
                 $payment->update([
                     'result_code' => $callback['ResultCode'],
-                    'result_desc' => $callback['ResultDesc'],
-                    'amount' => $items['Amount']['Value'] ?? null,
-                    'mpesa_receipt_number' => $items['MpesaReceiptNumber']['Value'] ?? null,
-                    'transaction_date' => isset($items['TransactionDate']['Value']) ? Carbon::createFromFormat('YmdHis', $items['TransactionDate']['Value'])->toDateTimeString() : null,
-                    'phone_number' => $items['PhoneNumber']['Value'] ?? null,
+                    'result_desc' => $callback['ResultDesc'] ?? null,
+                    'amount' => data_get($items, 'Amount.Value', $payment->amount),
+                    'mpesa_receipt_number' => data_get($items, 'MpesaReceiptNumber.Value'),
+                    'transaction_date' => isset($items['TransactionDate']['Value']) ? Carbon::createFromFormat('YmdHis', $items['TransactionDate']['Value'])->toDateTimeString() : $payment->transaction_date,
+                    'phone_number' => data_get($items, 'PhoneNumber.Value', $payment->phone_number),
                     'status' => 'Completed',
                 ]);
 
                 if ($payment->booking_id) {
-                    $booking = Booking::find($payment->booking_id);
-                    if ($booking) {
-                        $booking->confirmed = 1;
-                        $booking->save();
-                        Log::info("booking #{$booking->id} marked as complete from callback.");
-                    }
+                    Booking::where('id', $payment->booking_id)->update(['confirmed' => true]);
+                    Log::info("booking #{$payment->booking_id} marked as complete from callback.");
                 }
 
-                Log::info('Payment successfully recorded:', ['payment' => $payment]);
-
+                Log::info('Payment successfully recorded:', ['payment_id' => $payment->id]);
                 return response()->json(['message' => 'Payment received and recorded.'], 200);
             } catch (\Exception $e) {
-                Log::error('Payment Insertion Failed:', ['error' => $e->getMessage()]);
+                Log::error('Payment Insertion Failed:', ['error' => $e->getMessage(), 'payment_id' => $payment->id]);
                 return response()->json(['message' => 'Error saving payment.'], 500);
             }
-        } else {
-            Log::warning('Mpesa Transaction Failed:', ['ResultCode' => $callback['ResultCode'], 'Reason' => $callback['ResultDesc']]);
-
-            MpesaPayment::create([
-                'merchant_request_id' => $callback['MerchantRequestID'],
-                'checkout_request_id' => $callback['CheckoutRequestID'],
-                'result_code' => $callback['ResultCode'],
-                'result_desc' => $callback['ResultDesc'],
-                'status' => 'Failed',
-            ]);
-
-            return response()->json(['message' => 'Transaction failed', 'reason' => $callback['ResultDesc']], 200);
         }
+
+        Log::warning('Mpesa Transaction Failed:', ['ResultCode' => $callback['ResultCode'] ?? null, 'Reason' => $callback['ResultDesc'] ?? null]);
+
+        $payment->update([
+            'result_code' => $callback['ResultCode'] ?? $payment->result_code,
+            'result_desc' => $callback['ResultDesc'] ?? $payment->result_desc,
+            'status' => 'Failed',
+        ]);
+
+        return response()->json(['message' => 'Transaction failed', 'reason' => $callback['ResultDesc'] ?? 'Unknown'], 200);
     }
 }

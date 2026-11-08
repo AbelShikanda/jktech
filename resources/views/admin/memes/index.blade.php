@@ -12,8 +12,10 @@
                         </p>
                     </div>
                     <div class="col-md-6">
+                        @if(auth('admin')->user()?->can('admin.content.manage'))
                         <a href="{{ route('memes.create') }}" type="button"
                             class=" float-right btn mb-2 btn-outline-primary">Add memes</a>
+                        @endif
                     </div>
                 </div>
 
@@ -52,7 +54,9 @@
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item" href="{{ route('memes.show', $w->id) }}">View</a>
+                                                        @if(auth('admin')->user()?->can('admin.content.manage'))
                                                         <a class="dropdown-item" href="{{ route('memes.edit', $w->id) }}">Edit</a>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
