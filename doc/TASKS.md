@@ -78,10 +78,10 @@ Related: `doc/PLAN.md`, `GOALS.md`, `DECISIONS.md`, `AGENTS.md` (repo root).
 ## Module 7 — Validation & handoff
 | ID | Title | Area/files | Deps | Permission gate | Validation | Status | Notes |
 |---|---|---|---|---:|---|---|---|
-| M7-01 | Static checks | touched PHP files | relevant modules | no | `php -l` clean; project tests/lint if available | todo | |
-| M7-02 | Permission-gated DB setup/seed smoke | local DB | M1-05,M1-06,M3-04 | **yes** | migrate/seed only with explicit permission | blocked | |
-| M7-03 | End-to-end smoke flows | auth, guards, Spatie, CRUD, payments, UI | M7-01,M7-02 | no | key scenarios pass; residual risks listed | todo | |
-| M7-04 | Residual scan | codebase | M7-03 | no | no stubs, no `MustVerifyEmail` enforcement, no unsafe empty rendering in touched areas | todo | Document follow-ups. |
+| M7-01 | Static checks | touched PHP files | relevant modules | no | `php -l` clean; project tests/lint if available | in_progress | `php -l` run on touched files and across `app/config/routes/database/seeders` (clean). Project test/lint suite and full Blade/runtime checks not executed. |
+| M7-02 | Permission-gated DB setup/seed smoke | local DB | M1-05,M1-06,M3-04 | **yes** | migrate/seed only with explicit permission | blocked | No permission granted in this session for seed/reseed/reset/destructive DB smoke. |
+| M7-03 | End-to-end smoke flows | auth, guards, Spatie, CRUD, payments, UI | M7-01,M7-02 | no | key scenarios pass; residual risks listed | blocked | Requires runtime/browser + DB/app services; CLI-only pass cannot verify auth isolation, Spatie allow/deny, STK/callback/status, or UI flows. |
+| M7-04 | Residual scan | codebase | M7-03 | no | no stubs, no `MustVerifyEmail` enforcement, no unsafe empty rendering in touched areas | in_progress | Touched stubs/show contracts/fallbacks fixed; `[0]` removed in touched views; global residual scan still pending. |
 
 ## Suggested first implementation slice (after decisions)
 1. M0-02..M0-04 (docs/policies) — no permission gate.
