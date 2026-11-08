@@ -10,7 +10,9 @@
             <p><strong>Name:</strong> {{ $type->name ?? 'N/A' }}</p>
             <p><strong>Slug:</strong> {{ $type->slug ?? 'N/A' }}</p>
             <p><strong>Price:</strong> KES {{ number_format((float) ($type->price ?? 0), 2) }}</p>
+            @if(auth('admin')->user()?->can('admin.services.manage'))
             <a href="{{ route('types.edit', $type->id) }}" class="btn btn-primary">Edit</a>
+            @endif
         @endif
         <a href="{{ route('types.index') }}" class="btn btn-secondary">Back</a>
     </div></div>

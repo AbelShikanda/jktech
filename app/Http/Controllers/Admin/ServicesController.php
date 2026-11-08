@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 class ServicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.services.manage,admin')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $services = Services::with('serviceType', 'serviceImage')->orderBy('id', 'DESC')->get();

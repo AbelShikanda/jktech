@@ -27,7 +27,9 @@
         </div>
     </div>
 
+    @if(auth('admin')->user()?->can('admin.services.manage'))
     <a href="{{ route('bundles.edit', $bundle->id) }}" class="btn btn-warning mt-3">Edit</a>
+    @endif
     <a href="{{ route('bundles.index') }}" class="btn btn-secondary mt-3">Back</a>
 </div>
 @endsection

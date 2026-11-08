@@ -34,12 +34,14 @@
 
                 <div class="row mt-4">
                     <div class="col-md-5"></div>
+                    @if(auth('admin')->user()?->can('admin.content.manage'))
                     <div class="col"><a class="btn mb-2 btn-warning btn-lg" href="{{ route('memes.edit', $memes->id) }}">Edit</a></div>
                     <div class="col">
                         <form action="{{ route('memes.destroy', $memes->id) }}" method="POST" onsubmit="return confirm('Delete this meme?')">@csrf @method('DELETE')
                             <button type="submit" class="btn mb-2 btn-danger btn-lg">Remove</button>
                         </form>
                     </div>
+                    @endif
                     <div class="col-md-5"></div>
                 </div>
                 @endif

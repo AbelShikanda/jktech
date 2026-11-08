@@ -48,6 +48,7 @@
 
                 <div class="row mt-4">
                     <div class="col-md-5"></div>
+                    @if(auth('admin')->user()?->can('admin.content.manage'))
                     <div class="col">
                         <a class="btn mb-2 btn-warning btn-lg" href="{{ route('portfolios.edit', $portfolio->id) }}">Edit</a>
                     </div>
@@ -58,6 +59,7 @@
                             <button type="submit" class="btn mb-2 btn-danger btn-lg">Remove</button>
                         </form>
                     </div>
+                    @endif
                     <div class="col-md-5"></div>
                 </div>
             </div>

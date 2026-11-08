@@ -47,7 +47,9 @@
                 <div class="row mt-4">
                     <div class="col-md-4"></div>
                     <div class="col">
+                        @if(auth('admin')->user()?->can('admin.bookings.manage'))
                         <a class="btn mb-2 btn-warning btn-lg" href="{{ route('appointment.edit', $appointment->id) }}">Edit</a>
+                        @endif
                     </div>
                     <div class="col">
                         <a href="{{ route('appointment.index') }}" class="btn mb-2 btn-secondary btn-lg">Back to List</a>

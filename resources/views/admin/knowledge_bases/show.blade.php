@@ -9,7 +9,9 @@
         <p><strong>Category:</strong> {{ optional($item->knowledgeBaseCategories->first())->name ?? 'N/A' }}</p>
         <p><strong>Body:</strong></p><div class="border rounded p-3 mb-3">{!! nl2br(e($item->body)) !!}</div>
         @if($item->meta_image)<p><img src="{{ $item->meta_image }}" alt="meta" style="max-width:320px" class="img-fluid border rounded" onerror="this.src='https://placehold.co/640x360?text=Image'"></p>@endif
+        @if(auth('admin')->user()?->can('admin.content.manage'))
         <a href="{{ route('knowledge-bases.edit', $item->id) }}" class="btn btn-primary">Edit</a>
+        @endif
         <a href="{{ route('knowledge-bases.index') }}" class="btn btn-secondary">Back</a>
     </div></div>
 </div></div></div>

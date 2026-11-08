@@ -19,13 +19,17 @@
             </ul>
 
             <div class="mt-4">
+                @if(auth('admin')->user()?->can('admin.bookings.manage'))
                 <a href="{{ route('user-bundles.edit', $subscription->id) }}" class="btn btn-info">Edit</a>
+                @endif
                 <a href="{{ route('user-bundles.index') }}" class="btn btn-secondary">Back to List</a>
+                @if(auth('admin')->user()?->can('admin.bookings.manage'))
                 <form action="{{ route('user-bundles.destroy', $subscription->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger">Delete</button>
                 </form>
+                @endif
             </div>
         </div>
     </div>

@@ -20,7 +20,12 @@
                 @if (!empty($service->meta_image))
                     <img src="{{ \Illuminate\Support\Str::startsWith($service->meta_image, ['http://','https://','/']) ? $service->meta_image : asset('storage/' . ltrim($service->meta_image, '/')) }}" width="200" alt="Meta image" onerror="this.style.display='none'" />
                 @endif
-                <div class="mt-3"><a href="{{ route('services.edit', $service->id) }}" class="btn btn-primary">Edit</a> <a href="{{ route('services.index') }}" class="btn btn-secondary">Back</a></div>
+                <div class="mt-3">
+                    @if(auth('admin')->user()?->can('admin.services.manage'))
+                    <a href="{{ route('services.edit', $service->id) }}" class="btn btn-primary">Edit</a>
+                    @endif
+                    <a href="{{ route('services.index') }}" class="btn btn-secondary">Back</a>
+                </div>
         </div></div>
         @endif
     </div>

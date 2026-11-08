@@ -5,7 +5,9 @@
     <div class="card shadow"><div class="card-body">
         <p><strong>Name:</strong> {{ $category->name }}</p>
         <p><strong>Slug:</strong> {{ $category->slug }}</p>
+        @if(auth('admin')->user()?->can('admin.content.manage'))
         <a href="{{ route('knowledge-base-categories.edit', $category->id) }}" class="btn btn-primary">Edit</a>
+        @endif
         <a href="{{ route('knowledge-base-categories.index') }}" class="btn btn-secondary">Back</a>
     </div></div>
 </div></div></div>

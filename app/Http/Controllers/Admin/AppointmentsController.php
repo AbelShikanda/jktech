@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class AppointmentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.bookings.manage,admin')->only(['edit', 'update']);
+    }
+
     public function index()
     {
         $appointments = Booking::with('user')->latest()->get();

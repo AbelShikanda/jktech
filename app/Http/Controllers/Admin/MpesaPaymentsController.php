@@ -13,6 +13,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MpesaPaymentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin.bookings.manage,admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'export']);
+    }
+
     /**
      * Display a listing of the resource.
      *
