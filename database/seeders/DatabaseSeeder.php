@@ -3,16 +3,18 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use CreateServicesTable;
 
+/**
+ * Application seed orchestrator.
+ *
+ * PERMISSION-GATED: Do NOT run db:seed, migrate:fresh --seed, or any reseed
+ * without explicit user permission. Some seeders may be destructive or assume
+ * a fresh/local dataset. RolesAndPermissionsSeeder is intentionally NOT called
+ * here; run it manually only with explicit permission.
+ */
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
         $this->call([
             // Users
@@ -32,20 +34,19 @@ class DatabaseSeeder extends Seeder
             FaqsSeeder::class,
         ]);
         $this->call([
-            // Products
+            // Products/content (SoftwareSeeder intentionally disabled until reviewed)
             CreateBookingsSeeder::class,
             CreateServicesSeeder::class,
             KnowledgeBaseSeeder::class,
             BundleSeeder::class,
-            // SoftwareSeeder::class,
         ]);
         $this->call([
-            // pivots
+            // Pivots
             CreatePIvotSeeder::class,
             KnowledgeKnowledgeBaseCategorySeeder::class,
         ]);
         $this->call([
-            // seeders
+            // DB helpers
             ServiceTriggerSeeder::class,
         ]);
     }
