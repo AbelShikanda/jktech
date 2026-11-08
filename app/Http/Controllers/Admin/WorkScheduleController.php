@@ -63,10 +63,8 @@ class WorkScheduleController extends Controller
      */
     public function edit(string $id)
     {
-        $work = WorkingHour::find($id);
-        return view('admin.workSchedule.edit', with([
-            'work' => $work,
-        ]));
+        $work = WorkingHour::findOrFail($id);
+        return view('admin.workSchedule.edit', compact('work'));
     }
 
     /**
