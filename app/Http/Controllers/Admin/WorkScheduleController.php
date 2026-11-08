@@ -37,6 +37,7 @@ class WorkScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.settings.manage'), 403);
         $request->validate([
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -77,6 +78,7 @@ class WorkScheduleController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.settings.manage'), 403);
         $request->validate([
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -101,6 +103,7 @@ class WorkScheduleController extends Controller
      */
     public function destroy(string $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.settings.manage'), 403);
         $workingHour = WorkingHour::findOrFail($id);
         $workingHour->delete();
         return redirect()->route('work.index')->with('success', 'working hour deleted successfully!');

@@ -26,6 +26,7 @@ class SoftwareController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -62,6 +63,7 @@ class SoftwareController extends Controller
 
     public function update(Request $request, Software $software)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -88,6 +90,7 @@ class SoftwareController extends Controller
 
     public function destroy(Software $software)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $software->delete();
         return redirect()->route('software.index')->with('success', 'Software deleted.');
     }

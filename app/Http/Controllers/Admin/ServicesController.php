@@ -35,6 +35,7 @@ class ServicesController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $validated = $request->validate([
             'name' => 'required',
             'meta_title' => 'required',
@@ -104,6 +105,7 @@ class ServicesController extends Controller
 
     public function update(Request $request, string $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $validated = $request->validate([
             'name' => 'required',
             'meta_title' => 'required',
@@ -165,6 +167,7 @@ class ServicesController extends Controller
 
     public function destroy(string $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $service = Services::findOrFail($id);
         $service->delete();
 

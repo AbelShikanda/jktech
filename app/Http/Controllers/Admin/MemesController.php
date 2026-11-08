@@ -46,6 +46,7 @@ class MemesController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         // Validate inputs
         $request->validate([
             'heading' => 'required|string|max:255',
@@ -118,6 +119,7 @@ class MemesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         // Validate inputs
         $request->validate([
             'heading' => 'required|string|max:255',
@@ -173,6 +175,7 @@ class MemesController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $meme = Memes::findOrFail($id);
 
         // Delete image from storage if it exists

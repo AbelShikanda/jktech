@@ -28,6 +28,7 @@ class KnowledgeBaseImageController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $data = $request->validate([
             'knowledgeBases_id' => 'required|integer|exists:knowledge_bases,id',
             'thumbnail' => 'nullable|string|max:2048',
@@ -59,6 +60,7 @@ class KnowledgeBaseImageController extends Controller
 
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $image = KnowledgeBaseImages::findOrFail($id);
         $data = $request->validate([
             'knowledgeBases_id' => 'required|integer|exists:knowledge_bases,id',
@@ -78,6 +80,7 @@ class KnowledgeBaseImageController extends Controller
 
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         KnowledgeBaseImages::findOrFail($id)->delete();
         return redirect()->route('knowledge-base-images.index')->with('success', 'Knowledge base image deleted.');
     }

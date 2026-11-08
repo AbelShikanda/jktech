@@ -46,6 +46,7 @@ class PortfolioController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $request->validate([
             'url' => 'required|string|max:255',
             'title' => 'required|string|max:255',
@@ -117,6 +118,7 @@ class PortfolioController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $request->validate([
             'url' => 'required|string|max:255',
             'title' => 'required|string|max:255',
@@ -173,6 +175,7 @@ class PortfolioController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $portfolio = Portfolio::findOrFail($id);
 
         // Delete images from storage if they exist

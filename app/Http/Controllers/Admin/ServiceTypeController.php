@@ -27,6 +27,7 @@ class ServiceTypeController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:service_types,slug,',
@@ -64,6 +65,7 @@ class ServiceTypeController extends Controller
 
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:service_types,slug,' . $id,
@@ -86,6 +88,7 @@ class ServiceTypeController extends Controller
 
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $type = ServiceTypes::findOrFail($id);
         $type->delete();
 

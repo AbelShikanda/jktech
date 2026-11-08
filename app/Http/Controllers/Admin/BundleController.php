@@ -42,6 +42,7 @@ class BundleController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $validated = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
@@ -96,6 +97,7 @@ class BundleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $bundle = Bundle::findOrFail($id);
 
         $validated = $request->validate([
@@ -126,6 +128,7 @@ class BundleController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $bundle = Bundle::findOrFail($id);
         $bundle->delete();
 

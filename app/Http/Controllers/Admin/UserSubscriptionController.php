@@ -46,6 +46,7 @@ class UserSubscriptionController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.bookings.manage'), 403);
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'bundle_id' => 'required|exists:bundles,id',
@@ -133,6 +134,7 @@ class UserSubscriptionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.bookings.manage'), 403);
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'bundle_id' => 'required|exists:bundles,id',
@@ -155,6 +157,7 @@ class UserSubscriptionController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.bookings.manage'), 403);
         $userSubscription = UserBundle::findOrFail($id);
         $userSubscription->delete();
         return redirect()->route('user-bundles.index')->with('success', 'Subscription deleted successfully.');

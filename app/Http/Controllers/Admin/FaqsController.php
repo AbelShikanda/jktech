@@ -42,6 +42,7 @@ class FaqsController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $request->validate([
             'question' => 'required|string|max:255',
             'answer' => 'required|string',
@@ -78,6 +79,7 @@ class FaqsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $request->validate([
             'question' => 'required|string|max:255',
             'answer' => 'required|string',
@@ -103,6 +105,7 @@ class FaqsController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $faq = Faqs::findOrFail($id);
         $faq->delete();
 

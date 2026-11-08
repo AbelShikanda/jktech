@@ -29,6 +29,7 @@ class KnowledgeBaseController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $data = $request->validate([
             'knowledgeBase_categories_id' => 'required|integer|exists:knowledge_base_categories,id',
             'title' => 'required|string|max:255',
@@ -71,6 +72,7 @@ class KnowledgeBaseController extends Controller
 
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         $item = KnowledgeBases::findOrFail($id);
         $data = $request->validate([
             'knowledgeBase_categories_id' => 'required|integer|exists:knowledge_base_categories,id',
@@ -103,6 +105,7 @@ class KnowledgeBaseController extends Controller
 
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.content.manage'), 403);
         KnowledgeBases::findOrFail($id)->delete();
         return redirect()->route('knowledge-bases.index')->with('success', 'Knowledge base item deleted.');
     }

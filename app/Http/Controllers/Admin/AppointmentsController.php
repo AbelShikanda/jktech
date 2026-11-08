@@ -39,6 +39,7 @@ class AppointmentsController extends Controller
 
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.bookings.manage'), 403);
         $request->validate([
             'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',

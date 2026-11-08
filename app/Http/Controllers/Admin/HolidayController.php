@@ -26,6 +26,7 @@ class HolidayController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.settings.manage'), 403);
         $request->validate([
             'date' => 'required|date|unique:holidays,date',
             'reason' => 'nullable|string|max:255',
@@ -50,6 +51,7 @@ class HolidayController extends Controller
 
     public function update(Request $request, string $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.settings.manage'), 403);
         $request->validate([
             'date' => 'required|date|unique:holidays,date,' . $id,
             'reason' => 'nullable|string|max:255',
@@ -63,6 +65,7 @@ class HolidayController extends Controller
 
     public function destroy(string $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.settings.manage'), 403);
         $holiday = Holiday::findOrFail($id);
         $holiday->delete();
 

@@ -50,6 +50,7 @@ class MpesaPaymentsController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.payments.manage'), 403);
         $request->validate([
             'booking_id' => 'nullable|exists:bookings,id',
             'user_id' => 'nullable|exists:users,id',
@@ -105,6 +106,7 @@ class MpesaPaymentsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.payments.manage'), 403);
         $request->validate([
             'booking_id' => 'nullable|exists:bookings,id',
             'user_id' => 'nullable|exists:users,id',
@@ -133,6 +135,7 @@ class MpesaPaymentsController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.payments.manage'), 403);
         $payment = MpesaPayment::findOrFail($id);
         $payment->delete();
 
@@ -141,6 +144,7 @@ class MpesaPaymentsController extends Controller
 
     public function export()
     {
+        abort_unless(auth('admin')->user()?->can('admin.payments.manage'), 403);
         return Excel::download(new MpesaPaymentsExport, 'mpesa_payments.xlsx');
     }
 }

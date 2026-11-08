@@ -53,6 +53,7 @@ class ServiceImagesController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         // Validate inputs
         $request->validate([
             'service_id' => 'required|exists:services,id',
@@ -119,6 +120,7 @@ class ServiceImagesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $imageRecord = ServiceImages::findOrFail($id);
 
         $request->validate([
@@ -157,6 +159,7 @@ class ServiceImagesController extends Controller
      */
     public function destroy($id)
     {
+        abort_unless(auth('admin')->user()?->can('admin.services.manage'), 403);
         $image = ServiceImages::findOrFail($id);
 
         if ($image->thumbnail) {
