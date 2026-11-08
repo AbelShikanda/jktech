@@ -1,111 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Page Header Start -->
     @include('layouts.breadcrumb')
-    <!-- Page Header End -->
 
-    <!-- Service Start -->
     <div class="container-xxl py-5">
         <div class="container">
-            <div class="text-center mx-auto" style="max-width: 500px">
-                <h1 class="display-6 mb-5">
-                    We Provide professional Insurance Services
-                </h1>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="service-item rounded h-100 p-5">
-                        <div class="d-flex align-items-center ms-n5 mb-4">
-                            <div class="service-icon flex-shrink-0 bg-primary rounded-end me-4">
-                                <img class="img-fluid" src="img/icon/icon-10-light.png" alt="" />
-                            </div>
-                            <h4 class="mb-0">Life Insurance</h4>
+            @if(!empty($service))
+                <div class="row g-5">
+                    <div class="col-lg-8">
+                        <h1 class="display-6 mb-3">{{ $service->name ?? 'Service' }}</h1>
+                        <p class="mb-4">{{ $service->description ?? 'Service details will appear here.' }}</p>
+                        @if(optional($service->serviceImage)->thumbnail || optional($service->serviceImage)->full)
+                            <img class="img-fluid rounded mb-4" src="{{ asset('storage/' . (optional($service->serviceImage)->full ?: optional($service->serviceImage)->thumbnail)) }}" alt="{{ $service->name ?? 'Service' }}" onerror="this.src='https://placehold.co/1200x600?text=Service'">
+                        @endif
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="bg-light rounded p-4">
+                            <h5 class="mb-3">Service Info</h5>
+                            <p class="mb-2"><strong>Price:</strong> KES {{ number_format((float) ($service->price ?? 0), 2) }}</p>
+                            <p class="mb-2"><strong>Category:</strong> {{ optional(($service->serviceType ?? collect())->first())->name ?? optional($service->serviceCategories)->name ?? 'N/A' }}</p>
+                            <a href="{{ route('bookings.index') }}" class="btn btn-primary mt-2">Book Consultation</a>
                         </div>
-                        <p class="mb-4">
-                            Aliqu diam amet eos erat ipsum et lorem et sit, sed stet lorem
-                            sit clita duo justo erat amet
-                        </p>
-                        <a class="btn btn-light px-3" href="">Read More</a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="service-item rounded h-100 p-5">
-                        <div class="d-flex align-items-center ms-n5 mb-4">
-                            <div class="service-icon flex-shrink-0 bg-primary rounded-end me-4">
-                                <img class="img-fluid" src="img/icon/icon-01-light.png" alt="" />
-                            </div>
-                            <h4 class="mb-0">Health Insurance</h4>
-                        </div>
-                        <p class="mb-4">
-                            Aliqu diam amet eos erat ipsum et lorem et sit, sed stet lorem
-                            sit clita duo justo erat amet
-                        </p>
-                        <a class="btn btn-light px-3" href="">Read More</a>
-                    </div>
+            @else
+                <div class="text-center mx-auto" style="max-width: 700px">
+                    <h1 class="display-6 mb-3">Services</h1>
+                    <p class="text-muted">Select a service from the catalog or home page to view details.</p>
+                    <a href="{{ route('catalog') }}" class="btn btn-primary">View Catalog</a>
                 </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="service-item rounded h-100 p-5">
-                        <div class="d-flex align-items-center ms-n5 mb-4">
-                            <div class="service-icon flex-shrink-0 bg-primary rounded-end me-4">
-                                <img class="img-fluid" src="img/icon/icon-05-light.png" alt="" />
-                            </div>
-                            <h4 class="mb-0">Home Insurance</h4>
-                        </div>
-                        <p class="mb-4">
-                            Aliqu diam amet eos erat ipsum et lorem et sit, sed stet lorem
-                            sit clita duo justo erat amet
-                        </p>
-                        <a class="btn btn-light px-3" href="">Read More</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="service-item rounded h-100 p-5">
-                        <div class="d-flex align-items-center ms-n5 mb-4">
-                            <div class="service-icon flex-shrink-0 bg-primary rounded-end me-4">
-                                <img class="img-fluid" src="img/icon/icon-08-light.png" alt="" />
-                            </div>
-                            <h4 class="mb-0">Vehicle Insurance</h4>
-                        </div>
-                        <p class="mb-4">
-                            Aliqu diam amet eos erat ipsum et lorem et sit, sed stet lorem
-                            sit clita duo justo erat amet
-                        </p>
-                        <a class="btn btn-light px-3" href="">Read More</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="service-item rounded h-100 p-5">
-                        <div class="d-flex align-items-center ms-n5 mb-4">
-                            <div class="service-icon flex-shrink-0 bg-primary rounded-end me-4">
-                                <img class="img-fluid" src="img/icon/icon-07-light.png" alt="" />
-                            </div>
-                            <h4 class="mb-0">Business Insurance</h4>
-                        </div>
-                        <p class="mb-4">
-                            Aliqu diam amet eos erat ipsum et lorem et sit, sed stet lorem
-                            sit clita duo justo erat amet
-                        </p>
-                        <a class="btn btn-light px-3" href="">Read More</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="service-item rounded h-100 p-5">
-                        <div class="d-flex align-items-center ms-n5 mb-4">
-                            <div class="service-icon flex-shrink-0 bg-primary rounded-end me-4">
-                                <img class="img-fluid" src="img/icon/icon-06-light.png" alt="" />
-                            </div>
-                            <h4 class="mb-0">Property Insurance</h4>
-                        </div>
-                        <p class="mb-4">
-                            Aliqu diam amet eos erat ipsum et lorem et sit, sed stet lorem
-                            sit clita duo justo erat amet
-                        </p>
-                        <a class="btn btn-light px-3" href="">Read More</a>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
-    <!-- Service End -->
 @endsection

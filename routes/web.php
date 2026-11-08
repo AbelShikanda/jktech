@@ -40,18 +40,18 @@ Route::group(['prefix' => '/admin'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index')->middleware('adminauth');
 });
 
-Route::group(['middleware' => 'adminauth'], function () {
+Route::middleware('adminauth')->prefix('admin')->group(function () {
     Route::resource('types', ServiceTypeController::class);
     Route::resource('service_categories', ServiceCategoryController::class);
     Route::resource('knowledge-base-categories', \App\Http\Controllers\Admin\KnowledgeBaseCategoryController::class);
     Route::resource('knowledge-bases', \App\Http\Controllers\Admin\KnowledgeBaseController::class);
     Route::resource('knowledge-base-images', \App\Http\Controllers\Admin\KnowledgeBaseImageController::class);
-    Route::get('/admin/services/image', [ServiceImagesController::class, 'index'])->name('service_Images.index');
-    Route::get('/admin/services/{id}/image/create', [ServiceImagesController::class, 'create'])->name('service_Images.create');
-    Route::post('/admin/service-images', [ServiceImagesController::class, 'store'])->name('service_Images.store');
-    Route::get('/admin/service-images/{id}/edit', [ServiceImagesController::class, 'edit'])->name('service_Images.edit');
-    Route::put('/admin/service-images/{id}', [ServiceImagesController::class, 'update'])->name('service_Images.update');
-    Route::delete('/admin/service-images/{id}', [ServiceImagesController::class, 'destroy'])->name('service_Images.destroy');
+    Route::get('/services/image', [ServiceImagesController::class, 'index'])->name('service_Images.index');
+    Route::get('/services/{id}/image/create', [ServiceImagesController::class, 'create'])->name('service_Images.create');
+    Route::post('/service-images', [ServiceImagesController::class, 'store'])->name('service_Images.store');
+    Route::get('/service-images/{id}/edit', [ServiceImagesController::class, 'edit'])->name('service_Images.edit');
+    Route::put('/service-images/{id}', [ServiceImagesController::class, 'update'])->name('service_Images.update');
+    Route::delete('/service-images/{id}', [ServiceImagesController::class, 'destroy'])->name('service_Images.destroy');
 
     Route::resource('services', ServicesController::class);
     Route::resource('work', WorkScheduleController::class);
@@ -64,20 +64,11 @@ Route::group(['middleware' => 'adminauth'], function () {
     Route::resource('payments', MpesaPaymentsController::class);
     Route::resource('software', SoftwareController::class);
 
-    Route::get('/admin/payments/export', [MpesaPaymentsController::class, 'export'])->name('payments.export');
+    Route::get('/payments/export', [MpesaPaymentsController::class, 'export'])->name('payments.export');
     Route::get('/appointments', [AppointmentsController::class, 'index'])->name('appointment.index');
     Route::get('/appointments/{id}', [AppointmentsController::class, 'show'])->name('appointment.show');
     Route::get('/appointments/{id}/edit', [AppointmentsController::class, 'edit'])->name('appointment.edit');
     Route::put('/appointments/{id}', [AppointmentsController::class, 'update'])->name('appointment.update');
-
-    //     Route::resource('blogs', BlogController::class);
-    //     Route::resource('blog_categories', BlogCategoryController::class);
-    //     Route::resource('blog_images', BlogImageController::class);
-    //     Route::resource('contact', ContactsController::class);
-    //     Route::resource('prices', PricesController::class);
-
-    //     Route::resource('permissions', PermissionsController::class);
-    //     Route::resource('roles', RolesController::class);
 });
 
 Auth::routes(['verify' => false]);
