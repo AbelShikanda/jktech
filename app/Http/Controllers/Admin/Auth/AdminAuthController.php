@@ -29,7 +29,7 @@ class AdminAuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->route('dashboard.index')->with('success', 'You are logged in successfully.');
+            return redirect()->route('admin.dashboard.index')->with('success', 'You are logged in successfully.');
         }
 
         return redirect()->back()->withInput($request->only('email'))->with('error', 'Invalid credentials.');

@@ -62,10 +62,8 @@ class FaqsController extends Controller
      */
     public function edit(string $id)
     {
-        $faq = Faqs::find($id);
-        return view('admin.faqs.edit', with([
-            'faq' => $faq,
-        ]));
+        $faq = Faqs::findOrFail($id);
+        return view('admin.faqs.edit', compact('faq'));
     }
 
     /**

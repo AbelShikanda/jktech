@@ -32,10 +32,12 @@ Route::get('/admin_', function () {
 })->middleware('adminauth');
 
 Route::group(['prefix' => '/admin'], function () {
-    Route::get('/login', [AdminAuthController::class, 'getLogin'])->name('getLogin');
-    Route::post('/login', [AdminAuthController::class, 'postLogin'])->name('postLogin');
-    Route::post('/logout', [AdminAuthController::class, 'adminLogout'])->name('adminLogout');
-    Route::resource('dashboard', DashboardController::class)->middleware('adminauth');
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'getLogin'])->name('getLogin');
+        Route::post('/login', [AdminAuthController::class, 'postLogin'])->name('postLogin');
+    });
+    Route::post('/logout', [AdminAuthController::class, 'adminLogout'])->name('adminLogout')->middleware('adminauth');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index')->middleware('adminauth');
 });
 
 Route::group(['middleware' => 'adminauth'], function () {
@@ -78,7 +80,7 @@ Route::group(['middleware' => 'adminauth'], function () {
     //     Route::resource('roles', RolesController::class);
 });
 
-Auth::routes();
+Auth::routes(['verify' => false]);
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Route::redirect('/home', '/');
 Route::get('/', [HomeController::class, 'index'])->name('home');
