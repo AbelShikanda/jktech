@@ -13,42 +13,43 @@
                     productivity, and performance. Select your platform below and get started in just one click.
                 </p>
             </div>
-            @foreach ($softwares as $software)
+            @forelse (($softwares ?? collect()) as $software)
                 <div class="row g-5 mb-5 mt-5 py-5">
                     <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <h1 class="display-6 mb-4">{{ $software->name }}</h1>
-                        <p class="mb-4">{{ $software->description }}</p>
+                        <h1 class="display-6 mb-4">{{ $software->name ?? 'Software' }}</h1>
+                        <p class="mb-4">{{ $software->description ?? '' }}</p>
 
                         <div class="row g-3">
-                            @foreach ($software->releases as $release)
+                            @forelse (($software->releases ?? collect()) as $release)
+                                @php $dl = $release->download_url ?? $release->download_link ?? ''; @endphp
                                 <div class="col-sm-6 wow fadeIn" data-wow-delay="0.{{ $loop->index + 1 }}s">
                                     <div class="bg-light rounded h-100 p-3">
-                                        <div
-                                            class="bg-white d-flex flex-column justify-content-center text-center rounded h-100 py-4 px-3">
-                                            <h6 class="mb-1">{{ ucfirst($release->os) }} - v{{ $release->version }}</h6>
-                                            <a href="{{ $release->download_url }}" class="btn btn-primary mt-2"
-                                                target="_blank">Download</a>
+                                        <div class="bg-white d-flex flex-column justify-content-center text-center rounded h-100 py-4 px-3">
+                                            <h6 class="mb-1">{{ ucfirst($release->os ?? 'OS') }} - v{{ $release->version ?? 'N/A' }}</h6>
+                                            @if($dl)
+                                                <a href="{{ \Illuminate\Support\Str::startsWith($dl, ['http://', 'https://']) ? $dl : asset($dl) }}" class="btn btn-primary mt-2" target="_blank" rel="noopener">Download</a>
+                                            @else
+                                                <span class="text-muted small mt-2">No download link</span>
+                                            @endif
+                                            <small class="text-muted mt-1">{{ optional($release->release_date)->format('M d, Y') ?? '' }}</small>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <div class="col-12"><p class="text-muted mb-0">No releases available.</p></div>
+                            @endforelse
                         </div>
                     </div>
 
                     <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
                         <div class="position-relative rounded overflow-hidden h-100" style="min-height: 400px">
-                            <!-- <img class="position-absolute w-100 h-100"
-                                    src="{{ asset($software->image ?? 'img/default_software.png') }}" alt=""
-                                    style="object-fit: cover" /> -->
-
-                            <a href="https://www.linkedin.com/posts/abel-shikanda-4a68a582_be-a-part-of-the-solution-for-businesses-activity-7284428647409590272-iOMB?utm_source=share&utm_medium=member_desktop&rcm=ACoAABGSzn4B-J_1M3FdCxPEv3Z_c9wuYyNDnpY"
-                                target="_blank"><img class="position-absolute w-100 h-100"
-                                    src="https://media.licdn.com/dms/image/v2/D4D22AQG7vFSRUJHgsQ/feedshare-shrink_800/B4DZRd9OEqHIAg-/0/1736743125126?e=1755734400&v=beta&t=_GsCVC9tQtVXeb2zqtsDP8Kp-M-uGgejI3jMrqtq4vM"
-                                    alt="" style="object-fit: cover" /></a>
+                            <img class="position-absolute w-100 h-100" src="{{ $software->image ? asset('storage/'.$software->image) : 'https://placehold.co/800x600?text=Software' }}" alt="{{ $software->name ?? 'Software' }}" style="object-fit: cover" onerror="this.src='https://placehold.co/800x600?text=Software'" />
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="py-4 text-center text-muted">No software available yet. Add software in admin to populate this page.</div>
+            @endforelse
         </div>
     </div>
 @endsection
