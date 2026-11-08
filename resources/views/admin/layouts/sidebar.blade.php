@@ -122,6 +122,17 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a href="#kb-admin" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                    <i class="fe fe-book-open fe-16"></i>
+                    <span class="ml-3 item-text">Knowledge Base</span>
+                </a>
+                <ul class="collapse list-unstyled pl-4 w-100" id="kb-admin">
+                    <li class="nav-item"><a class="nav-link pl-3" href="{{ route('knowledge-bases.index') }}"><span class="ml-1 item-text">Entries</span></a></li>
+                    <li class="nav-item"><a class="nav-link pl-3" href="{{ route('knowledge-base-categories.index') }}"><span class="ml-1 item-text">Categories</span></a></li>
+                    <li class="nav-item"><a class="nav-link pl-3" href="{{ route('knowledge-base-images.index') }}"><span class="ml-1 item-text">Images</span></a></li>
+                </ul>
+            </li>
         </ul>
         @if($canManage)
         <p class="text-muted nav-heading mt-4 mb-1">
