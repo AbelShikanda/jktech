@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/under_construction', [UnderConstructionController::class, 'underConstruction'])->name('underConstruction');
 
 Route::get('/admin_', function () {
-    return redirect()->route('dashboard.index');
+    return redirect()->route('admin.dashboard.index');
 })->middleware('adminauth');
 
 Route::group(['prefix' => '/admin'], function () {

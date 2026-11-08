@@ -5,7 +5,7 @@
     <nav class="vertnav navbar navbar-light">
         <!-- nav bar -->
         <div class="w-100 mb-4 d-flex">
-            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ route('dashboard.index') }}">
+            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ route('admin.dashboard.index') }}">
                 <img src="{{ asset('admin/assets/images/logo.png') }}" alt="logo" class="w-50">
             </a>
         </div>
@@ -17,7 +17,7 @@
                 </a>
                 <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="{{ route('dashboard.index') }}"><span
+                        <a class="nav-link pl-3" href="{{ route('admin.dashboard.index') }}"><span
                                 class="ml-1 item-text">Home</span></a>
                     </li>
                 </ul>
